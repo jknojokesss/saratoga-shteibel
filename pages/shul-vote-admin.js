@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import Head from 'next/head'
 
-const NAVY = '#1A2035'
-const GOLD = '#C9A84C'
-const INK = '#1A1A2E'
-const MUTED = '#7A8090'
-const CREAM = '#F7F4EF'
+const NAVY = '#243B4A'   // slate
+const GOLD = '#1C8C8C'   // teal accent
+const INK = '#243B4A'
+const MUTED = '#5E7180'
+const CREAM = '#E8F1F1'  // pale teal
 
 export default function ShulVoteAdmin() {
   const [passcode, setPasscode] = useState('')
@@ -32,9 +32,9 @@ export default function ShulVoteAdmin() {
   return (
     <>
       <Head><title>Election Admin</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
-      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: 'Georgia, serif' }}>
+      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
         <div style={{ maxWidth: 520, margin: '0 auto', background: '#fff', borderRadius: 16, padding: '28px 26px', border: '1px solid #ECE7DD' }}>
-          <div style={{ fontSize: 22, color: INK, marginBottom: 4 }}>Gabbai Vote — Admin</div>
+          <div style={{ fontSize: 22, color: INK, marginBottom: 4 }}>Gabbai Sheini — Admin</div>
           <div style={{ width: 40, height: 3, background: GOLD, borderRadius: 2, marginBottom: 22 }} />
 
           {!data && (
@@ -42,10 +42,10 @@ export default function ShulVoteAdmin() {
               <label style={{ fontSize: 13, color: MUTED, display: 'block', marginBottom: 7 }}>Admin passcode</label>
               <input type="password" value={passcode} onChange={(e) => setPasscode(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') call('status') }}
-                style={{ width: '100%', boxSizing: 'border-box', fontSize: 16, padding: '12px 14px', border: '1.5px solid #DDD8CF', borderRadius: 10, fontFamily: 'Georgia, serif', outline: 'none' }} />
+                style={{ width: '100%', boxSizing: 'border-box', fontSize: 16, padding: '12px 14px', border: '1.5px solid #DDD8CF', borderRadius: 10, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', outline: 'none' }} />
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginTop: 12 }}>{error}</div>}
               <button onClick={() => call('status')} disabled={busy}
-                style={{ width: '100%', marginTop: 16, padding: 13, border: 'none', borderRadius: 11, background: NAVY, color: '#fff', fontSize: 15, fontFamily: 'Georgia, serif', cursor: 'pointer' }}>
+                style={{ width: '100%', marginTop: 16, padding: 13, border: 'none', borderRadius: 11, background: NAVY, color: '#fff', fontSize: 15, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
                 {busy ? 'Loading…' : 'View turnout'}
               </button>
             </div>
@@ -113,17 +113,17 @@ export default function ShulVoteAdmin() {
 
               <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
                 <button onClick={() => call('status')} disabled={busy}
-                  style={{ flex: 1, padding: 12, border: '1.5px solid #DDD8CF', borderRadius: 10, background: '#fff', color: INK, fontSize: 14, fontFamily: 'Georgia, serif', cursor: 'pointer' }}>
+                  style={{ flex: 1, padding: 12, border: '1.5px solid #DDD8CF', borderRadius: 10, background: '#fff', color: INK, fontSize: 14, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
                   Refresh
                 </button>
                 {data.isOpen ? (
                   <button onClick={() => { if (confirm('Close voting? This reveals names + the result and stops new votes.')) call('close') }} disabled={busy}
-                    style={{ flex: 1, padding: 12, border: 'none', borderRadius: 10, background: '#B23A2E', color: '#fff', fontSize: 14, fontFamily: 'Georgia, serif', cursor: 'pointer' }}>
+                    style={{ flex: 1, padding: 12, border: 'none', borderRadius: 10, background: '#B23A2E', color: '#fff', fontSize: 14, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
                     Close voting
                   </button>
                 ) : (
                   <button onClick={() => { if (confirm('Re-open voting?')) call('reopen') }} disabled={busy}
-                    style={{ flex: 1, padding: 12, border: '1.5px solid #DDD8CF', borderRadius: 10, background: '#fff', color: INK, fontSize: 14, fontFamily: 'Georgia, serif', cursor: 'pointer' }}>
+                    style={{ flex: 1, padding: 12, border: '1.5px solid #DDD8CF', borderRadius: 10, background: '#fff', color: INK, fontSize: 14, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
                     Re-open voting
                   </button>
                 )}

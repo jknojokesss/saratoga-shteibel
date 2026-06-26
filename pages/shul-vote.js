@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-const NAVY = '#1A2035'
-const GOLD = '#C9A84C'
-const INK = '#1A1A2E'
-const MUTED = '#7A8090'
-const CREAM = '#F7F4EF'
+const NAVY = '#243B4A'   // slate (page bg + buttons)
+const GOLD = '#1C8C8C'   // teal accent
+const INK = '#243B4A'    // slate text
+const MUTED = '#5E7180'
+const CREAM = '#E8F1F1'  // pale teal (selected tint)
 
 function fmtPhone(digits) {
   digits = digits.slice(0, 10)
@@ -69,12 +69,12 @@ export default function ShulVote() {
 
   return (
     <>
-      <Head><title>Gabbai Vote</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
-      <div style={{ minHeight: '100vh', background: NAVY, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '32px 16px', fontFamily: 'Georgia, serif' }}>
+      <Head><title>Gabbai Sheini</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+      <div style={{ minHeight: '100vh', background: NAVY, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '32px 16px', fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
         <div style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 16, padding: '32px 26px', marginTop: '6vh' }}>
 
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <div style={{ fontSize: 26, color: INK, letterSpacing: 0.5 }}>Gabbai Vote</div>
+            <div style={{ fontSize: 26, color: INK, letterSpacing: 0.5, fontWeight: 600 }}>Gabbai Sheini</div>
             <div style={{ width: 40, height: 3, background: GOLD, margin: '12px auto 0', borderRadius: 2 }} />
           </div>
 
@@ -95,12 +95,12 @@ export default function ShulVote() {
                 value={phone}
                 onChange={(e) => setPhone(fmtPhone(e.target.value.replace(/\D/g, '')))}
                 onKeyDown={(e) => { if (e.key === 'Enter' && phoneReady && !busy) checkPhone() }}
-                style={{ width: '100%', boxSizing: 'border-box', fontSize: 19, padding: '13px 14px', border: '1.5px solid #DDD8CF', borderRadius: 10, fontFamily: 'Georgia, serif', letterSpacing: 0.5, outline: 'none' }}
+                style={{ width: '100%', boxSizing: 'border-box', fontSize: 19, padding: '13px 14px', border: '1.5px solid #DDD8CF', borderRadius: 10, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', letterSpacing: 0.5, outline: 'none' }}
               />
               <div style={{ fontSize: 12, color: MUTED, margin: '8px 2px 0' }}>Used only to confirm you're eligible. Your vote stays anonymous.</div>
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginTop: 12, lineHeight: 1.5 }}>{error}</div>}
               <button onClick={checkPhone} disabled={!phoneReady || busy}
-                style={{ width: '100%', marginTop: 18, padding: 14, border: 'none', borderRadius: 11, background: phoneReady ? NAVY : '#C9CCD4', color: phoneReady ? '#fff' : '#fff', fontSize: 15, fontFamily: 'Georgia, serif', cursor: phoneReady && !busy ? 'pointer' : 'default', letterSpacing: 0.5 }}>
+                style={{ width: '100%', marginTop: 18, padding: 14, border: 'none', borderRadius: 11, background: phoneReady ? NAVY : '#C9CCD4', color: phoneReady ? '#fff' : '#fff', fontSize: 15, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: phoneReady && !busy ? 'pointer' : 'default', letterSpacing: 0.5 }}>
                 {busy ? 'Checking…' : 'Continue'}
               </button>
             </div>
@@ -119,7 +119,7 @@ export default function ShulVote() {
               ))}
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginTop: 8 }}>{error}</div>}
               <button onClick={submitVote} disabled={busy}
-                style={{ width: '100%', marginTop: 14, padding: 14, border: 'none', borderRadius: 11, background: NAVY, color: '#fff', fontSize: 15, fontFamily: 'Georgia, serif', cursor: busy ? 'default' : 'pointer', letterSpacing: 0.5 }}>
+                style={{ width: '100%', marginTop: 14, padding: 14, border: 'none', borderRadius: 11, background: NAVY, color: '#fff', fontSize: 15, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: busy ? 'default' : 'pointer', letterSpacing: 0.5 }}>
                 {busy ? 'Submitting…' : 'Submit vote'}
               </button>
             </div>
