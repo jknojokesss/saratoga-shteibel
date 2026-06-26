@@ -17,9 +17,20 @@ function fmtPhone(digits) {
   return out
 }
 
+function fmtRemaining(ms) {
+  if (ms < 0) ms = 0
+  const s = Math.floor(ms / 1000)
+  const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600)
+  const m = Math.floor((s % 3600) / 60), sec = s % 60
+  const pad = (n) => String(n).padStart(2, '0')
+  return (d > 0 ? d + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(sec)
+}
+
 export default function ShulVote() {
-  const [step, setStep] = useState('loading')   // loading | phone | pick | done | closed
+  const [step, setStep] = useState('loading')   // loading | pending | phone | pick | done | closed
   const [candidates, setCandidates] = useState({ A: 'Candidate A', B: 'Candidate B' })
+  const [opensAt, setOpensAt] = useState(null)
+  const [now, setNow] = useState(Date.now())
   const [phone, setPhone] = useState('')
   const [choice, setChoice] = useState(null)
   const [error, setError] = useState('')
@@ -28,9 +39,21 @@ export default function ShulVote() {
   useEffect(() => {
     fetch('/api/shul-vote/config').then((r) => r.json()).then((d) => {
       if (d.candidates) setCandidates(d.candidates)
-      setStep(d.open ? 'phone' : 'closed')
+      if (d.opensAt) setOpensAt(d.opensAt)
+      setStep(d.open ? 'phone' : (d.notYetOpen ? 'pending' : 'closed'))
     }).catch(() => setStep('phone'))
   }, [])
+
+  // While waiting for the open time, tick every second and auto-open at 9:45.
+  useEffect(() => {
+    if (step !== 'pending' || !opensAt) return
+    const target = new Date(opensAt).getTime()
+    const t = setInterval(() => {
+      if (Date.now() >= target) { setStep('phone'); clearInterval(t) }
+      else setNow(Date.now())
+    }, 1000)
+    return () => clearInterval(t)
+  }, [step, opensAt])
 
   const digits = phone.replace(/\D/g, '')
   const phoneReady = digits.length === 10
@@ -79,6 +102,15 @@ export default function ShulVote() {
           </div>
 
           {step === 'loading' && <p style={{ textAlign: 'center', color: MUTED }}>Loading…</p>}
+
+          {step === 'pending' && (
+            <div style={{ textAlign: 'center', padding: '14px 0' }}>
+              <div style={{ fontSize: 17, color: INK, marginBottom: 8 }}>Voting hasn't opened yet</div>
+              <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.6, marginBottom: 20 }}>Polls open Motzei Shabbos at 9:45&nbsp;PM. Keep this page open or come back then — it opens on its own.</div>
+              <div style={{ fontSize: 32, color: GOLD, fontVariantNumeric: 'tabular-nums', letterSpacing: 1 }}>{fmtRemaining(new Date(opensAt).getTime() - now)}</div>
+              <div style={{ fontSize: 12, color: MUTED, marginTop: 6 }}>until voting opens</div>
+            </div>
+          )}
 
           {step === 'closed' && (
             <div style={{ textAlign: 'center', padding: '20px 0' }}>

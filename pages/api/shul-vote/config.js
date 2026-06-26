@@ -6,12 +6,16 @@ export default async function handler(req, res) {
   try {
     const { data, error } = await supabaseAdmin
       .from('shul_vote_status')
-      .select('candidate_a, candidate_b, is_open')
+      .select('candidate_a, candidate_b, is_open, opens_at')
       .eq('id', 1)
       .single()
     if (error) throw error
+    const opensAt = data.opens_at ? new Date(data.opens_at).getTime() : 0
+    const beforeOpen = Date.now() < opensAt
     return res.status(200).json({
-      open: data.is_open,
+      open: data.is_open && !beforeOpen,
+      notYetOpen: data.is_open && beforeOpen,
+      opensAt: data.opens_at,
       candidates: { A: data.candidate_a, B: data.candidate_b },
     })
   } catch (e) {

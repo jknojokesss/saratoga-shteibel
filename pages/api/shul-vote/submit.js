@@ -16,8 +16,9 @@ export default async function handler(req, res) {
 
   try {
     const { data: status } = await supabaseAdmin
-      .from('shul_vote_status').select('is_open').eq('id', 1).single()
-    if (!status?.is_open) return res.status(409).json({ error: 'Voting is closed.' })
+      .from('shul_vote_status').select('is_open, opens_at').eq('id', 1).single()
+    const beforeOpen = status?.opens_at && Date.now() < new Date(status.opens_at).getTime()
+    if (!status?.is_open || beforeOpen) return res.status(409).json({ error: 'Voting is not open.' })
 
     // Atomically claim this voter: only succeeds if they exist AND haven't voted.
     const { data: claimed, error: claimErr } = await supabaseAdmin

@@ -12,8 +12,9 @@ export default async function handler(req, res) {
 
   try {
     const { data: status } = await supabaseAdmin
-      .from('shul_vote_status').select('is_open').eq('id', 1).single()
-    if (!status?.is_open) return res.status(200).json({ open: false })
+      .from('shul_vote_status').select('is_open, opens_at').eq('id', 1).single()
+    const beforeOpen = status?.opens_at && Date.now() < new Date(status.opens_at).getTime()
+    if (!status?.is_open || beforeOpen) return res.status(200).json({ open: false })
 
     const { data: row } = await supabaseAdmin
       .from('shul_vote_eligible').select('voted').eq('phone', phone).maybeSingle()
