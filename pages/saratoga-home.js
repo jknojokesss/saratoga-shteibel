@@ -11,8 +11,8 @@ export default function SaratogaHome() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div style={{ minHeight: '100vh', background: '#F5F3EF', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: FONT }}>
-        <div style={{ width: '100%', maxWidth: 440, textAlign: 'center' }}>
-          <img src={LOGO} alt="Saratoga Shteibel" style={{ width: '82%', maxWidth: 280, height: 'auto', margin: '0 auto 30px' }} />
+        <div style={{ width: '100%', maxWidth: 560, textAlign: 'center' }}>
+          <img src={LOGO} alt="Saratoga Shteibel" style={{ width: '100%', maxWidth: 480, height: 'auto', margin: '0 auto 30px' }} />
 
           <div style={{ fontSize: 13, letterSpacing: 2.5, color: '#A89B86', textTransform: 'uppercase', marginBottom: 14 }}>Website under construction</div>
 
