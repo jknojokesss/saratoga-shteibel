@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-const LOGO = 'https://cdn.logo.cardknox.com/6/0/6/4/7/e89e2e8922e9243f9ce5089b9_paymentsite_41621.png?v=639153325573841273'
+const LOGO = '/logo.png'
 const FONT = '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
 
 export default function SaratogaHome() {
@@ -12,9 +12,7 @@ export default function SaratogaHome() {
       </Head>
       <div style={{ minHeight: '100vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: FONT }}>
         <div style={{ width: '100%', maxWidth: 560, textAlign: 'center' }}>
-          <div style={{ overflow: 'hidden', width: '100%', maxWidth: 360, margin: '0 auto 22px', lineHeight: 0 }}>
-            <img src={LOGO} alt="Saratoga Shteibel" style={{ width: '152%', marginLeft: '-26%', height: 'auto', display: 'block' }} />
-          </div>
+          <img src={LOGO} alt="Saratoga Shteibel" style={{ width: '100%', maxWidth: 340, height: 'auto', margin: '0 auto 24px', display: 'block' }} />
 
           <div style={{ fontSize: 13, letterSpacing: 2.5, color: '#A89B86', textTransform: 'uppercase', marginBottom: 14 }}>Website under construction</div>
 
