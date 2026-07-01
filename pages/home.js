@@ -59,11 +59,7 @@ export default function Home() {
           </div>
         </header>
 
-        <div style={{ height: 420, position: 'relative', background: `#cfc7b6 center 42%/cover no-repeat`, backgroundImage: SHUL_PHOTO ? `url(${SHUL_PHOTO})` : 'none' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(30,45,78,0.34)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ fontFamily: SERIF, fontSize: 30, color: '#fff', letterSpacing: 0.5, textShadow: '0 2px 12px rgba(0,0,0,.4)' }}>Saratoga Shteibel</div>
-          </div>
-        </div>
+        <div style={{ height: 420, background: `#cfc7b6 center 42%/cover no-repeat`, backgroundImage: SHUL_PHOTO ? `url(${SHUL_PHOTO})` : 'none' }} />
 
         <div className="main-grid" style={{ display: 'grid', gridTemplateColumns: '1.55fr 1fr' }}>
 
