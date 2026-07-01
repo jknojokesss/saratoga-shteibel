@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { useState, useEffect } from 'react'
 
 const NAVY = '#1e2d4e'
 const GOLD = '#c9a84c'
@@ -9,12 +10,12 @@ const BORDER = '#ddd5c4'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
 const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
-// ── Edit announcements here. `pin` = thumbtack color. Newest first. ──
-const ANNOUNCEMENTS = [
-  { tag: 'Welcome', title: 'Welcome to our new website', body: 'Kiddush sponsors, shiurim, and simcha announcements will be posted here on the bulletin board.', pin: GOLD, tilt: -1.3 },
-  { tag: 'Membership', title: 'Membership is open for the year', body: 'Support the shul for the coming year — you can sign up online in under two minutes.', pin: '#d47c6a', tilt: 0.9 },
-  { tag: 'Reminder', title: 'Check back often', body: 'This board is updated regularly with the latest from around the kehilla.', pin: GOLD, tilt: -0.6 },
+// Announcements are managed at /announcements-admin and stored in Supabase.
+// This fallback shows only if the API can't be reached.
+const FALLBACK_ANNOUNCEMENTS = [
+  { tag: 'Welcome', title: 'Welcome to our new website', body: 'Announcements will be posted here on the bulletin board.', pin: GOLD },
 ]
+const TILTS = [-1.3, 0.9, -0.6, 1.1, -1.0, 0.7]
 
 // Set to the PDF path (e.g. '/shabbos-schedule.pdf') once uploaded to /public.
 const SCHEDULE_PDF = null
@@ -28,6 +29,12 @@ function Pin({ color }) {
 }
 
 export default function Home() {
+  const [announcements, setAnnouncements] = useState(FALLBACK_ANNOUNCEMENTS)
+  useEffect(() => {
+    fetch('/api/announcements/list').then((r) => r.json()).then((d) => {
+      if (d.announcements && d.announcements.length) setAnnouncements(d.announcements)
+    }).catch(() => {})
+  }, [])
   return (
     <>
       <Head>
@@ -63,8 +70,8 @@ export default function Home() {
           <section style={{ background: NAVY, padding: '24px 24px 34px' }}>
             <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: GOLD_LIGHT }}>Bulletin Board</div>
             <div style={{ width: 38, height: 1.5, background: GOLD, margin: '8px 0 26px' }} />
-            {ANNOUNCEMENTS.map((a, i) => (
-              <div key={i} style={{ position: 'relative', background: '#fffdf8', padding: '17px 18px 16px', borderRadius: 2, boxShadow: '0 4px 12px rgba(0,0,0,.28)', transform: `rotate(${a.tilt}deg)`, marginBottom: 26 }}>
+            {announcements.map((a, i) => (
+              <div key={a.id || i} style={{ position: 'relative', background: '#fffdf8', padding: '17px 18px 16px', borderRadius: 2, boxShadow: '0 4px 12px rgba(0,0,0,.28)', transform: `rotate(${TILTS[i % TILTS.length]}deg)`, marginBottom: 26 }}>
                 <Pin color={a.pin} />
                 <div style={{ fontSize: 10, letterSpacing: 1, color: '#b08a2e', textTransform: 'uppercase' }}>{a.tag}</div>
                 <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY, margin: '3px 0 5px' }}>{a.title}</div>
