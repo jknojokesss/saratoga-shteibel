@@ -18,7 +18,7 @@ export default function SaratogaHome() {
       </Head>
       <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: FONT_SANS }}>
         <div style={{ width: '100%', maxWidth: 560, textAlign: 'center' }}>
-          <img src={LOGO} alt="Saratoga Shteibel" style={{ width: '100%', maxWidth: 340, height: 'auto', margin: '0 auto 24px', display: 'block' }} />
+          <img src={LOGO} alt="Saratoga Shteibel" style={{ width: '100%', maxWidth: 340, height: 'auto', margin: '0 auto 24px', display: 'block', mixBlendMode: 'multiply' }} />
 
           <div style={{ fontSize: 12, letterSpacing: 3, color: GOLD, textTransform: 'uppercase', marginBottom: 18, fontWeight: 400 }}>Website under construction</div>
 
