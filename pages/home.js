@@ -59,7 +59,9 @@ export default function Home() {
           </div>
         </header>
 
-        <div style={{ height: 420, background: `#cfc7b6 center 42%/cover no-repeat`, backgroundImage: SHUL_PHOTO ? `url(${SHUL_PHOTO})` : 'none' }} />
+        <div style={{ height: 420, position: 'relative', background: `#cfc7b6 center 42%/cover no-repeat`, backgroundImage: SHUL_PHOTO ? `url(${SHUL_PHOTO})` : 'none' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(30,45,78,0.30)' }} />
+        </div>
 
         <div className="main-grid" style={{ display: 'grid', gridTemplateColumns: '1.55fr 1fr' }}>
 
