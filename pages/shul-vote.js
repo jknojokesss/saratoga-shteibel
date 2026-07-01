@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-const NAVY = '#243B4A'   // slate (page bg + buttons)
-const GOLD = '#1C8C8C'   // teal accent
-const INK = '#243B4A'    // slate text
-const MUTED = '#5E7180'
-const CREAM = '#E8F1F1'  // pale teal (selected tint)
+const NAVY = '#1e2d4e'
+const GOLD = '#c9a84c'
+const INK = '#2a2a2a'
+const MUTED = '#7a7068'
+const CREAM = '#f0ebe0'
+const BORDER = '#ddd5c4'
+const FONT_SERIF = "'Cormorant Garamond', Georgia, serif"
+const FONT_SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
 function fmtPhone(digits) {
   digits = digits.slice(0, 10)
@@ -92,29 +95,33 @@ export default function ShulVote() {
 
   return (
     <>
-      <Head><title>Gabbai Sheini</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
-      <div style={{ minHeight: '100vh', background: NAVY, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '32px 16px', fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
-        <div style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 16, padding: '32px 26px', marginTop: '6vh' }}>
+      <Head>
+        <title>Gabbai Sheini</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+      </Head>
+      <div style={{ minHeight: '100vh', background: NAVY, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '32px 16px', fontFamily: FONT_SANS }}>
+        <div style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 4, padding: '36px 30px', marginTop: '6vh', borderTop: `3px solid ${GOLD}` }}>
 
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <div style={{ fontSize: 26, color: INK, letterSpacing: 0.5, fontWeight: 600 }}>Gabbai Sheini</div>
-            <div style={{ width: 40, height: 3, background: GOLD, margin: '12px auto 0', borderRadius: 2 }} />
+          <div style={{ textAlign: 'center', marginBottom: 26 }}>
+            <div style={{ fontFamily: FONT_SERIF, fontSize: 30, color: NAVY, letterSpacing: 0.3, fontWeight: 500 }}>Gabbai Sheini</div>
+            <div style={{ width: 44, height: 1.5, background: GOLD, margin: '14px auto 0' }} />
           </div>
 
           {step === 'loading' && <p style={{ textAlign: 'center', color: MUTED }}>Loading…</p>}
 
           {step === 'pending' && (
             <div style={{ textAlign: 'center', padding: '14px 0' }}>
-              <div style={{ fontSize: 17, color: INK, marginBottom: 8 }}>Voting hasn't opened yet</div>
+              <div style={{ fontFamily: FONT_SERIF, fontSize: 20, color: NAVY, marginBottom: 8, fontWeight: 500 }}>Voting hasn't opened yet</div>
               <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.6, marginBottom: 20 }}>Polls open Motzei Shabbos at 9:45&nbsp;PM. Keep this page open or come back then — it opens on its own.</div>
-              <div style={{ fontSize: 32, color: GOLD, fontVariantNumeric: 'tabular-nums', letterSpacing: 1 }}>{fmtRemaining(new Date(opensAt).getTime() - now)}</div>
+              <div style={{ fontFamily: FONT_SERIF, fontSize: 34, color: GOLD, fontVariantNumeric: 'tabular-nums', letterSpacing: 1, fontWeight: 500 }}>{fmtRemaining(new Date(opensAt).getTime() - now)}</div>
               <div style={{ fontSize: 12, color: MUTED, marginTop: 6 }}>until voting opens</div>
             </div>
           )}
 
           {step === 'closed' && (
             <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <div style={{ fontSize: 17, color: INK, marginBottom: 8 }}>Voting is closed</div>
+              <div style={{ fontFamily: FONT_SERIF, fontSize: 20, color: NAVY, marginBottom: 8, fontWeight: 500 }}>Voting is closed</div>
               <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.6 }}>Thank you. The election is no longer accepting votes.</div>
             </div>
           )}
@@ -127,12 +134,12 @@ export default function ShulVote() {
                 value={phone}
                 onChange={(e) => setPhone(fmtPhone(e.target.value.replace(/\D/g, '')))}
                 onKeyDown={(e) => { if (e.key === 'Enter' && phoneReady && !busy) checkPhone() }}
-                style={{ width: '100%', boxSizing: 'border-box', fontSize: 19, padding: '13px 14px', border: '1.5px solid #DDD8CF', borderRadius: 10, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', letterSpacing: 0.5, outline: 'none' }}
+                style={{ width: '100%', boxSizing: 'border-box', fontSize: 19, padding: '13px 14px', border: `1.5px solid ${BORDER}`, borderRadius: 3, fontFamily: FONT_SANS, letterSpacing: 0.5, outline: 'none', background: CREAM }}
               />
               <div style={{ fontSize: 12, color: MUTED, margin: '8px 2px 0' }}>Used only to confirm you're eligible. Your vote stays anonymous.</div>
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginTop: 12, lineHeight: 1.5 }}>{error}</div>}
               <button onClick={checkPhone} disabled={!phoneReady || busy}
-                style={{ width: '100%', marginTop: 18, padding: 14, border: 'none', borderRadius: 11, background: phoneReady ? NAVY : '#C9CCD4', color: phoneReady ? '#fff' : '#fff', fontSize: 15, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: phoneReady && !busy ? 'pointer' : 'default', letterSpacing: 0.5 }}>
+                style={{ width: '100%', marginTop: 18, padding: 14, border: 'none', borderRadius: 3, background: phoneReady ? NAVY : '#C9CCD4', color: '#fff', fontSize: 14, fontWeight: 500, fontFamily: FONT_SANS, cursor: phoneReady && !busy ? 'pointer' : 'default', letterSpacing: 0.5 }}>
                 {busy ? 'Checking…' : 'Continue'}
               </button>
             </div>
@@ -144,14 +151,14 @@ export default function ShulVote() {
               <div style={{ fontSize: 13, color: MUTED, marginBottom: 18 }}>Tap your choice, then submit.</div>
               {[['A', candidates.A], ['B', candidates.B]].map(([key, name]) => (
                 <div key={key} onClick={() => { setChoice(key); setError('') }}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 16px', marginBottom: 12, borderRadius: 11, cursor: 'pointer', border: choice === key ? `2px solid ${GOLD}` : '1.5px solid #DDD8CF', background: choice === key ? CREAM : '#fff' }}>
-                  <span style={{ fontSize: 17, color: INK }}>{name}</span>
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 16px', marginBottom: 12, borderRadius: 3, cursor: 'pointer', border: choice === key ? `2px solid ${GOLD}` : `1.5px solid ${BORDER}`, background: choice === key ? CREAM : '#fff' }}>
+                  <span style={{ fontFamily: FONT_SERIF, fontSize: 19, color: NAVY, fontWeight: 500 }}>{name}</span>
                   <span style={{ width: 22, height: 22, borderRadius: '50%', border: choice === key ? `7px solid ${GOLD}` : '2px solid #C9CCD4', boxSizing: 'border-box' }} />
                 </div>
               ))}
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginTop: 8 }}>{error}</div>}
               <button onClick={submitVote} disabled={busy}
-                style={{ width: '100%', marginTop: 14, padding: 14, border: 'none', borderRadius: 11, background: NAVY, color: '#fff', fontSize: 15, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: busy ? 'default' : 'pointer', letterSpacing: 0.5 }}>
+                style={{ width: '100%', marginTop: 14, padding: 14, border: 'none', borderRadius: 3, background: NAVY, color: '#fff', fontSize: 14, fontWeight: 500, fontFamily: FONT_SANS, cursor: busy ? 'default' : 'pointer', letterSpacing: 0.5 }}>
                 {busy ? 'Submitting…' : 'Submit vote'}
               </button>
             </div>
@@ -160,7 +167,7 @@ export default function ShulVote() {
           {step === 'done' && (
             <div style={{ textAlign: 'center', padding: '24px 0' }}>
               <div style={{ width: 54, height: 54, borderRadius: '50%', background: CREAM, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 28, color: GOLD }}>✓</div>
-              <div style={{ fontSize: 20, color: INK, marginBottom: 8 }}>Thank you</div>
+              <div style={{ fontFamily: FONT_SERIF, fontSize: 24, color: NAVY, marginBottom: 8, fontWeight: 500 }}>Thank you</div>
               <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.6 }}>Your vote has been recorded. You can close this page.</div>
             </div>
           )}

@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import Head from 'next/head'
 
-const NAVY = '#243B4A'   // slate
-const GOLD = '#1C8C8C'   // teal accent
-const INK = '#243B4A'
-const MUTED = '#5E7180'
-const CREAM = '#E8F1F1'  // pale teal
+const NAVY = '#1e2d4e'
+const GOLD = '#c9a84c'
+const INK = '#2a2a2a'
+const MUTED = '#7a7068'
+const CREAM = '#f0ebe0'
+const BORDER = '#ddd5c4'
+const FONT_SERIF = "'Cormorant Garamond', Georgia, serif"
+const FONT_SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
 export default function ShulVoteAdmin() {
   const [passcode, setPasscode] = useState('')
@@ -31,21 +34,25 @@ export default function ShulVoteAdmin() {
 
   return (
     <>
-      <Head><title>Election Admin</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
-      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
-        <div style={{ maxWidth: 520, margin: '0 auto', background: '#fff', borderRadius: 16, padding: '28px 26px', border: '1px solid #ECE7DD' }}>
-          <div style={{ fontSize: 22, color: INK, marginBottom: 4 }}>Gabbai Sheini — Admin</div>
-          <div style={{ width: 40, height: 3, background: GOLD, borderRadius: 2, marginBottom: 22 }} />
+      <Head>
+        <title>Gabbai Sheini — Admin</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+      </Head>
+      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: FONT_SANS }}>
+        <div style={{ maxWidth: 520, margin: '0 auto', background: '#fff', borderRadius: 4, padding: '30px 28px', border: `1px solid ${BORDER}`, borderTop: `3px solid ${GOLD}` }}>
+          <div style={{ fontFamily: FONT_SERIF, fontSize: 24, color: NAVY, marginBottom: 4, fontWeight: 500 }}>Gabbai Sheini — Admin</div>
+          <div style={{ width: 44, height: 1.5, background: GOLD, marginBottom: 24 }} />
 
           {!data && (
             <div>
               <label style={{ fontSize: 13, color: MUTED, display: 'block', marginBottom: 7 }}>Admin passcode</label>
               <input type="password" value={passcode} onChange={(e) => setPasscode(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') call('status') }}
-                style={{ width: '100%', boxSizing: 'border-box', fontSize: 16, padding: '12px 14px', border: '1.5px solid #DDD8CF', borderRadius: 10, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', outline: 'none' }} />
+                style={{ width: '100%', boxSizing: 'border-box', fontSize: 16, padding: '12px 14px', border: `1.5px solid ${BORDER}`, borderRadius: 3, fontFamily: FONT_SANS, outline: 'none', background: CREAM }} />
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginTop: 12 }}>{error}</div>}
               <button onClick={() => call('status')} disabled={busy}
-                style={{ width: '100%', marginTop: 16, padding: 13, border: 'none', borderRadius: 11, background: NAVY, color: '#fff', fontSize: 15, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
+                style={{ width: '100%', marginTop: 16, padding: 13, border: 'none', borderRadius: 3, background: NAVY, color: '#fff', fontSize: 14, fontWeight: 500, fontFamily: FONT_SANS, cursor: 'pointer' }}>
                 {busy ? 'Loading…' : 'View turnout'}
               </button>
             </div>
@@ -54,11 +61,11 @@ export default function ShulVoteAdmin() {
           {data && (
             <div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
-                <span style={{ fontSize: 38, color: NAVY }}>{data.votedCount}</span>
+                <span style={{ fontFamily: FONT_SERIF, fontSize: 40, color: NAVY, fontWeight: 500 }}>{data.votedCount}</span>
                 <span style={{ fontSize: 16, color: MUTED }}>of {data.totalEligible} voted</span>
                 <span style={{ fontSize: 16, color: GOLD, marginLeft: 'auto' }}>{pct}%</span>
               </div>
-              <div style={{ height: 8, background: '#ECE7DD', borderRadius: 4, overflow: 'hidden', marginBottom: 20 }}>
+              <div style={{ height: 8, background: BORDER, borderRadius: 4, overflow: 'hidden', marginBottom: 20 }}>
                 <div style={{ width: pct + '%', height: '100%', background: GOLD }} />
               </div>
 
@@ -70,7 +77,7 @@ export default function ShulVoteAdmin() {
               </div>
 
               {data.isOpen && (
-                <div style={{ background: CREAM, borderRadius: 10, padding: '14px 16px', fontSize: 13, color: MUTED, lineHeight: 1.6, marginBottom: 18 }}>
+                <div style={{ background: CREAM, borderRadius: 3, padding: '14px 16px', fontSize: 13, color: MUTED, lineHeight: 1.6, marginBottom: 18 }}>
                   Names and the tally are hidden while voting is open — you can only see the count.
                   Close voting to reveal who voted and the result.
                 </div>
@@ -78,7 +85,7 @@ export default function ShulVoteAdmin() {
 
               {!data.isOpen && data.tally && (
                 <div style={{ marginBottom: 18 }}>
-                  <div style={{ fontSize: 14, color: INK, marginBottom: 10 }}>Result</div>
+                  <div style={{ fontFamily: FONT_SERIF, fontSize: 18, color: NAVY, marginBottom: 10, fontWeight: 500 }}>Result</div>
                   {[['A', data.candidates.A], ['B', data.candidates.B]].map(([k, name]) => {
                     const v = data.tally[k] || 0
                     const total = (data.tally.A || 0) + (data.tally.B || 0)
@@ -89,7 +96,7 @@ export default function ShulVoteAdmin() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, color: INK, marginBottom: 4 }}>
                           <span>{name}{win && total ? ' ✓' : ''}</span><span>{v} ({w}%)</span>
                         </div>
-                        <div style={{ height: 10, background: '#ECE7DD', borderRadius: 5, overflow: 'hidden' }}>
+                        <div style={{ height: 10, background: BORDER, borderRadius: 5, overflow: 'hidden' }}>
                           <div style={{ width: w + '%', height: '100%', background: win ? GOLD : '#C9CCD4' }} />
                         </div>
                       </div>
@@ -113,17 +120,17 @@ export default function ShulVoteAdmin() {
 
               <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
                 <button onClick={() => call('status')} disabled={busy}
-                  style={{ flex: 1, padding: 12, border: '1.5px solid #DDD8CF', borderRadius: 10, background: '#fff', color: INK, fontSize: 14, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
+                  style={{ flex: 1, padding: 12, border: `1.5px solid ${BORDER}`, borderRadius: 3, background: '#fff', color: INK, fontSize: 13, fontWeight: 500, fontFamily: FONT_SANS, cursor: 'pointer' }}>
                   Refresh
                 </button>
                 {data.isOpen ? (
                   <button onClick={() => { if (confirm('Close voting? This reveals names + the result and stops new votes.')) call('close') }} disabled={busy}
-                    style={{ flex: 1, padding: 12, border: 'none', borderRadius: 10, background: '#B23A2E', color: '#fff', fontSize: 14, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
+                    style={{ flex: 1, padding: 12, border: 'none', borderRadius: 3, background: '#B23A2E', color: '#fff', fontSize: 13, fontWeight: 500, fontFamily: FONT_SANS, cursor: 'pointer' }}>
                     Close voting
                   </button>
                 ) : (
                   <button onClick={() => { if (confirm('Re-open voting?')) call('reopen') }} disabled={busy}
-                    style={{ flex: 1, padding: 12, border: '1.5px solid #DDD8CF', borderRadius: 10, background: '#fff', color: INK, fontSize: 14, fontFamily: '-apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', cursor: 'pointer' }}>
+                    style={{ flex: 1, padding: 12, border: `1.5px solid ${BORDER}`, borderRadius: 3, background: '#fff', color: INK, fontSize: 13, fontWeight: 500, fontFamily: FONT_SANS, cursor: 'pointer' }}>
                     Re-open voting
                   </button>
                 )}
