@@ -55,9 +55,13 @@ export default function Home() {
           const canvas = pdfCanvas.current
           if (!canvas) return
           const base = page.getViewport({ scale: 1 })
-          const w = (canvas.parentElement && canvas.parentElement.clientWidth) || 360
-          const vp = page.getViewport({ scale: Math.min(w / base.width, 2) })
+          const cssW = (canvas.parentElement && canvas.parentElement.clientWidth) || 360
+          const dpr = Math.min(window.devicePixelRatio || 1, 3)
+          let scale = (cssW * dpr) / base.width
+          if (base.width * scale > 2400) scale = 2400 / base.width // cap for performance
+          const vp = page.getViewport({ scale })
           canvas.width = vp.width; canvas.height = vp.height
+          canvas.style.width = '100%'; canvas.style.height = 'auto'
           return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise
         })
         .catch(() => { if (!cancelled) setPdfFailed(true) })
