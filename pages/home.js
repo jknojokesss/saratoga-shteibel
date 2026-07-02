@@ -17,8 +17,6 @@ const FALLBACK_ANNOUNCEMENTS = [
 ]
 const TILTS = [-1.3, 0.9, -0.6, 1.1, -1.0, 0.7]
 
-// Set to the PDF path (e.g. '/shabbos-schedule.pdf') once uploaded to /public.
-const SCHEDULE_PDF = null
 // Optional shul photo path in /public (e.g. '/shul-photo.jpg'). Falls back to a plain band.
 const SHUL_PHOTO = '/shul-photo.jpg'
 
@@ -30,9 +28,13 @@ function Pin({ color }) {
 
 export default function Home() {
   const [announcements, setAnnouncements] = useState(FALLBACK_ANNOUNCEMENTS)
+  const [scheduleUrl, setScheduleUrl] = useState(null)
   useEffect(() => {
     fetch('/api/announcements/list').then((r) => r.json()).then((d) => {
       if (d.announcements && d.announcements.length) setAnnouncements(d.announcements)
+    }).catch(() => {})
+    fetch('/api/announcements/schedule').then((r) => r.json()).then((d) => {
+      if (d.url) setScheduleUrl(d.url)
     }).catch(() => {})
   }, [])
   return (
@@ -81,13 +83,13 @@ export default function Home() {
           <aside className="col-schedule" style={{ background: '#f7f3ec', padding: '24px 24px 34px' }}>
             <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: NAVY }}>Shabbos Schedule</div>
             <div style={{ width: 38, height: 1.5, background: GOLD, margin: '8px 0 18px' }} />
-            {SCHEDULE_PDF ? (
+            {scheduleUrl ? (
               <>
                 <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 3, overflow: 'hidden', boxShadow: '0 3px 10px rgba(0,0,0,.08)' }}>
-                  <iframe src={SCHEDULE_PDF} title="Shabbos Schedule" style={{ width: '100%', height: 460, border: 'none', display: 'block' }} />
+                  <iframe src={scheduleUrl} title="Shabbos Schedule" style={{ width: '100%', height: 460, border: 'none', display: 'block' }} />
                 </div>
                 <div style={{ textAlign: 'center', marginTop: 14 }}>
-                  <a href={SCHEDULE_PDF} download className="btn-navy" style={{ display: 'inline-block', background: NAVY, color: '#fff', fontSize: 12, fontWeight: 500, letterSpacing: 0.5, padding: '10px 22px', borderRadius: 3, textDecoration: 'none' }}>Download PDF</a>
+                  <a href={scheduleUrl} target="_blank" rel="noreferrer" className="btn-navy" style={{ display: 'inline-block', background: NAVY, color: '#fff', fontSize: 12, fontWeight: 500, letterSpacing: 0.5, padding: '10px 22px', borderRadius: 3, textDecoration: 'none' }}>Open / Download PDF</a>
                 </div>
               </>
             ) : (

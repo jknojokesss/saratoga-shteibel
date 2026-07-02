@@ -25,6 +25,34 @@ export default function AnnouncementsAdmin() {
   const [draft, setDraft] = useState({ tag: '', title: '', body: '', pin: '#c9a84c', sort_order: 0 })
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [schedUrl, setSchedUrl] = useState(null)
+  const [schedFile, setSchedFile] = useState(null)
+  const [schedBusy, setSchedBusy] = useState(false)
+  const [schedMsg, setSchedMsg] = useState('')
+
+  async function loadSchedule() {
+    try { const r = await fetch('/api/announcements/schedule'); const d = await r.json(); setSchedUrl(d.url || null) } catch {}
+  }
+
+  function uploadSchedule() {
+    if (!schedFile) { setSchedMsg('Choose a PDF first.'); return }
+    setSchedMsg(''); setSchedBusy(true)
+    const reader = new FileReader()
+    reader.onload = async () => {
+      try {
+        const r = await fetch('/api/announcements/upload-schedule', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ passcode, dataBase64: reader.result }),
+        })
+        const d = await r.json()
+        if (!r.ok) { setSchedMsg(d.error || 'Upload failed.') }
+        else { setSchedUrl(d.url); setSchedFile(null); setSchedMsg('Uploaded — it is now live on the site.') }
+      } catch { setSchedMsg('Network error.') }
+      finally { setSchedBusy(false) }
+    }
+    reader.onerror = () => { setSchedMsg('Could not read that file.'); setSchedBusy(false) }
+    reader.readAsDataURL(schedFile)
+  }
 
   async function call(action, item) {
     setError(''); setBusy(true)
@@ -81,9 +109,9 @@ export default function AnnouncementsAdmin() {
             <div style={{ ...card, maxWidth: 360 }}>
               <label style={labelStyle}>Admin passcode</label>
               <input type="password" value={passcode} onChange={(e) => setPasscode(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') call('list') }} style={inputStyle} />
+                onKeyDown={(e) => { if (e.key === 'Enter') call('list').then(function(ok){ if (ok) loadSchedule() }) }} style={inputStyle} />
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginBottom: 10 }}>{error}</div>}
-              <button onClick={() => call('list')} disabled={busy}
+              <button onClick={() => call('list').then(function(ok){ if (ok) loadSchedule() })} disabled={busy}
                 style={{ width: '100%', padding: 12, border: 'none', borderRadius: 3, background: NAVY, color: '#fff', fontSize: 14, fontWeight: 500, fontFamily: SANS, cursor: 'pointer' }}>
                 {busy ? 'Loading…' : 'Sign in'}
               </button>
@@ -108,6 +136,21 @@ export default function AnnouncementsAdmin() {
                 <button onClick={addNew} disabled={busy}
                   style={{ padding: '11px 24px', border: 'none', borderRadius: 3, background: GOLD, color: NAVY, fontSize: 13, fontWeight: 500, fontFamily: SANS, cursor: 'pointer' }}>
                   {busy ? 'Posting…' : 'Post to board'}
+                </button>
+              </div>
+
+              <div style={{ ...card, borderTop: `3px solid ${GOLD}` }}>
+                <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY, marginBottom: 6 }}>Shabbos Schedule PDF</div>
+                <div style={{ fontSize: 13, color: MUTED, marginBottom: 12 }}>
+                  {schedUrl
+                    ? <>Current schedule is live — <a href={schedUrl} target="_blank" rel="noreferrer" style={{ color: NAVY }}>view PDF</a>. Upload a new one to replace it.</>
+                    : 'No schedule uploaded yet. Upload a PDF and it appears on the homepage instantly.'}
+                </div>
+                <input type="file" accept="application/pdf" onChange={(e) => { setSchedFile(e.target.files[0] || null); setSchedMsg('') }} style={{ fontSize: 13, marginBottom: 12, display: 'block' }} />
+                {schedMsg && <div style={{ fontSize: 13, color: schedMsg.includes('live') ? '#2E7D32' : '#B23A2E', marginBottom: 10 }}>{schedMsg}</div>}
+                <button onClick={uploadSchedule} disabled={schedBusy}
+                  style={{ padding: '11px 24px', border: 'none', borderRadius: 3, background: NAVY, color: '#fff', fontSize: 13, fontWeight: 500, fontFamily: SANS, cursor: 'pointer' }}>
+                  {schedBusy ? 'Uploading…' : 'Upload / replace schedule'}
                 </button>
               </div>
 
