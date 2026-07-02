@@ -103,15 +103,32 @@ export default function Home() {
 
         <div className="main-grid" style={{ display: 'grid', gridTemplateColumns: '1.55fr 1fr' }}>
 
-          <section className="col-bulletin" style={{ background: NAVY, padding: '24px 24px 34px' }}>
-            <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: GOLD_LIGHT }}>Bulletin Board</div>
-            <div style={{ width: 38, height: 1.5, background: GOLD, margin: '8px 0 26px' }} />
+          <section className="col-bulletin" style={{
+            background: '#c69a63',
+            backgroundImage: 'radial-gradient(rgba(90,60,30,0.22) 1px, transparent 1.5px), radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1.5px)',
+            backgroundSize: '6px 6px, 9px 9px',
+            backgroundPosition: '0 0, 3px 4px',
+            boxShadow: 'inset 0 0 36px rgba(60,40,20,0.5)',
+            padding: '26px 24px 42px',
+          }}>
+            <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: '#3f2a15', textShadow: '0 1px 0 rgba(255,255,255,0.15)' }}>Bulletin Board</div>
+            <div style={{ width: 38, height: 2, background: '#6e4a29', margin: '8px 0 32px' }} />
             {announcements.map((a, i) => (
-              <div key={a.id || i} style={{ position: 'relative', background: '#fffdf8', padding: '17px 18px 16px', borderRadius: 2, boxShadow: '0 4px 12px rgba(0,0,0,.28)', transform: `rotate(${TILTS[i % TILTS.length]}deg)`, marginBottom: 26 }}>
+              <div key={a.id || i} style={{
+                position: 'relative',
+                background: '#fffdf5',
+                backgroundImage: 'repeating-linear-gradient(#fffdf5, #fffdf5 24px, #cdd8ea 24px, #cdd8ea 25px)',
+                boxShadow: '0 7px 16px rgba(40,25,10,0.42)',
+                borderRadius: 2,
+                padding: '20px 16px 16px 32px',
+                transform: `rotate(${TILTS[i % TILTS.length]}deg)`,
+                marginBottom: 30,
+              }}>
                 <Pin color={a.pin} />
-                <div style={{ fontSize: 10, letterSpacing: 1, color: '#b08a2e', textTransform: 'uppercase' }}>{a.tag}</div>
-                <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY, margin: '3px 0 5px' }}>{a.title}</div>
-                <div style={{ fontSize: 12.5, color: '#6a6258', lineHeight: 1.55 }}>{a.body}</div>
+                <div style={{ position: 'absolute', top: 0, bottom: 0, left: 22, width: 1.5, background: '#e7a6a6' }} />
+                <div style={{ position: 'relative', fontSize: 10, letterSpacing: 1, color: '#b0762e', textTransform: 'uppercase' }}>{a.tag}</div>
+                <div style={{ position: 'relative', fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY, margin: '2px 0 4px' }}>{a.title}</div>
+                <div style={{ position: 'relative', fontSize: 13, color: '#5a5348', lineHeight: '25px' }}>{a.body}</div>
               </div>
             ))}
           </section>
