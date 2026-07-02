@@ -65,7 +65,7 @@ export default function Home() {
 
         <div className="main-grid" style={{ display: 'grid', gridTemplateColumns: '1.55fr 1fr' }}>
 
-          <section style={{ background: NAVY, padding: '24px 24px 34px' }}>
+          <section className="col-bulletin" style={{ background: NAVY, padding: '24px 24px 34px' }}>
             <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: GOLD_LIGHT }}>Bulletin Board</div>
             <div style={{ width: 38, height: 1.5, background: GOLD, margin: '8px 0 26px' }} />
             {announcements.map((a, i) => (
@@ -78,7 +78,7 @@ export default function Home() {
             ))}
           </section>
 
-          <aside style={{ background: '#f7f3ec', padding: '24px 24px 34px' }}>
+          <aside className="col-schedule" style={{ background: '#f7f3ec', padding: '24px 24px 34px' }}>
             <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: NAVY }}>Shabbos Schedule</div>
             <div style={{ width: 38, height: 1.5, background: GOLD, margin: '8px 0 18px' }} />
             {SCHEDULE_PDF ? (
@@ -113,6 +113,7 @@ export default function Home() {
         .btn-navy:hover { background: ${'#2c3e6b'}; }
         @media (max-width: 720px) {
           .main-grid { grid-template-columns: 1fr !important; }
+          .col-schedule { order: -1; }
         }
       `}</style>
     </>
