@@ -113,24 +113,28 @@ export default function Home() {
           }}>
             <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: '#3f2a15', textShadow: '0 1px 0 rgba(255,255,255,0.15)' }}>Bulletin Board</div>
             <div style={{ width: 38, height: 2, background: '#6e4a29', margin: '8px 0 32px' }} />
-            {announcements.map((a, i) => (
-              <div key={a.id || i} style={{
-                position: 'relative',
-                background: '#fffdf5',
-                backgroundImage: 'repeating-linear-gradient(#fffdf5, #fffdf5 24px, #cdd8ea 24px, #cdd8ea 25px)',
-                boxShadow: '0 7px 16px rgba(40,25,10,0.42)',
-                borderRadius: 2,
-                padding: '20px 16px 16px 32px',
-                transform: `rotate(${TILTS[i % TILTS.length]}deg)`,
-                marginBottom: 30,
-              }}>
-                <Pin color={a.pin} />
-                <div style={{ position: 'absolute', top: 0, bottom: 0, left: 22, width: 1.5, background: '#e7a6a6' }} />
-                <div style={{ position: 'relative', fontSize: 10, letterSpacing: 1, color: '#b0762e', textTransform: 'uppercase' }}>{a.tag}</div>
-                <div style={{ position: 'relative', fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY, margin: '2px 0 4px' }}>{a.title}</div>
-                <div style={{ position: 'relative', fontSize: 13, color: '#5a5348', lineHeight: '25px' }}>{a.body}</div>
-              </div>
-            ))}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px 18px' }}>
+              {announcements.map((a, i) => (
+                <div key={a.id || i} style={{
+                  position: 'relative',
+                  background: '#fffdf5',
+                  boxShadow: '0 7px 16px rgba(40,25,10,0.42)',
+                  borderRadius: 2,
+                  padding: '16px 14px',
+                  aspectRatio: '1 / 1',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  transform: `rotate(${TILTS[i % TILTS.length]}deg)`,
+                }}>
+                  <Pin color={a.pin} />
+                  <div style={{ fontSize: 10, letterSpacing: 1, color: '#b0762e', textTransform: 'uppercase', marginBottom: 5 }}>{a.tag}</div>
+                  <div style={{ fontFamily: SERIF, fontSize: 17, fontWeight: 600, color: NAVY, marginBottom: 5, lineHeight: 1.2 }}>{a.title}</div>
+                  <div style={{ fontSize: 12, color: '#5a5348', lineHeight: 1.5 }}>{a.body}</div>
+                </div>
+              ))}
+            </div>
           </section>
 
           <aside className="col-schedule" style={{ background: '#f7f3ec', padding: '24px 24px 34px' }}>
