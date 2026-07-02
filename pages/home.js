@@ -59,7 +59,7 @@ export default function Home() {
           </div>
         </header>
 
-        <div style={{ height: 420, position: 'relative', background: `#cfc7b6 center 42%/cover no-repeat`, backgroundImage: SHUL_PHOTO ? `url(${SHUL_PHOTO})` : 'none' }}>
+        <div className="hero-band" style={{ position: 'relative', background: `#cfc7b6 center 42%/cover no-repeat`, backgroundImage: SHUL_PHOTO ? `url(${SHUL_PHOTO})` : 'none' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(30,45,78,0.30)' }} />
         </div>
 
@@ -111,9 +111,11 @@ export default function Home() {
         .btn-gold:hover { background: #d8b95e; }
         .btn-outline:hover { background: ${NAVY}; color: #fff !important; }
         .btn-navy:hover { background: ${'#2c3e6b'}; }
+        .hero-band { height: 300px; }
         @media (max-width: 720px) {
           .main-grid { grid-template-columns: 1fr !important; }
           .col-schedule { order: -1; }
+          .hero-band { height: 170px; }
         }
       `}</style>
     </>
