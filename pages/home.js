@@ -55,11 +55,8 @@ export default function Home() {
           const canvas = pdfCanvas.current
           if (!canvas) return
           const base = page.getViewport({ scale: 1 })
-          const cssW = (canvas.parentElement && canvas.parentElement.clientWidth) || 360
-          const dpr = Math.min(window.devicePixelRatio || 1, 3)
-          let scale = (cssW * dpr) / base.width
-          if (base.width * scale > 2400) scale = 2400 / base.width // cap for performance
-          const vp = page.getViewport({ scale })
+          // Render at a high fixed width and display scaled-down = crisp on any screen (supersampling).
+          const vp = page.getViewport({ scale: 2200 / base.width })
           canvas.width = vp.width; canvas.height = vp.height
           canvas.style.width = '100%'; canvas.style.height = 'auto'
           return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise
@@ -127,7 +124,7 @@ export default function Home() {
                 <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 3, overflow: 'hidden', boxShadow: '0 3px 10px rgba(0,0,0,.08)', padding: pdfFailed ? '40px 20px' : 0, textAlign: 'center' }}>
                   {pdfFailed
                     ? <div style={{ color: MUTED }}><div style={{ fontFamily: SERIF, fontSize: 17, color: NAVY, marginBottom: 6 }}>This week's schedule is ready</div><div style={{ fontSize: 13 }}>Tap below to open it.</div></div>
-                    : <canvas ref={pdfCanvas} style={{ display: 'block', width: '100%' }} />}
+                    : <canvas ref={pdfCanvas} onClick={() => window.open(scheduleUrl, '_blank')} title="Tap to open full schedule" style={{ display: 'block', width: '100%', cursor: 'pointer' }} />}
                 </div>
                 <div style={{ textAlign: 'center', marginTop: 14 }}>
                   <a href={scheduleUrl} target="_blank" rel="noreferrer" className="btn-navy" style={{ display: 'inline-block', background: NAVY, color: '#fff', fontSize: 12, fontWeight: 500, letterSpacing: 0.5, padding: '10px 22px', borderRadius: 3, textDecoration: 'none' }}>Open / Download PDF</a>
