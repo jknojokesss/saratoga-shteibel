@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const NAVY = '#1e2d4e'
 const GOLD = '#c9a84c'
@@ -29,6 +29,8 @@ function Pin({ color }) {
 export default function Home() {
   const [announcements, setAnnouncements] = useState(FALLBACK_ANNOUNCEMENTS)
   const [scheduleUrl, setScheduleUrl] = useState(null)
+  const [pdfFailed, setPdfFailed] = useState(false)
+  const pdfCanvas = useRef(null)
   useEffect(() => {
     fetch('/api/announcements/list').then((r) => r.json()).then((d) => {
       if (d.announcements && d.announcements.length) setAnnouncements(d.announcements)
@@ -37,6 +39,39 @@ export default function Home() {
       if (d.url) setScheduleUrl(d.url)
     }).catch(() => {})
   }, [])
+
+  // Render the schedule PDF's first page to a canvas (clean image, no viewer chrome).
+  useEffect(() => {
+    if (!scheduleUrl) return
+    let cancelled = false
+    function render() {
+      const lib = window.pdfjsLib
+      if (!lib) { setPdfFailed(true); return }
+      try { lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js' } catch (e) {}
+      lib.getDocument(scheduleUrl).promise
+        .then((pdf) => pdf.getPage(1))
+        .then((page) => {
+          if (cancelled) return
+          const canvas = pdfCanvas.current
+          if (!canvas) return
+          const base = page.getViewport({ scale: 1 })
+          const w = (canvas.parentElement && canvas.parentElement.clientWidth) || 360
+          const vp = page.getViewport({ scale: Math.min(w / base.width, 2) })
+          canvas.width = vp.width; canvas.height = vp.height
+          return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise
+        })
+        .catch(() => { if (!cancelled) setPdfFailed(true) })
+    }
+    if (window.pdfjsLib) { render() }
+    else {
+      const s = document.createElement('script')
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'
+      s.onload = render
+      s.onerror = () => { if (!cancelled) setPdfFailed(true) }
+      document.body.appendChild(s)
+    }
+    return () => { cancelled = true }
+  }, [scheduleUrl])
   return (
     <>
       <Head>
@@ -85,8 +120,10 @@ export default function Home() {
             <div style={{ width: 38, height: 1.5, background: GOLD, margin: '8px 0 18px' }} />
             {scheduleUrl ? (
               <>
-                <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 3, overflow: 'hidden', boxShadow: '0 3px 10px rgba(0,0,0,.08)' }}>
-                  <iframe src={scheduleUrl} title="Shabbos Schedule" style={{ width: '100%', height: 460, border: 'none', display: 'block' }} />
+                <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 3, overflow: 'hidden', boxShadow: '0 3px 10px rgba(0,0,0,.08)', padding: pdfFailed ? '40px 20px' : 0, textAlign: 'center' }}>
+                  {pdfFailed
+                    ? <div style={{ color: MUTED }}><div style={{ fontFamily: SERIF, fontSize: 17, color: NAVY, marginBottom: 6 }}>This week's schedule is ready</div><div style={{ fontSize: 13 }}>Tap below to open it.</div></div>
+                    : <canvas ref={pdfCanvas} style={{ display: 'block', width: '100%' }} />}
                 </div>
                 <div style={{ textAlign: 'center', marginTop: 14 }}>
                   <a href={scheduleUrl} target="_blank" rel="noreferrer" className="btn-navy" style={{ display: 'inline-block', background: NAVY, color: '#fff', fontSize: 12, fontWeight: 500, letterSpacing: 0.5, padding: '10px 22px', borderRadius: 3, textDecoration: 'none' }}>Open / Download PDF</a>
