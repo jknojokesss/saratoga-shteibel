@@ -115,23 +115,23 @@ export default function Home() {
             <div style={{ width: 38, height: 2, background: '#6e4a29', margin: '8px 0 32px' }} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 175px))', justifyContent: 'center', gap: '28px 22px' }}>
               {announcements.map((a, i) => (
-                <div key={a.id || i} style={{
-                  position: 'relative',
-                  background: '#fffdf5',
-                  boxShadow: '0 7px 16px rgba(40,25,10,0.42)',
-                  borderRadius: 2,
-                  padding: '12px 12px',
-                  aspectRatio: '1 / 1',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  transform: `rotate(${TILTS[i % TILTS.length]}deg)`,
-                }}>
+                <div key={a.id || i} style={{ position: 'relative', transform: `rotate(${TILTS[i % TILTS.length]}deg)` }}>
                   <Pin color={a.pin} />
-                  <div style={{ fontSize: 9.5, letterSpacing: 1, color: '#b0762e', textTransform: 'uppercase', marginBottom: 4 }}>{a.tag}</div>
-                  <div style={{ fontFamily: SERIF, fontSize: 16, fontWeight: 600, color: NAVY, marginBottom: 4, lineHeight: 1.15 }}>{a.title}</div>
-                  <div style={{ fontSize: 11.5, color: '#5a5348', lineHeight: 1.4 }}>{a.body}</div>
+                  <div style={{
+                    background: '#fffdf5',
+                    boxShadow: '0 7px 16px rgba(40,25,10,0.42)',
+                    borderRadius: 2,
+                    padding: '14px 12px',
+                    aspectRatio: '1 / 1',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                  }}>
+                    <div style={{ fontSize: 9.5, letterSpacing: 1, color: '#b0762e', textTransform: 'uppercase', marginBottom: 4 }}>{a.tag}</div>
+                    <div style={{ fontFamily: SERIF, fontSize: 16, fontWeight: 600, color: NAVY, marginBottom: 4, lineHeight: 1.15 }}>{a.title}</div>
+                    <div style={{ fontSize: 11.5, color: '#5a5348', lineHeight: 1.4 }}>{a.body}</div>
+                  </div>
                 </div>
               ))}
             </div>
