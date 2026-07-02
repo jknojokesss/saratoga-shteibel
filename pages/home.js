@@ -113,14 +113,14 @@ export default function Home() {
           }}>
             <div style={{ fontFamily: SERIF, fontSize: 23, fontWeight: 600, color: '#3f2a15', textShadow: '0 1px 0 rgba(255,255,255,0.15)' }}>Bulletin Board</div>
             <div style={{ width: 38, height: 2, background: '#6e4a29', margin: '8px 0 32px' }} />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px 18px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 175px))', justifyContent: 'center', gap: '28px 22px' }}>
               {announcements.map((a, i) => (
                 <div key={a.id || i} style={{
                   position: 'relative',
                   background: '#fffdf5',
                   boxShadow: '0 7px 16px rgba(40,25,10,0.42)',
                   borderRadius: 2,
-                  padding: '16px 14px',
+                  padding: '12px 12px',
                   aspectRatio: '1 / 1',
                   display: 'flex',
                   flexDirection: 'column',
@@ -129,9 +129,9 @@ export default function Home() {
                   transform: `rotate(${TILTS[i % TILTS.length]}deg)`,
                 }}>
                   <Pin color={a.pin} />
-                  <div style={{ fontSize: 10, letterSpacing: 1, color: '#b0762e', textTransform: 'uppercase', marginBottom: 5 }}>{a.tag}</div>
-                  <div style={{ fontFamily: SERIF, fontSize: 17, fontWeight: 600, color: NAVY, marginBottom: 5, lineHeight: 1.2 }}>{a.title}</div>
-                  <div style={{ fontSize: 12, color: '#5a5348', lineHeight: 1.5 }}>{a.body}</div>
+                  <div style={{ fontSize: 9.5, letterSpacing: 1, color: '#b0762e', textTransform: 'uppercase', marginBottom: 4 }}>{a.tag}</div>
+                  <div style={{ fontFamily: SERIF, fontSize: 16, fontWeight: 600, color: NAVY, marginBottom: 4, lineHeight: 1.15 }}>{a.title}</div>
+                  <div style={{ fontSize: 11.5, color: '#5a5348', lineHeight: 1.4 }}>{a.body}</div>
                 </div>
               ))}
             </div>
