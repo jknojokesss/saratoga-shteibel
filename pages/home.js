@@ -124,10 +124,10 @@ export default function Home() {
                 <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 3, overflow: 'hidden', boxShadow: '0 3px 10px rgba(0,0,0,.08)', padding: pdfFailed ? '40px 20px' : 0, textAlign: 'center' }}>
                   {pdfFailed
                     ? <div style={{ color: MUTED }}><div style={{ fontFamily: SERIF, fontSize: 17, color: NAVY, marginBottom: 6 }}>This week's schedule is ready</div><div style={{ fontSize: 13 }}>Tap below to open it.</div></div>
-                    : <canvas ref={pdfCanvas} onClick={() => window.open(scheduleUrl, '_blank')} title="Tap to open full schedule" style={{ display: 'block', width: '100%', cursor: 'pointer' }} />}
+                    : <canvas ref={pdfCanvas} onClick={() => window.open('/shabbos-schedule.pdf', '_blank')} title="Tap to open full schedule" style={{ display: 'block', width: '100%', cursor: 'pointer' }} />}
                 </div>
                 <div style={{ textAlign: 'center', marginTop: 14 }}>
-                  <a href={scheduleUrl} target="_blank" rel="noreferrer" className="btn-navy" style={{ display: 'inline-block', background: NAVY, color: '#fff', fontSize: 12, fontWeight: 500, letterSpacing: 0.5, padding: '10px 22px', borderRadius: 3, textDecoration: 'none' }}>Open / Download PDF</a>
+                  <a href="/shabbos-schedule.pdf" target="_blank" rel="noreferrer" className="btn-navy" style={{ display: 'inline-block', background: NAVY, color: '#fff', fontSize: 12, fontWeight: 500, letterSpacing: 0.5, padding: '10px 22px', borderRadius: 3, textDecoration: 'none' }}>Open / Download PDF</a>
                 </div>
               </>
             ) : (
