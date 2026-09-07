@@ -47,10 +47,12 @@ export default function SaratogaHome() {
             alt="Morning minyan at Saratoga Shteibel"
             fill
             priority
-            className="object-cover object-[center_42%]"
+            className="object-cover object-[center_38%] scale-[1.02]"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121a30] via-[#1e2d4e]/70 to-[#1e2d4e]/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#121a30] via-[#121a30]/35 to-[#121a30]/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121a30]/80 via-[#121a30]/25 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#121a30]/75 to-transparent" />
           <div className="ornament-frame pointer-events-none absolute inset-4 sm:inset-6 border border-[#c9a84c]/35" />
 
           <div className="relative z-10 w-full mx-auto max-w-6xl px-5 sm:px-8 pb-16 pt-32">

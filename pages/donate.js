@@ -21,8 +21,8 @@ export default function Donate() {
       <SiteLayout current="donate">
         <section className="relative overflow-hidden donate-hero">
           <div className="absolute inset-0">
-            <img src="/shul-photo.jpg" alt="" className="w-full h-full object-cover object-[center_40%] opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#121a30] via-[#1e2d4e]/92 to-[#1e2d4e]/80" />
+            <img src="/shul-photo.jpg" alt="" className="w-full h-full object-cover object-[center_40%] opacity-55" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#121a30] via-[#1e2d4e]/78 to-[#1e2d4e]/55" />
           </div>
           <div className="relative mx-auto max-w-6xl px-5 sm:px-8 py-14 sm:py-20">
             <p className="font-hebrew text-[#e8d5a3] text-[20px] mb-3">ב״ה</p>
