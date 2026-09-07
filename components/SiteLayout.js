@@ -1,13 +1,12 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { MAPS_LINK } from './brand'
 
 const LINKS = [
-  { href: '/#this-week', label: 'This week' },
-  { href: '/#visit', label: 'Visit' },
+  { href: '/#schedule', label: 'Schedule' },
+  { href: '/visit', label: 'Visit' },
 ]
 
-export default function SiteLayout({ children, overlayNav = false, current = '' }) {
+export default function SiteLayout({ children, overlayNav = false, current = '', hideFooter = false }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -58,7 +57,11 @@ export default function SiteLayout({ children, overlayNav = false, current = '' 
                 key={l.href}
                 href={l.href}
                 className={`text-[12px] tracking-[0.16em] uppercase font-medium transition-colors ${
-                  light ? 'text-[#faf7f2]/80 hover:text-[#e8d5a3]' : 'text-[#7a7068] hover:text-[#1e2d4e]'
+                  light
+                    ? 'text-[#faf7f2]/80 hover:text-[#e8d5a3]'
+                    : current && l.href.includes(current)
+                      ? 'text-[#1e2d4e]'
+                      : 'text-[#7a7068] hover:text-[#1e2d4e]'
                 }`}
               >
                 {l.label}
@@ -110,46 +113,23 @@ export default function SiteLayout({ children, overlayNav = false, current = '' 
         {children}
       </div>
 
-      <footer className="mt-auto bg-[#1e2d4e] text-[#9aa6bd]">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-12 grid gap-10 sm:grid-cols-3">
-          <div>
-            <div className="font-display text-[#e8d5a3] text-[22px] font-semibold">Saratoga Shteibel</div>
-            <div className="gold-rule my-3" />
-            <p className="text-[13px] leading-relaxed text-[#c5cddd]">
-              A neighborhood minyan in Toms River. Come daven, stay for kiddush, be part of the kehillah.
-            </p>
+      {hideFooter ? null : (
+        <footer className="mt-auto bg-[#1e2d4e] text-[#9aa6bd]">
+          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-5 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
+              <span className="font-display text-[#e8d5a3] text-[18px] font-semibold">Saratoga Shteibel</span>
+              <span>166 Woodleigh Place · Toms River, NJ</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/#schedule" className="text-[11px] tracking-[0.14em] uppercase text-[#e8d5a3] hover:text-white">Schedule</Link>
+              <Link href="/visit" className="text-[11px] tracking-[0.14em] uppercase text-[#e8d5a3] hover:text-white">Visit</Link>
+              <Link href="/donate" className="border border-[#c9a84c] text-[#e8d5a3] text-[11px] tracking-[0.14em] uppercase px-3 py-2 hover:bg-[#c9a84c] hover:text-[#1e2d4e] transition-colors rounded-sm">
+                Donate
+              </Link>
+            </div>
           </div>
-          <div>
-            <div className="text-[11px] tracking-[0.2em] uppercase text-[#c9a84c] mb-3">Visit</div>
-            <p className="text-[14px] text-[#faf7f2] leading-relaxed">
-              166 Woodleigh Place<br />Toms River, NJ 08755
-            </p>
-            <a
-              href={MAPS_LINK}
-              className="inline-block mt-3 text-[12px] tracking-[0.12em] uppercase text-[#e8d5a3] hover:text-white"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Get directions →
-            </a>
-          </div>
-          <div>
-            <div className="text-[11px] tracking-[0.2em] uppercase text-[#c9a84c] mb-3">Support</div>
-            <p className="text-[14px] text-[#c5cddd] leading-relaxed mb-4">
-              Membership, kiddush, shaleshudis, or a gift in any amount — card or Donors Fund.
-            </p>
-            <Link href="/donate" className="inline-block border border-[#c9a84c] text-[#e8d5a3] text-[12px] tracking-[0.14em] uppercase px-4 py-2.5 hover:bg-[#c9a84c] hover:text-[#1e2d4e] transition-colors rounded-sm">
-              Give now
-            </Link>
-          </div>
-        </div>
-        <div className="border-t border-white/10">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-4 flex flex-wrap justify-between gap-2 text-[11px] tracking-wide">
-            <span>© {new Date().getFullYear()} Saratoga Shteibel</span>
-            <span className="font-hebrew text-[13px] text-[#e8d5a3]/80">ב״ה</span>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   )
 }
