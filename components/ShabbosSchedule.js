@@ -2,11 +2,27 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
   const pdfCanvas = useRef(null)
+  const frameRef = useRef(null)
   const [pdfFailed, setPdfFailed] = useState(false)
 
   useEffect(() => {
     if (!scheduleUrl) return undefined
     let cancelled = false
+    function fitCanvas(canvas) {
+      if (!embedded) {
+        canvas.style.width = '100%'
+        canvas.style.height = 'auto'
+        return
+      }
+      const wrap = frameRef.current
+      if (!wrap || !canvas.width || !canvas.height) return
+      const maxW = Math.max(0, wrap.clientWidth - 24)
+      const maxH = Math.max(0, wrap.clientHeight - 24)
+      if (!maxW || !maxH) return
+      const scale = Math.min(maxW / canvas.width, maxH / canvas.height)
+      canvas.style.width = `${Math.floor(canvas.width * scale)}px`
+      canvas.style.height = `${Math.floor(canvas.height * scale)}px`
+    }
     function render() {
       const lib = window.pdfjsLib
       if (!lib) { setPdfFailed(true); return }
@@ -21,14 +37,11 @@ export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
           const vp = page.getViewport({ scale: 2200 / base.width })
           canvas.width = vp.width
           canvas.height = vp.height
-          if (!embedded) {
-            canvas.style.width = '100%'
-            canvas.style.height = 'auto'
-          } else {
-            canvas.style.width = ''
-            canvas.style.height = ''
-          }
+          fitCanvas(canvas)
           return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise
+        })
+        .then(() => {
+          if (!cancelled && pdfCanvas.current) fitCanvas(pdfCanvas.current)
         })
         .catch(() => { if (!cancelled) setPdfFailed(true) })
     }
@@ -41,7 +54,18 @@ export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
       s.onerror = () => { if (!cancelled) setPdfFailed(true) }
       document.body.appendChild(s)
     }
-    return () => { cancelled = true }
+    const wrap = frameRef.current
+    let ro
+    if (embedded && wrap) {
+      ro = new ResizeObserver(() => {
+        if (pdfCanvas.current) fitCanvas(pdfCanvas.current)
+      })
+      ro.observe(wrap)
+    }
+    return () => {
+      cancelled = true
+      if (ro) ro.disconnect()
+    }
   }, [scheduleUrl, embedded])
 
   const pdfLink = scheduleUrl ? (
@@ -89,7 +113,10 @@ export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
           </div>
           {pdfLink}
         </div>
-        <div className={`flex-1 min-h-0 bg-white flex items-center justify-center ${scheduleUrl && !pdfFailed ? 'overflow-hidden p-2 sm:p-3' : ''}`}>
+        <div
+          ref={frameRef}
+          className={`flex-1 min-h-0 bg-white flex items-center justify-center ${scheduleUrl && !pdfFailed ? 'overflow-hidden p-2 sm:p-3' : ''}`}
+        >
           {flyer}
         </div>
       </section>
