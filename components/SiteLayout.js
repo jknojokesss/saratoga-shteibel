@@ -6,62 +6,42 @@ const LINKS = [
   { href: '/visit', label: 'Visit' },
 ]
 
-export default function SiteLayout({ children, overlayNav = false, current = '', hideFooter = false, flush = false }) {
-  const [scrolled, setScrolled] = useState(false)
+export default function SiteLayout({ children, current = '', hideFooter = false, flush = false }) {
   const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    if (!overlayNav) return undefined
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [overlayNav])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [open])
 
-  const solid = !overlayNav || scrolled || open
-  const light = overlayNav && !solid
-
   return (
     <div className={`${flush ? 'donate-lock h-[100svh] overflow-hidden' : 'min-h-screen'} flex flex-col bg-paper`}>
       <a href="#main" className="skip-link">Skip to content</a>
-      <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-          solid
-            ? 'bg-[#faf7f2]/95 backdrop-blur-md border-b border-[#ddd5c4] shadow-[0_1px_0_rgba(201,168,76,0.55)]'
-            : 'bg-transparent border-b border-transparent'
-        }`}
-      >
+      <header className="fixed top-0 inset-x-0 z-50 bg-[#faf7f2]/95 backdrop-blur-md border-b border-[#ddd5c4] shadow-[0_1px_0_rgba(201,168,76,0.55)]">
         <div className="mx-auto max-w-6xl px-5 sm:px-8 h-[72px] flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-3 min-w-0" onClick={() => setOpen(false)}>
-            <span className={`logo-plate ${light ? 'logo-plate-light' : ''}`}>
+            <span className="logo-plate">
               <img src="/logo.png" alt="" width={48} height={36} />
             </span>
             <span className="min-w-0">
-              <span className={`block font-display text-[21px] leading-none font-semibold tracking-wide ${light ? 'text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.75)]' : 'text-[#1e2d4e]'}`}>
+              <span className="block font-display text-[21px] leading-none font-semibold tracking-wide text-[#1e2d4e]">
                 Saratoga Shteibel
               </span>
-              <span className={`block text-[10px] tracking-[0.18em] uppercase mt-1 ${light ? 'text-[#e8d5a3] drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]' : 'text-[#7a7068]'}`}>
+              <span className="block text-[10px] tracking-[0.18em] uppercase mt-1 text-[#7a7068]">
                 Toms River · Est. 2023
               </span>
             </span>
           </Link>
 
-          <nav className={`hidden md:flex items-center gap-8 ${light ? 'rounded-sm bg-[#121a30]/35 px-4 py-2 backdrop-blur-sm' : ''}`} aria-label="Primary">
+          <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 className={`text-[12px] tracking-[0.16em] uppercase font-medium transition-colors ${
-                  light
-                    ? 'text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.75)] hover:text-[#e8d5a3]'
-                    : current && l.href.includes(current)
-                      ? 'text-[#1e2d4e]'
-                      : 'text-[#7a7068] hover:text-[#1e2d4e]'
+                  current && l.href.includes(current)
+                    ? 'text-[#1e2d4e]'
+                    : 'text-[#7a7068] hover:text-[#1e2d4e]'
                 }`}
               >
                 {l.label}
@@ -79,7 +59,7 @@ export default function SiteLayout({ children, overlayNav = false, current = '',
 
           <button
             type="button"
-            className={`md:hidden w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-sm ${light ? 'text-[#faf7f2]' : 'text-[#1e2d4e]'}`}
+            className="md:hidden w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-sm text-[#1e2d4e]"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -111,7 +91,7 @@ export default function SiteLayout({ children, overlayNav = false, current = '',
 
       <div
         id="main"
-        className={`${overlayNav ? '' : 'pt-[72px]'} ${flush ? 'flex-1 min-h-0 overflow-hidden' : ''}`}
+        className={`${flush ? 'flex-1 min-h-0 overflow-hidden' : ''} pt-[72px]`}
       >
         {children}
       </div>
