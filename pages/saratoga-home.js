@@ -10,7 +10,7 @@ export default function SaratogaHome() {
 
   useEffect(() => {
     fetch('/api/announcements/schedule').then((r) => r.json()).then((d) => {
-      if (d.url) setScheduleUrl(d.url)
+      if (d.url) setScheduleUrl('/shabbos-schedule.pdf')
     }).catch(() => {})
   }, [])
 
@@ -60,7 +60,7 @@ export default function SaratogaHome() {
               </div>
             </div>
 
-            <div id="schedule" className="flex-1 min-h-[46vh] lg:min-h-0">
+            <div id="schedule" className="flex-1 min-h-[46vh] lg:min-h-full lg:h-full">
               <ShabbosSchedule scheduleUrl={scheduleUrl} embedded />
             </div>
           </div>

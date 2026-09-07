@@ -14,10 +14,11 @@ export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
         canvas.style.height = 'auto'
         return
       }
-      const wrap = frameRef.current
-      if (!wrap || !canvas.width || !canvas.height) return
-      const maxW = Math.max(0, wrap.clientWidth - 24)
-      const maxH = Math.max(0, wrap.clientHeight - 24)
+          const wrap = frameRef.current
+          if (!wrap || !canvas.width || !canvas.height) return
+          const pad = 16
+          const maxW = Math.max(120, wrap.clientWidth - pad)
+          const maxH = Math.max(120, wrap.clientHeight - pad)
       if (!maxW || !maxH) return
       const scale = Math.min(maxW / canvas.width, maxH / canvas.height)
       canvas.style.width = `${Math.floor(canvas.width * scale)}px`
@@ -41,7 +42,10 @@ export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
           return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise
         })
         .then(() => {
-          if (!cancelled && pdfCanvas.current) fitCanvas(pdfCanvas.current)
+          if (cancelled || !pdfCanvas.current) return
+          requestAnimationFrame(() => {
+            if (pdfCanvas.current) fitCanvas(pdfCanvas.current)
+          })
         })
         .catch(() => { if (!cancelled) setPdfFailed(true) })
     }
