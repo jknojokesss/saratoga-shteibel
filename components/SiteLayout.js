@@ -6,7 +6,7 @@ const LINKS = [
   { href: '/visit', label: 'Visit' },
 ]
 
-export default function SiteLayout({ children, overlayNav = false, current = '', hideFooter = false }) {
+export default function SiteLayout({ children, overlayNav = false, current = '', hideFooter = false, flush = false }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -27,7 +27,7 @@ export default function SiteLayout({ children, overlayNav = false, current = '',
   const light = overlayNav && !solid
 
   return (
-    <div className="min-h-screen flex flex-col bg-paper">
+    <div className={`${flush ? 'donate-lock h-[100svh] overflow-hidden' : 'min-h-screen'} flex flex-col bg-paper`}>
       <a href="#main" className="skip-link">Skip to content</a>
       <header
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
@@ -109,7 +109,10 @@ export default function SiteLayout({ children, overlayNav = false, current = '',
         )}
       </header>
 
-      <div className={overlayNav ? '' : 'pt-[72px]'} id="main">
+      <div
+        id="main"
+        className={`${overlayNav ? '' : 'pt-[72px]'} ${flush ? 'flex-1 min-h-0 overflow-hidden' : ''}`}
+      >
         {children}
       </div>
 
