@@ -46,7 +46,7 @@ export default function SaratogaHome() {
               <Link href="/donate" className="btn-gold px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
                 Donate
               </Link>
-              <Link href="/visit" className="btn-outline px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
+              <Link href="/visit" className="btn-navy px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
                 Visit
               </Link>
             </div>

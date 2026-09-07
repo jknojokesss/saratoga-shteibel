@@ -14,7 +14,7 @@ export default function Visit() {
       <SiteLayout current="visit">
         <div className="paper-bg">
           <section className="mx-auto max-w-3xl px-5 sm:px-8 pt-10 sm:pt-14 pb-8 text-center">
-            <p className="text-[11px] tracking-[0.22em] uppercase text-[#c9a84c] mb-3">Visit</p>
+            <p className="text-[11px] tracking-[0.22em] uppercase text-[#7a7068] mb-3">Visit</p>
             <h1 className="font-display font-semibold text-[#1e2d4e] leading-tight text-[36px] sm:text-[52px]">
               166 Woodleigh Place
             </h1>
@@ -30,7 +30,7 @@ export default function Visit() {
             </div>
           </section>
         </div>
-        <div className="h-[52vh] min-h-[380px] border-t-[3px] border-[#c9a84c]">
+        <div className="h-[52vh] min-h-[380px] border-t-[3px] border-[#c9a84c] bg-[#e8e4dc]">
           <iframe
             title="Map of Saratoga Shteibel"
             src={MAPS_EMBED}
