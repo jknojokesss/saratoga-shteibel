@@ -67,7 +67,8 @@ body {
   color: var(--navy);
   text-decoration: none;
   font-weight: 500;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  border: 1.5px solid var(--gold);
+  box-shadow: 0 2px 10px rgba(8, 12, 24, 0.28);
 }
 .btn-cream:hover {
   background: #fff;
@@ -166,19 +167,19 @@ body {
 
 .hero-schedule {
   width: 100%;
-  max-width: 420px;
+  max-width: 340px;
 }
 
 .hero-schedule-frame {
   width: 100%;
   aspect-ratio: 8.5 / 11;
-  max-height: min(52svh, 560px);
+  max-height: min(40svh, 420px);
 }
 
 @media (min-width: 1024px) {
   .hero-schedule {
-    width: min(400px, calc((100svh - 168px) * 8.5 / 11));
-    max-width: 400px;
+    width: min(340px, calc((100svh - 220px) * 8.5 / 11));
+    max-width: 340px;
   }
 
   .hero-schedule-frame {

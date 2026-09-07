@@ -32,7 +32,7 @@ export default function SaratogaHome() {
             alt="Morning minyan at Saratoga Shteibel"
             fill
             priority
-            className="object-cover object-[center_16%] scale-[1.24] origin-center"
+            className="object-cover object-top scale-[1.45] origin-top"
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-[#121a30]/28" />

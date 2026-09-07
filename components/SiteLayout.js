@@ -51,7 +51,7 @@ export default function SiteLayout({ children, overlayNav = false, current = '',
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
+          <nav className={`hidden md:flex items-center gap-8 ${light ? 'rounded-sm bg-[#121a30]/35 px-4 py-2 backdrop-blur-sm' : ''}`} aria-label="Primary">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
