@@ -105,7 +105,7 @@ export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
   if (embedded) {
     return (
       <section
-        className="h-full min-h-[280px] flex flex-col bg-[#faf7f2] text-[#1e2d4e] rounded-sm overflow-hidden shadow-[0_28px_64px_rgba(8,12,24,0.45)] border border-[#e8d5a3]/40"
+        className="flex flex-col bg-[#faf7f2] text-[#1e2d4e] rounded-sm overflow-hidden shadow-[0_28px_64px_rgba(8,12,24,0.45)] border border-[#e8d5a3]/40"
         aria-labelledby="schedule-heading"
       >
         <div className="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 bg-[#1e2d4e] text-[#faf7f2] shrink-0">
@@ -119,7 +119,7 @@ export default function ShabbosSchedule({ scheduleUrl, embedded = false }) {
         </div>
         <div
           ref={frameRef}
-          className={`flex-1 min-h-0 bg-white flex items-center justify-center ${scheduleUrl && !pdfFailed ? 'overflow-hidden p-2 sm:p-3' : ''}`}
+          className={`hero-schedule-frame bg-white flex items-center justify-center ${scheduleUrl && !pdfFailed ? 'overflow-hidden p-2 sm:p-3' : 'px-5 py-8'}`}
         >
           {flyer}
         </div>

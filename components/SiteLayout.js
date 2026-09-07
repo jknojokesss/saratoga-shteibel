@@ -42,10 +42,10 @@ export default function SiteLayout({ children, overlayNav = false, current = '',
               <img src="/logo.png" alt="" width={48} height={36} />
             </span>
             <span className="min-w-0">
-              <span className={`block font-display text-[21px] leading-none font-semibold tracking-wide ${light ? 'text-[#faf7f2]' : 'text-[#1e2d4e]'}`}>
+              <span className={`block font-display text-[21px] leading-none font-semibold tracking-wide ${light ? 'text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.75)]' : 'text-[#1e2d4e]'}`}>
                 Saratoga Shteibel
               </span>
-              <span className={`block text-[10px] tracking-[0.18em] uppercase mt-1 ${light ? 'text-[#e8d5a3]' : 'text-[#7a7068]'}`}>
+              <span className={`block text-[10px] tracking-[0.18em] uppercase mt-1 ${light ? 'text-[#e8d5a3] drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]' : 'text-[#7a7068]'}`}>
                 Toms River · Est. 2023
               </span>
             </span>
@@ -58,7 +58,7 @@ export default function SiteLayout({ children, overlayNav = false, current = '',
                 href={l.href}
                 className={`text-[12px] tracking-[0.16em] uppercase font-medium transition-colors ${
                   light
-                    ? 'text-[#faf7f2]/80 hover:text-[#e8d5a3]'
+                    ? 'text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.75)] hover:text-[#e8d5a3]'
                     : current && l.href.includes(current)
                       ? 'text-[#1e2d4e]'
                       : 'text-[#7a7068] hover:text-[#1e2d4e]'
