@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export default function ShabbosSchedule({ scheduleUrl }) {
+export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
   const pdfCanvas = useRef(null)
   const [pdfFailed, setPdfFailed] = useState(false)
 
@@ -44,17 +44,21 @@ export default function ShabbosSchedule({ scheduleUrl }) {
 
   return (
     <section aria-labelledby="schedule-heading">
-      <div className="flex flex-col items-center text-center mb-6">
-        <p className="flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-[#c9a84c]">
-          <span className="block h-px w-8 bg-[#c9a84c]" />
-          This week
-          <span className="block h-px w-8 bg-[#c9a84c]" />
-        </p>
-        <h2 id="schedule-heading" className="font-display text-[30px] sm:text-[36px] font-semibold text-[#1e2d4e] mt-2">
-          Shabbos Schedule
-        </h2>
+      <div className={`mb-5 ${compact
+        ? 'flex flex-col gap-3 items-center text-center md:flex-row md:items-end md:justify-between md:text-left'
+        : 'flex flex-col items-center text-center mb-6'}`}>
+        <div className={compact ? 'min-w-0' : ''}>
+          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-[#c9a84c] ${compact ? 'justify-center md:justify-start' : 'justify-center'}`}>
+            {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
+            This week
+            {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
+          </p>
+          <h2 id="schedule-heading" className={`font-display font-semibold text-[#1e2d4e] mt-1 ${compact ? 'text-[24px] sm:text-[28px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
+            Shabbos Schedule
+          </h2>
+        </div>
         {scheduleUrl ? (
-          <a href="/shabbos-schedule.pdf" target="_blank" rel="noreferrer" className="btn-outline mt-4 text-[12px] font-medium tracking-[0.12em] uppercase px-4 py-2 rounded-sm">
+          <a href="/shabbos-schedule.pdf" target="_blank" rel="noreferrer" className={`btn-outline shrink-0 text-[12px] font-medium tracking-[0.12em] uppercase px-4 py-2 rounded-sm ${compact ? '' : 'mt-4'}`}>
             Open PDF
           </a>
         ) : null}
