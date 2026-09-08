@@ -15,7 +15,7 @@ export default function ThisWeek() {
   return (
     <>
       <Head>
-        <title>Schedule · Saratoga Shteibel</title>
+        <title>Zmanim · Saratoga Shteibel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <SiteLayout current="this-week">

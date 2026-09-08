@@ -54,7 +54,7 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
             {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
           </p>
           <h2 id="schedule-heading" className={`font-display font-semibold text-[#1e2d4e] mt-1 ${compact ? 'text-[22px] sm:text-[26px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
-            Shabbos Schedule
+            Zmanim
           </h2>
         </div>
         {scheduleUrl ? (
