@@ -139,6 +139,10 @@ body {
   background: rgba(250, 247, 242, 0.92);
 }
 
+.logo-on-paper {
+  mix-blend-mode: multiply;
+}
+
 .cork-board {
   background: #c69a63;
   background-image:

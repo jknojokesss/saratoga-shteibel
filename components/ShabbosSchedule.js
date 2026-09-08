@@ -45,15 +45,15 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
   return (
     <section aria-labelledby="schedule-heading">
       <div className={`mb-5 ${compact
-        ? 'flex flex-col gap-3 items-center text-center lg:flex-row lg:items-end lg:justify-between lg:text-left'
+        ? 'flex flex-col gap-3 items-center text-center sm:flex-row sm:items-end sm:justify-between'
         : 'flex flex-col items-center text-center mb-6'}`}>
-        <div className={compact ? 'min-w-0' : ''}>
-          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-[#c9a84c] ${compact ? 'justify-center lg:justify-start' : 'justify-center'}`}>
+        <div className={compact ? 'min-w-0 text-center sm:text-left' : ''}>
+          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-[#c9a84c] ${compact ? 'justify-center sm:justify-start' : 'justify-center'}`}>
             {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
             This week
             {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
           </p>
-          <h2 id="schedule-heading" className={`font-display font-semibold text-[#1e2d4e] mt-1 ${compact ? 'text-[24px] sm:text-[28px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
+          <h2 id="schedule-heading" className={`font-display font-semibold text-[#1e2d4e] mt-1 ${compact ? 'text-[26px] sm:text-[30px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
             Shabbos Schedule
           </h2>
         </div>
