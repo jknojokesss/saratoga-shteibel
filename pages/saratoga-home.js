@@ -26,36 +26,40 @@ export default function SaratogaHome() {
 
       <SiteLayout current="home">
         <div className="paper-bg">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-6 sm:py-9 lg:py-12 lg:min-h-[calc(100svh-72px)] lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(340px,42%)] lg:gap-12 xl:gap-16 lg:items-center">
-            <section className="text-center lg:text-left mb-8 lg:mb-0">
-              <p className="font-hebrew text-[18px] sm:text-[22px] text-[#c9a84c]">ב״ה</p>
-              <img
-                src="/logo.png"
-                alt=""
-                width={148}
-                height={148}
-                className="mx-auto lg:mx-0 mt-3 mb-4 lg:mt-4 lg:mb-5 w-[76px] sm:w-[96px] lg:w-[128px] h-auto"
-              />
-              <h1 className="font-display font-semibold text-[#1e2d4e] leading-[0.95] text-[36px] sm:text-[48px] lg:text-[64px]">
-                Saratoga Shteibel
-              </h1>
-              <p className="mt-2 sm:mt-3 text-[13px] sm:text-[16px] text-[#7a7068]">
-                166 Woodleigh Place · Toms River, NJ · Est. 2023
-              </p>
-              <div className="gold-rule mx-auto lg:mx-0 my-5 sm:my-6" />
-              <div className="flex flex-row flex-wrap items-center justify-center lg:justify-start gap-3">
-                <Link href="/donate" className="btn-gold text-center px-6 sm:px-8 py-3 sm:py-3.5 text-[12px] sm:text-[13px] tracking-[0.16em] uppercase rounded-sm">
-                  Donate
-                </Link>
-                <Link href="/visit" className="btn-navy text-center px-6 sm:px-8 py-3 sm:py-3.5 text-[12px] sm:text-[13px] tracking-[0.16em] uppercase rounded-sm">
-                  Visit
-                </Link>
-              </div>
-            </section>
+          <div className="mx-auto max-w-[1100px] px-5 sm:px-8 py-6 sm:py-9 lg:py-12">
+            <div className="home-invite">
+              <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:gap-12">
+                <section className="w-full max-w-[360px] text-center lg:shrink-0">
+                  <p className="font-hebrew text-[18px] sm:text-[22px] text-[#c9a84c]">ב״ה</p>
+                  <img
+                    src="/logo.png"
+                    alt=""
+                    width={160}
+                    height={160}
+                    className="logo-on-paper mx-auto mt-3 mb-4 w-[96px] sm:w-[120px] h-auto"
+                  />
+                  <h1 className="font-display font-semibold text-[#1e2d4e] leading-[0.95] text-[36px] sm:text-[48px]">
+                    Saratoga Shteibel
+                  </h1>
+                  <p className="mt-2.5 text-[13px] sm:text-[15px] text-[#7a7068]">
+                    166 Woodleigh Place · Toms River, NJ · Est. 2023
+                  </p>
+                  <div className="gold-rule mx-auto my-5" />
+                  <div className="flex flex-row flex-wrap items-center justify-center gap-3">
+                    <Link href="/donate" className="btn-gold text-center px-7 sm:px-8 py-3 sm:py-3.5 text-[12px] sm:text-[13px] tracking-[0.16em] uppercase rounded-sm">
+                      Donate
+                    </Link>
+                    <Link href="/visit" className="btn-navy text-center px-7 sm:px-8 py-3 sm:py-3.5 text-[12px] sm:text-[13px] tracking-[0.16em] uppercase rounded-sm">
+                      Visit
+                    </Link>
+                  </div>
+                </section>
 
-            <section id="schedule" className="w-full max-w-[420px] mx-auto lg:max-w-none lg:mx-0">
-              <ShabbosSchedule scheduleUrl={scheduleUrl} compact />
-            </section>
+                <section id="schedule" className="w-full min-w-0 lg:border-l lg:border-[#e8d5a3] lg:pl-12">
+                  <ShabbosSchedule scheduleUrl={scheduleUrl} compact nested />
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </SiteLayout>
