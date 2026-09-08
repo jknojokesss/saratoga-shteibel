@@ -8,7 +8,7 @@ export default function ThisWeek() {
 
   useEffect(() => {
     fetch('/api/announcements/schedule').then((r) => r.json()).then((d) => {
-      if (d.url) setScheduleUrl(d.url)
+      if (d.url) setScheduleUrl('/shabbos-schedule.pdf')
     }).catch(() => {})
   }, [])
 
@@ -19,8 +19,10 @@ export default function ThisWeek() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <SiteLayout current="this-week">
-        <div className="mx-auto w-full max-w-4xl px-5 sm:px-8 py-10">
-          <ShabbosSchedule scheduleUrl={scheduleUrl} />
+        <div className="paper-bg">
+          <div className="mx-auto w-full max-w-4xl px-5 sm:px-8 py-10">
+            <ShabbosSchedule scheduleUrl={scheduleUrl} />
+          </div>
         </div>
       </SiteLayout>
     </>
