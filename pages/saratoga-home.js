@@ -4,7 +4,6 @@ import SiteLayout from '../components/SiteLayout'
 
 const ACTIONS = [
   { href: '/this-week', label: 'Schedule', className: 'btn-navy' },
-  { href: '/visit', label: 'Visit', className: 'btn-outline' },
   { href: '/donate', label: 'Donate', className: 'btn-gold' },
 ]
 
@@ -14,7 +13,7 @@ export default function SaratogaHome() {
       <Head>
         <title>Saratoga Shteibel · Toms River</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Saratoga Shteibel, an Orthodox shtiebel at 166 Woodleigh Place, Toms River, NJ. This week's schedule, donate, visit." />
+        <meta name="description" content="Saratoga Shteibel, an Orthodox shtiebel at 166 Woodleigh Place, Toms River, NJ. This week's schedule and donate." />
         <meta property="og:title" content="Saratoga Shteibel" />
         <meta property="og:image" content="/logo.png" />
         <link rel="canonical" href="https://www.saratogashteibel.org/" />
