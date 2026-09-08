@@ -3,8 +3,34 @@ import Link from 'next/link'
 import SiteLayout from '../components/SiteLayout'
 
 const ACTIONS = [
-  { href: '/this-week', label: 'Schedule', className: 'btn-navy' },
-  { href: '/donate', label: 'Donate', className: 'btn-gold' },
+  {
+    href: '/this-week',
+    label: 'Schedule',
+    className: 'btn-navy',
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M3 10h18" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M8 3v4M16 3v4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    href: '/donate',
+    label: 'Donate',
+    className: 'btn-gold',
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
 ]
 
 export default function SaratogaHome() {
@@ -21,7 +47,7 @@ export default function SaratogaHome() {
 
       <SiteLayout current="home">
         <div className="paper-bg">
-          <div className="mx-auto flex min-h-[calc(100svh-72px)] max-w-lg flex-col items-center justify-center px-5 py-10 sm:px-8 sm:py-14">
+          <div className="home-splash">
             <h1 className="m-0">
               <img
                 src="/logo.png"
@@ -32,14 +58,15 @@ export default function SaratogaHome() {
               />
             </h1>
 
-            <nav className="mt-8 sm:mt-10 flex w-full flex-col gap-3.5 sm:gap-4" aria-label="Site">
+            <nav className="home-actions" aria-label="Site">
               {ACTIONS.map((action) => (
                 <Link
                   key={action.href}
                   href={action.href}
                   className={`home-btn ${action.className}`}
                 >
-                  {action.label}
+                  <span className="home-btn-icon">{action.icon}</span>
+                  <span>{action.label}</span>
                 </Link>
               ))}
             </nav>
