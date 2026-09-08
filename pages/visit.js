@@ -28,7 +28,7 @@ export default function Visit() {
                 Directions
               </a>
               <Link href="/this-week" className="btn-outline px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
-                Schedule
+                Zmanim
               </Link>
             </div>
           </section>
