@@ -98,12 +98,12 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
 
       {hideFooter ? null : (
         <footer className="mt-auto bg-[#1e2d4e] text-[#9aa6bd]">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-5 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
-              <span className="font-display text-[#e8d5a3] text-[18px] font-semibold">Saratoga Shteibel</span>
-              <span>166 Woodleigh Place · Toms River, NJ</span>
+          <div className="mx-auto max-w-6xl px-5 sm:px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="font-display text-[#e8d5a3] text-[18px] font-semibold">Saratoga Shteibel</div>
+              <div className="text-[13px] mt-1">166 Woodleigh Place · Toms River, NJ</div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
               <Link href="/#schedule" className="text-[11px] tracking-[0.14em] uppercase text-[#e8d5a3] hover:text-white">Schedule</Link>
               <Link href="/visit" className="text-[11px] tracking-[0.14em] uppercase text-[#e8d5a3] hover:text-white">Visit</Link>
               <Link href="/donate" className="border border-[#c9a84c] text-[#e8d5a3] text-[11px] tracking-[0.14em] uppercase px-3 py-2 hover:bg-[#c9a84c] hover:text-[#1e2d4e] transition-colors rounded-sm">
