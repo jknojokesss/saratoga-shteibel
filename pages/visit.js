@@ -27,7 +27,7 @@ export default function Visit() {
               <a href={MAPS_LINK} target="_blank" rel="noreferrer" className="btn-gold px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
                 Directions
               </a>
-              <Link href="/#schedule" className="btn-outline px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
+              <Link href="/this-week" className="btn-outline px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
                 Schedule
               </Link>
             </div>

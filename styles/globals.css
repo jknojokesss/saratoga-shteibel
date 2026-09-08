@@ -135,6 +135,34 @@ body {
   height: auto;
   mix-blend-mode: multiply;
 }
+
+.home-logo {
+  display: block;
+  width: min(86vw, 420px);
+  height: auto;
+  mix-blend-mode: multiply;
+}
+
+.home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  padding: 18px 24px;
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 2px;
+}
+@media (min-width: 640px) {
+  .home-btn {
+    min-height: 76px;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+  }
+}
 .logo-plate-light {
   background: rgba(250, 247, 242, 0.92);
 }
