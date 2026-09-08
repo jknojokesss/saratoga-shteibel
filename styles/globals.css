@@ -143,6 +143,40 @@ body {
   mix-blend-mode: multiply;
 }
 
+.home-invite {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .home-invite {
+    max-width: none;
+    background: #fff;
+    border: 1px solid var(--gold-light);
+    box-shadow:
+      0 0 0 6px #fff,
+      0 0 0 7px var(--gold),
+      0 16px 36px rgba(30, 45, 78, 0.08);
+    padding: 2.75rem 3rem;
+  }
+}
+
+.schedule-sheet {
+  background: #fff;
+  border: 1px solid var(--gold-light);
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 5px var(--gold),
+    0 10px 24px rgba(30, 45, 78, 0.08);
+}
+
+@media (min-width: 1024px) {
+  .schedule-sheet {
+    box-shadow: none;
+    border: 1px solid var(--border);
+  }
+}
+
 .cork-board {
   background: #c69a63;
   background-image:

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
+export default function ShabbosSchedule({ scheduleUrl, compact = false, nested = false }) {
   const pdfCanvas = useRef(null)
   const [pdfFailed, setPdfFailed] = useState(false)
 
@@ -64,7 +64,7 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
         ) : null}
       </div>
       {scheduleUrl && !pdfFailed ? (
-        <div className="flyer-frame overflow-hidden">
+        <div className={nested ? 'schedule-sheet overflow-hidden' : 'flyer-frame overflow-hidden'}>
           <canvas
             ref={pdfCanvas}
             onClick={() => window.open('/shabbos-schedule.pdf', '_blank')}
@@ -73,7 +73,7 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
           />
         </div>
       ) : (
-        <div className="flyer-frame">
+        <div className={nested ? 'schedule-sheet' : 'flyer-frame'}>
           <div className="text-[#7a7068] text-[14px] text-center px-5 py-12">
             {scheduleUrl && pdfFailed
               ? 'Tap Open PDF for this week\'s schedule.'
