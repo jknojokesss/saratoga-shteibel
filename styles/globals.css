@@ -169,9 +169,18 @@ body {
   background: #fff;
   border: 1px solid var(--gold-light);
   box-shadow:
-    0 0 0 6px #fff,
-    0 0 0 7px var(--gold),
-    0 16px 36px rgba(30, 45, 78, 0.08);
+    0 0 0 4px #fff,
+    0 0 0 5px var(--gold),
+    0 10px 24px rgba(30, 45, 78, 0.08);
+}
+
+@media (min-width: 768px) {
+  .flyer-frame {
+    box-shadow:
+      0 0 0 6px #fff,
+      0 0 0 7px var(--gold),
+      0 16px 36px rgba(30, 45, 78, 0.08);
+  }
 }
 
 html:has(.donate-lock),
