@@ -45,10 +45,10 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
   return (
     <section aria-labelledby="schedule-heading">
       <div className={`mb-5 ${compact
-        ? 'flex flex-col gap-3 items-center text-center md:flex-row md:items-end md:justify-between md:text-left'
+        ? 'flex flex-col gap-3 items-center text-center lg:flex-row lg:items-end lg:justify-between lg:text-left'
         : 'flex flex-col items-center text-center mb-6'}`}>
         <div className={compact ? 'min-w-0' : ''}>
-          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-[#c9a84c] ${compact ? 'justify-center md:justify-start' : 'justify-center'}`}>
+          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-[#c9a84c] ${compact ? 'justify-center lg:justify-start' : 'justify-center'}`}>
             {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
             This week
             {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
