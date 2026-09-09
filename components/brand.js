@@ -14,4 +14,5 @@ export const MAPS_QUERY = encodeURIComponent(FULL_ADDRESS)
 export const MAPS_EMBED = `https://maps.google.com/maps?q=${MAPS_QUERY}&z=16&output=embed`
 export const MAPS_LINK = `https://maps.google.com/?q=${MAPS_QUERY}`
 export const PAYMENT_URL = 'https://saratoga-payment.vercel.app'
+export const DONATE_FORM_URL = '/donate-form.html'
 
