@@ -8,7 +8,7 @@ export default function ThisWeek() {
 
   useEffect(() => {
     fetch('/api/announcements/schedule').then((r) => r.json()).then((d) => {
-      if (d.url) setScheduleUrl('/shabbos-schedule.pdf')
+      if (d.url) setScheduleUrl(d.url)
     }).catch(() => {})
   }, [])
 

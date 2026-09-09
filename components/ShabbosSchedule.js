@@ -58,7 +58,7 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
           </h2>
         </div>
         {scheduleUrl ? (
-          <a href="/shabbos-schedule.pdf" target="_blank" rel="noreferrer" className={`btn-outline shrink-0 text-[12px] font-medium tracking-[0.12em] uppercase px-4 py-2 rounded-sm ${compact ? '' : 'mt-4'}`}>
+          <a href={scheduleUrl} target="_blank" rel="noreferrer" className={`btn-outline shrink-0 text-[12px] font-medium tracking-[0.12em] uppercase px-4 py-2 rounded-sm ${compact ? '' : 'mt-4'}`}>
             Open PDF
           </a>
         ) : null}
@@ -67,8 +67,8 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
         <div className="flyer-frame overflow-hidden">
           <canvas
             ref={pdfCanvas}
-            onClick={() => window.open('/shabbos-schedule.pdf', '_blank')}
-            title="Open full schedule"
+            onClick={() => window.open(scheduleUrl, '_blank')}
+            title="Open this week's zmanim"
             className="block w-full cursor-pointer"
           />
         </div>
@@ -76,8 +76,8 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
         <div className="flyer-frame">
           <div className="text-[#7a7068] text-[14px] text-center px-5 py-12">
             {scheduleUrl && pdfFailed
-              ? 'Tap Open PDF for this week\'s schedule.'
-              : 'This week\'s schedule will be posted here.'}
+              ? 'Tap Open PDF for this week\'s zmanim.'
+              : 'This week\'s zmanim will be posted here.'}
           </div>
         </div>
       )}
