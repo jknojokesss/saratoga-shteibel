@@ -33,6 +33,14 @@ const nextConfig = {
       permanent: false,
     }))
   },
+  async headers() {
+    return [
+      {
+        source: '/donate-form.html',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
