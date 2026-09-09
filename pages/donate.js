@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import SiteLayout from '../components/SiteLayout'
-import { PAYMENT_URL } from '../components/brand'
+import { DONATE_FORM_URL } from '../components/brand'
 
 export default function Donate() {
   return (
@@ -12,7 +12,7 @@ export default function Donate() {
       </Head>
       <SiteLayout current="donate" hideFooter flush>
         <iframe
-          src={PAYMENT_URL}
+          src={DONATE_FORM_URL}
           title="Saratoga Shteibel donation form"
           className="donate-iframe"
           allow="payment"
