@@ -8,8 +8,8 @@ const nextConfig = {
     // beforeFiles so this runs BEFORE the filesystem route (index.js login page).
     return {
       beforeFiles: [
-        // Clean URL for the Shabbos schedule — proxies the file so the Supabase URL never shows.
-        { source: '/shabbos-schedule.pdf', destination: '/api/schedule-file' },
+        // Clean URL for this week's zmanim flyer.
+        { source: '/shabbos-schedule.pdf', destination: '/zmanim/this-week.pdf' },
         {
           source: '/',
           has: [{ type: 'host', value: 'saratogashteibel.org' }],
