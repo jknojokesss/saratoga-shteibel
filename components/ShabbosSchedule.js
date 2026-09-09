@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
-export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
+export default function ShabbosSchedule({ scheduleUrl, previewUrl, compact = false }) {
   const pdfCanvas = useRef(null)
   const [pdfFailed, setPdfFailed] = useState(false)
 
   useEffect(() => {
-    if (!scheduleUrl) return undefined
+    if (!scheduleUrl || previewUrl) return undefined
     let cancelled = false
     function fitCanvas(canvas) {
       canvas.style.width = '100%'
@@ -40,7 +40,7 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
       document.body.appendChild(s)
     }
     return () => { cancelled = true }
-  }, [scheduleUrl])
+  }, [scheduleUrl, previewUrl])
 
   return (
     <section aria-labelledby="schedule-heading">
@@ -63,7 +63,11 @@ export default function ShabbosSchedule({ scheduleUrl, compact = false }) {
           </a>
         ) : null}
       </div>
-      {scheduleUrl && !pdfFailed ? (
+      {previewUrl ? (
+        <a href={scheduleUrl || previewUrl} target="_blank" rel="noreferrer" className="flyer-frame block overflow-hidden">
+          <img src={previewUrl} alt="This week's zmanim" className="block w-full" />
+        </a>
+      ) : scheduleUrl && !pdfFailed ? (
         <div className="flyer-frame overflow-hidden">
           <canvas
             ref={pdfCanvas}
