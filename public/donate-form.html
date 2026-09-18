@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saratoga Shteibel — Support Your Community</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.cardknox.com/ifields/2.15.2409.2601/ifields.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #faf7f2; --cream-dark: #f0ebe0; --navy: #1e2d4e; --navy-light: #2c3e6b;
+      --gold: #c9a84c; --gold-light: #e8d5a3; --text: #2a2a2a; --text-muted: #7a7068;
+      --border: #ddd5c4; --white: #ffffff;
+    }
+    html, body { min-height: 100%; background: var(--cream); font-family: 'Jost', sans-serif; color: var(--text); }
+    .hero { background: var(--navy); padding: 18px 20px 16px; text-align: center; border-top: 3px solid var(--gold); }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; color: var(--gold-light); margin-bottom: 6px; line-height: 1.15; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 300; }
+    .container { max-width: 700px; margin: 20px auto; padding: 0 16px 48px; }
+    .form-card { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 34px 36px; margin-bottom: 20px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 500; color: var(--navy); margin-bottom: 22px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .field-full { margin-bottom: 16px; }
+    .field-trio { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .field-label { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="text"]:not([style]) {
+      width: 100%; height: 46px; border: 1px solid var(--border); border-radius: 3px; padding: 0 14px;
+      font-family: 'Jost', sans-serif; font-size: 14px; color: var(--text); background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--navy-light); background: var(--white); }
+    select {
+      width: 100%; height: 46px; border: 1px solid var(--border); border-radius: 3px; padding: 0 14px;
+      font-family: 'Jost', sans-serif; font-size: 14px; color: var(--text); background: var(--cream);
+      outline: none;
+    }
+    .commitment-summary { display: none; background: #fff8e8; border: 1px solid var(--gold-light); border-radius: 3px; padding: 14px 16px; font-size: 13px; color: var(--navy); line-height: 1.6; margin-bottom: 20px; }
+    .commitment-summary.visible { display: block; }
+    .checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 13px; color: var(--text); }
+    .checkbox-row input { width: auto; height: auto; }
+    #email, #fname, #lname, #custom-amount {
+      border: 1px solid var(--border) !important;
+      background: var(--cream) !important;
+      height: 46px !important;
+      display: block !important;
+      width: 100% !important;
+      padding: 0 14px !important;
+      border-radius: 3px !important;
+    }
+    .donation-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 22px; }
+    .donation-option { border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; cursor: pointer; transition: border-color .15s, background .15s; position: relative; user-select: none; background: var(--white); }
+    .donation-option:hover { border-color: var(--navy-light); background: #f8f8f8; }
+    .donation-option.selected { border-color: var(--navy); border-width: 1.5px; background: #f2f5fb; }
+    .opt-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+    .opt-price { font-family: 'Jost', sans-serif; font-size: 16px; font-weight: 600; color: var(--navy); line-height: 1.3; margin-bottom: 2px; }
+    .opt-price small { font-family: 'Jost', sans-serif; font-size: 11px; color: var(--text-muted); font-weight: 400; }
+    .opt-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .opt-badge { position: absolute; top: 12px; right: 14px; background: var(--cream-dark); color: var(--navy); font-size: 9.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+    .custom-amount-wrap { margin-bottom: 20px; display: none; }
+    .custom-amount-wrap.visible { display: block; }
+    .amount-input-wrap { position: relative; }
+    #custom-amount { padding-left: 30px !important; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+    .amount-input-wrap::before {
+      content: '$';
+      position: absolute;
+      left: 14px;
+      top: 0;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      color: var(--navy);
+      font-weight: 500;
+      font-size: 16px;
+      pointer-events: none;
+    }
+    #card-input, #exp-input, #cvv-input { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+
+    .recurring-note { background: #f0f3fa; border: 1px solid #c5cfe0; border-radius: 3px; padding: 12px 16px; font-size: 13px; color: var(--navy-light); margin-bottom: 20px; display: none; line-height: 1.6; }
+    .recurring-note.visible { display: block; }
+    .ifield-wrap { width: 100%; height: 44px; border: 1px solid var(--border); border-radius: 3px; background: var(--cream); margin-bottom: 16px; overflow: hidden; }
+    .ifield-wrap > * { height: 44px !important; max-height: 44px !important; }
+    .ifield-wrap iframe { width: 100% !important; height: 44px !important; border: none !important; display: block !important; max-height: 44px !important; }
+    .ifield-wrap div { height: 44px !important; max-height: 44px !important; overflow: hidden !important; }
+    
+    
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    .total-bar { display: flex; justify-content: space-between; align-items: center; background: var(--cream-dark); border: 1px solid var(--border); border-radius: 3px; padding: 16px 20px; margin-bottom: 22px; }
+    .total-bar span { font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    .total-bar strong { font-family: 'Jost', sans-serif; font-size: 24px; color: var(--navy); font-weight: 600; }
+    .submit-btn { width: 100%; height: 52px; background: var(--navy); color: #fff; border: none; border-radius: 3px; font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+    .submit-btn:hover { background: var(--navy-light); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .secure-note { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 14px; letter-spacing: 0.05em; }
+    .success-screen { display: none; text-align: center; padding: 60px 40px; }
+    .success-screen.visible { display: block; }
+    .success-screen h2 { font-family: 'Cormorant Garamond', serif; font-size: 30px; color: var(--navy); margin-bottom: 12px; }
+    .success-screen p { color: var(--text-muted); font-size: 15px; line-height: 1.7; }
+    .success-icon { font-size: 48px; margin-bottom: 20px; color: var(--gold); }
+    .error-msg { background: #fff0f0; border: 1px solid #f5c1c1; border-radius: 3px; padding: 12px 16px; font-size: 13px; color: #a32d2d; margin-bottom: 16px; display: none; }
+    .error-msg.visible { display: block; }
+    .ifield-frame { width: 100%; height: 44px; border: none; background: transparent; display: block; margin-bottom: 4px; }
+    input[type="hidden"] { display: none !important; }
+    .ifield-frame + input, .ifield-frame + div, .ifield-frame + iframe {
+      border: none !important;
+      background: #ffffff !important;
+      height: 4px !important;
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+    .card-error { color: red; font-size: 12px; margin-bottom: 8px; min-height: 16px; }
+    input[type="hidden"] { display: none !important; }
+    .ifield-frame + input, .ifield-frame + div, .ifield-frame + iframe {
+      border: none !important;
+      background: #ffffff !important;
+      height: 4px !important;
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+    @media (max-width: 600px) {
+      .form-card { padding: 24px 20px; }
+      .field-row, .card-row, .donation-options, .field-trio { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Support Your Community</h1>
+  <p>Your generosity sustains our shul and its programs throughout the year</p>
+</div>
+
+<div class="container">
+  <div class="form-card" id="main-form">
+
+    <div class="section-title" data-kicker="Step 1">Your Donation</div>
+    <div class="donation-options">
+      <div class="donation-option" id="opt-donation" onclick="selectOption('donation')">
+        <div class="opt-title">General Donation</div>
+        <div class="opt-price"><small>any amount</small></div>
+        <div class="opt-desc">Enter the amount you'd like to contribute</div>
+      </div>
+      <div class="donation-option" id="opt-membership" onclick="selectOption('membership')">
+        <div class="opt-title">Monthly Membership</div>
+        <div class="opt-price">$50<small> / month</small></div>
+        <div class="opt-desc">Charged automatically every month</div>
+      </div>
+      <div class="donation-option" id="opt-kiddush" onclick="toggleSponsor('kiddush')">
+        <div class="opt-title">Kiddush Sponsorship</div>
+        <div class="opt-price">$180</div>
+        <div class="opt-desc">Sponsor a Shabbos kiddush</div>
+      </div>
+      <div class="donation-option" id="opt-shaleshudis" onclick="toggleSponsor('shaleshudis')">
+        <div class="opt-title">Shaleshudis Sponsorship</div>
+        <div class="opt-price">$25</div>
+        <div class="opt-desc">Sponsor shaleshudis</div>
+      </div>
+    </div>
+
+    <div class="custom-amount-wrap" id="custom-amount-wrap">
+      <label class="field-label">Donation Amount</label>
+      <div class="amount-input-wrap">
+        <input type="text" id="custom-amount" inputmode="decimal" autocomplete="off" placeholder="0.00" maxlength="15"/>
+      </div>
+      <label class="field-label" style="margin-top:16px">What is this donation for? *</label>
+      <input type="text" id="donation-desc" placeholder="e.g. Kiddush, Building Fund, Yahrzeit"/>
+
+      <label class="checkbox-row">
+        <input type="checkbox" id="donation-recurring-check"/>
+        Make this a recurring monthly donation
+      </label>
+      <div class="custom-amount-wrap" id="donation-months-wrap" style="margin-top:12px;margin-bottom:0;">
+        <label class="field-label">How many months? *</label>
+        <input type="number" id="donation-months" placeholder="e.g. 6" min="2" step="1"/>
+      </div>
+    </div>
+
+    <div class="custom-amount-wrap" id="membership-months-wrap">
+      <label class="field-label">How many months? *</label>
+      <input type="number" id="membership-months" placeholder="e.g. 6" min="2" step="1"/>
+      <label class="checkbox-row">
+        <input type="checkbox" id="membership-ongoing-check"/>
+        No end date — charge me every month until I cancel
+      </label>
+    </div>
+
+    <div class="recurring-note" id="recurring-note">
+      <strong>Monthly recurring membership.</strong> Your first $50 payment will be charged today. Choose above how many months this will run — it stops automatically after the last payment unless you pick "Ongoing."
+    </div>
+
+    <div class="commitment-summary" id="commitment-summary"></div>
+
+    <div class="custom-amount-wrap" id="sponsor-block">
+      <div id="sponsor-kiddush-fields" style="display:none;">
+        <label class="field-label">Which Shabbos?</label>
+        <select id="kiddush-parsha" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #ddd5c4;border-radius:6px;font-size:15px;background:#faf7f2;font-family:inherit;">
+          <option value="">Loading parshios…</option>
+        </select>
+        <div id="kiddush-closed-note" style="display:none;font-size:12.5px;color:#5a5248;background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:9px 12px;margin-top:8px;line-height:1.45;">This week's kiddush has closed. To sponsor <b>this week</b>, please reach out to <b>Eli Shine</b>.</div>
+        <label class="field-label" style="margin-top:16px">Message for the zmanim sheet *</label>
+        <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;background:#faf7f2;border:1px solid #ddd5c4;border-radius:6px;padding:12px 14px;">
+          <span style="white-space:nowrap;color:#1e2d4e;font-weight:600;font-size:15px;">Kiddush is sponsored by</span>
+          <input type="text" id="kiddush-msg" placeholder="… in honor of …" style="flex:1;min-width:170px;border:none;background:transparent;font-size:15px;font-family:inherit;outline:none;padding:0;"/>
+        </div>
+      </div>
+      <div id="sponsor-shaleshudis-fields" style="display:none;margin-top:18px;">
+        <label class="field-label">Which Shabbos?</label>
+        <select id="shaleshudis-parsha" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #ddd5c4;border-radius:6px;font-size:15px;background:#faf7f2;font-family:inherit;">
+          <option value="">Loading parshios…</option>
+        </select>
+        <label class="field-label" style="margin-top:16px">Message for the zmanim sheet *</label>
+        <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;background:#faf7f2;border:1px solid #ddd5c4;border-radius:6px;padding:12px 14px;">
+          <span style="white-space:nowrap;color:#1e2d4e;font-weight:600;font-size:15px;">Shaleshudis is sponsored by</span>
+          <input type="text" id="shaleshudis-msg" placeholder="… in honor of …" style="flex:1;min-width:170px;border:none;background:transparent;font-size:15px;font-family:inherit;outline:none;padding:0;"/>
+        </div>
+      </div>
+      <div class="recurring-note visible" id="sponsor-total-note" style="margin-top:18px;"></div>
+    </div>
+
+    <div id="cc-section">
+    <div class="section-title" data-kicker="Step 2" style="margin-top:36px">Your Information</div>
+    <div class="field-row">
+      <div><label class="field-label">First Name *</label><input type="text" id="fname" placeholder="Jane"/></div>
+      <div><label class="field-label">Last Name *</label><input type="text" id="lname" placeholder="Cohen"/></div>
+    </div>
+    <div class="field-full"><label class="field-label">Email *</label><input type="email" id="email" placeholder="jane@example.com"/></div>
+
+                <div class="section-title" data-kicker="Step 3" style="margin-top:36px">Payment Information</div>
+
+    <div class="field-full" id="pay-method-row">
+      <label class="field-label">How would you like to pay?</label>
+      <div style="display:flex;gap:12px;">
+        <div class="donation-option" id="pm-card" onclick="setPayMethod('card')" style="flex:1;padding:14px 16px;">
+          <div class="opt-title" style="font-size:16px;margin-bottom:0;">Credit Card</div>
+        </div>
+        <div class="donation-option" id="pm-df" onclick="setPayMethod('df')" style="flex:1;padding:14px 16px;">
+          <div class="opt-title" style="font-size:16px;margin-bottom:0;">The Donors Fund</div>
+        </div>
+      </div>
+      <div id="pm-df-note" style="display:none;font-size:12px;color:#7a7068;margin-top:8px;">Monthly membership needs a credit card for the automatic billing.</div>
+    </div>
+
+    <div id="df-block" style="display:none;">
+      <div class="recurring-note visible" style="margin-top:4px;">
+        <strong>Giving from your Donors Fund account.</strong> Enter your giving-card number and PIN/CVV — the amount above is granted directly to Saratoga Shteibel.
+      </div>
+      <label class="field-label">Donors Fund giving-card number *</label>
+      <input type="text" id="df-card" placeholder="Giving-card number" autocomplete="off"/>
+      <label class="field-label" style="margin-top:16px">PIN / CVV *</label>
+      <input type="text" id="df-auth" placeholder="e.g. 1234" autocomplete="off" style="margin-bottom:16px;"/>
+    </div>
+
+    <div id="card-fields">
+        <div class="field-full">
+      <label class="field-label">Card Number *</label>
+      <input type="text" id="card-input" inputmode="numeric" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+      <iframe data-ifields-id="card-number" data-ifields-placeholder="•••• •••• •••• ••••" src="https://cdn.cardknox.com/ifields/2.15.2409.2601/ifield.htm" title="Card Number" style="display:none;position:absolute;top:-9999px;"></iframe>
+      <input type="hidden" data-ifields-id="card-number-token" name="xCardNum"/>
+    </div>
+
+    <div class="card-row">
+      <div>
+        <label class="field-label">Expiration Date * (MM/YY)</label>
+        <input type="text" id="exp-input" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+      </div>
+      <div>
+        <label class="field-label">CVV *</label>
+        <input type="text" id="cvv-input" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+      </div>
+    </div>
+
+    <label class="card-error" data-ifields-id="card-data-error"></label>
+    </div>
+    </div>
+
+    <div class="total-bar">
+      <span>Total Due Today</span>
+      <strong id="total-display">$0.00</strong>
+    </div>
+
+    <div class="error-msg" id="error-msg"></div>
+    <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">Complete Payment</button>
+    <div class="secure-note">🔒 Secured by Sola Payments · PCI Compliant</div>
+  </div>
+
+  <div class="form-card success-screen" id="success-screen">
+    <div class="success-icon">✓</div>
+    <h2 id="success-title">Thank You!</h2>
+    <p id="success-msg">Your contribution to Saratoga Shteibel has been received.<br/>A receipt will be sent to your email address.</p>
+  </div>
+</div>
+
+<script>
+  const IFIELDS_KEY = "ifields_saratogashteibele22c42598c15468d99473";
+
+  function digitsBefore(str, pos) {
+    return String(str).slice(0, pos).replace(/\D/g, '').length;
+  }
+  function caretFromDigitCount(str, count) {
+    if (count <= 0) return 0;
+    var seen = 0;
+    for (var i = 0; i < str.length; i++) {
+      if (/\d/.test(str[i])) {
+        seen++;
+        if (seen === count) return i + 1;
+      }
+    }
+    return str.length;
+  }
+  function parseDonationAmount(str) {
+    var cleaned = String(str || '').replace(/[^0-9.]/g, '');
+    if (!cleaned) return 0;
+    var parts = cleaned.split('.');
+    var n = parseFloat(parts[0] + (parts.length > 1 ? '.' + parts.slice(1).join('').slice(0, 2) : ''));
+    return isFinite(n) ? n : 0;
+  }
+  function formatDonationAmount(str) {
+    var raw = String(str || '').replace(/[^0-9.]/g, '');
+    if (!raw) return '';
+    var hasDot = raw.indexOf('.') !== -1;
+    var parts = raw.split('.');
+    var intDigits = parts[0] || '';
+    intDigits = intDigits.replace(/^0+(?=\d)/, '');
+    if (intDigits === '' && hasDot) intDigits = '0';
+    var dec = parts.length > 1 ? parts.slice(1).join('').replace(/\D/g, '').slice(0, 2) : '';
+    var grouped = intDigits.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return hasDot ? grouped + '.' + dec : grouped;
+  }
+  function amountCaret(formatted, typedBefore) {
+    var wantDot = typedBefore.indexOf('.') !== -1;
+    var wantInt = (typedBefore.split('.')[0] || '').length;
+    var wantDec = wantDot ? (typedBefore.split('.')[1] || '').length : 0;
+    var seenInt = 0, seenDec = 0, pastDot = false;
+    for (var i = 0; i < formatted.length; i++) {
+      var ch = formatted.charAt(i);
+      if (ch === '.') {
+        pastDot = true;
+        if (wantDot && wantDec === 0) return i + 1;
+        continue;
+      }
+      if (!/\d/.test(ch)) continue;
+      if (!pastDot) {
+        seenInt++;
+        if (!wantDot && seenInt === wantInt) return i + 1;
+      } else {
+        seenDec++;
+        if (wantDot && seenDec === wantDec) return i + 1;
+      }
+    }
+    return formatted.length;
+  }
+  function formatCardNumber(str) {
+    return String(str || '').replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
+  }
+  function formatExpDate(str, deleting) {
+    var d = String(str || '').replace(/\D/g, '').slice(0, 4);
+    if (d.length >= 1 && d.charAt(0) > '1') d = '0' + d.slice(0, 3);
+    if (d.length >= 2) {
+      var mm = parseInt(d.slice(0, 2), 10);
+      if (mm === 0) d = '01' + d.slice(2);
+      else if (mm > 12) d = '12' + d.slice(2);
+      d = d.slice(0, 4);
+    }
+    if (d.length === 0) return '';
+    if (d.length === 1) return d;
+    if (d.length === 2) return deleting ? d : d + '/';
+    return d.slice(0, 2) + '/' + d.slice(2);
+  }
+  function bindMaskedInput(el, formatter, onComplete) {
+    if (!el) return;
+    el.addEventListener('input', function(e) {
+      var deleting = e.inputType && e.inputType.indexOf('delete') === 0;
+      var old = el.value;
+      var pos = el.selectionStart || 0;
+      var count = digitsBefore(old, pos);
+      var next = formatter(old, deleting);
+      el.value = next;
+      var caret = caretFromDigitCount(next, count);
+      if (deleting && next.charAt(caret) === '/') caret = Math.max(0, caret);
+      try { el.setSelectionRange(caret, caret); } catch (err) {}
+      if (typeof onComplete === 'function') onComplete(next);
+    });
+  }
+  function bindAmountInput(el) {
+    if (!el) return;
+    el.addEventListener('input', function() {
+      var old = el.value;
+      var pos = el.selectionStart || 0;
+      var typedBefore = old.slice(0, pos).replace(/[^0-9.]/g, '');
+      var firstDot = typedBefore.indexOf('.');
+      if (firstDot !== -1) typedBefore = typedBefore.slice(0, firstDot + 1) + typedBefore.slice(firstDot + 1).replace(/\./g, '');
+      var next = formatDonationAmount(old);
+      el.value = next;
+      var caret = amountCaret(next, typedBefore);
+      try { el.setSelectionRange(caret, caret); } catch (err) {}
+      updateTotal();
+    });
+  }
+
+  var selectedOption = null;
+
+  setAccount(IFIELDS_KEY, "SaratogaShteibel", "1.0");
+  enableAutoFormatting(' ');
+
+  // Hide ghost iframes injected by iFields
+  function hideGhostIframes() {
+    document.querySelectorAll('.ifield-wrap').forEach(function(wrap) {
+      var iframes = wrap.querySelectorAll('iframe');
+      iframes.forEach(function(iframe, i) {
+        if (i > 0) {
+          iframe.style.position = 'absolute';
+          iframe.style.top = '-9999px';
+          iframe.style.left = '-9999px';
+          iframe.style.width = '1px';
+          iframe.style.height = '1px';
+          iframe.style.opacity = '0';
+          iframe.style.pointerEvents = 'none';
+        }
+      });
+    });
+  }
+  // Style iFields wrapper divs when they appear
+  function styleIFieldWrappers() {
+    document.querySelectorAll('.ifield-direct').forEach(function(iframe) {
+      var parent = iframe.parentElement;
+      if (parent && parent !== document.body) {
+        parent.style.height = '44px';
+        parent.style.overflow = 'hidden';
+        parent.style.border = 'none';
+        parent.style.padding = '0';
+        parent.style.margin = '0 0 16px 0';
+      }
+    });
+  }
+  var ghostObserver = new MutationObserver(function() { hideGhostIframes(); styleIFieldWrappers(); });
+  ghostObserver.observe(document.body, { childList: true, subtree: true, attributes: true });
+  setTimeout(hideGhostIframes, 200);
+  setTimeout(hideGhostIframes, 600);
+  setTimeout(hideGhostIframes, 1500);
+  setTimeout(hideGhostIframes, 3000);
+
+  // Fix iFields injecting height on parent divs
+  function fixIFieldHeights() {
+    document.querySelectorAll('.ifield-inner').forEach(function(inner) {
+      // Force the inner div back to 44px regardless of what iFields injected
+      inner.setAttribute('style', 'width:100%;height:44px;overflow:hidden;border:none;padding:0;margin:0;');
+      var iframe = inner.querySelector('iframe');
+      if (iframe) {
+        iframe.setAttribute('style', 'width:100%;height:44px;border:none;display:block;');
+      }
+    });
+    // Hide any hidden inputs that are showing as boxes
+    document.querySelectorAll('input[data-ifields-id$="-token"]').forEach(function(inp) {
+      inp.setAttribute('style', 'display:none!important;width:0;height:0;position:absolute;');
+    });
+  }
+  setTimeout(fixIFieldHeights, 100);
+  setTimeout(fixIFieldHeights, 500);
+  setTimeout(fixIFieldHeights, 1000);
+  setTimeout(fixIFieldHeights, 2000);
+
+  var sponsor = { kiddush: false, shaleshudis: false };
+  var payMethod = 'card';
+
+  function selectOption(type) {
+    selectedOption = type;
+    sponsor.kiddush = false; sponsor.shaleshudis = false;
+    renderSponsor();
+    document.getElementById('opt-donation').classList.toggle('selected', type === 'donation');
+    document.getElementById('opt-membership').classList.toggle('selected', type === 'membership');
+    document.getElementById('custom-amount-wrap').classList.toggle('visible', type === 'donation');
+    document.getElementById('membership-months-wrap').classList.toggle('visible', type === 'membership');
+    document.getElementById('recurring-note').classList.toggle('visible', type === 'membership');
+    // Membership requires a card (automatic monthly billing) — Donors Fund can't do that here.
+    if (type === 'membership') setPayMethod('card');
+    document.getElementById('pm-df').style.display = (type === 'membership') ? 'none' : 'block';
+    document.getElementById('pm-df-note').style.display = (type === 'membership') ? 'block' : 'none';
+    updateTotal();
+  }
+
+  // Kiddush + Shaleshudis are toggleable and COMBINE with each other (one payment).
+  function toggleSponsor(kind) {
+    sponsor[kind] = !sponsor[kind];
+    if (sponsor.kiddush || sponsor.shaleshudis) {
+      selectedOption = 'sponsorship';
+      ['opt-donation','opt-membership'].forEach(function(id){ document.getElementById(id).classList.remove('selected'); });
+      ['custom-amount-wrap','membership-months-wrap','recurring-note'].forEach(function(id){ document.getElementById(id).classList.remove('visible'); });
+      document.getElementById('pm-df').style.display = 'block';
+      document.getElementById('pm-df-note').style.display = 'none';
+    } else {
+      selectedOption = null;
+    }
+    renderSponsor();
+    updateTotal();
+  }
+
+  function setPayMethod(m) {
+    payMethod = m;
+    document.getElementById('pm-card').classList.toggle('selected', m === 'card');
+    document.getElementById('pm-df').classList.toggle('selected', m === 'df');
+    document.getElementById('card-fields').style.display = (m === 'card') ? 'block' : 'none';
+    document.getElementById('df-block').style.display = (m === 'df') ? 'block' : 'none';
+  }
+
+  function sponsorTotal() { return (sponsor.kiddush ? 180 : 0) + (sponsor.shaleshudis ? 25 : 0); }
+
+  function renderSponsor() {
+    document.getElementById('opt-kiddush').classList.toggle('selected', sponsor.kiddush);
+    document.getElementById('opt-shaleshudis').classList.toggle('selected', sponsor.shaleshudis);
+    document.getElementById('sponsor-block').classList.toggle('visible', sponsor.kiddush || sponsor.shaleshudis);
+    document.getElementById('sponsor-kiddush-fields').style.display = sponsor.kiddush ? 'block' : 'none';
+    document.getElementById('sponsor-shaleshudis-fields').style.display = sponsor.shaleshudis ? 'block' : 'none';
+    var note = document.getElementById('sponsor-total-note');
+    if (sponsor.kiddush && sponsor.shaleshudis) note.innerHTML = '<strong>Kiddush ($180) + Shaleshudis ($25) — one payment of $205.</strong>';
+    else if (sponsor.kiddush) note.innerHTML = '<strong>Kiddush sponsorship — $180.</strong> You can add Shaleshudis too and pay once.';
+    else if (sponsor.shaleshudis) note.innerHTML = '<strong>Shaleshudis sponsorship — $25.</strong> You can add a Kiddush too and pay once.';
+  }
+
+  // Live parsha list from Hebcal (next ~3 months of Shabbosos, diaspora reading).
+  // Populate the Kiddush + Shaleshudis "Which Shabbos?" dropdowns from the live parsha
+  // calendar, grey out weeks already sponsored (per type), and default to the next open week.
+  (function loadParshios() {
+    var kSel = document.getElementById('kiddush-parsha');
+    var sSel = document.getElementById('shaleshudis-parsha');
+    var fmt = function(d) { return d.toISOString().slice(0, 10); };
+    var start = new Date(); var end = new Date(); end.setDate(end.getDate() + 92);
+    var pList = null, taken = { kiddush: [], shaleshudis: [] };
+
+    // Kiddush for a given week closes at 9:00 PM Eastern on the THURSDAY before that Shabbos.
+    function easternNow() {
+      try {
+        var f = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+        var p = {}; f.formatToParts(new Date()).forEach(function(x) { p[x.type] = x.value; });
+        return { ymd: p.year + '-' + p.month + '-' + p.day, mins: (parseInt(p.hour, 10) % 24) * 60 + parseInt(p.minute, 10) };
+      } catch (e) { var d = new Date(); return { ymd: d.toISOString().slice(0, 10), mins: d.getHours() * 60 + d.getMinutes() }; }
+    }
+    function kiddushClosed(shabbosIso) {
+      if (!shabbosIso) return false;
+      var d = new Date(shabbosIso.slice(0, 10) + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - 2); // Thursday
+      var cut = d.toISOString().slice(0, 10);
+      var n = easternNow();
+      return n.ymd > cut || (n.ymd === cut && n.mins >= 1260); // 1260 = 21:00 (9 PM)
+    }
+
+    function populate(sel, takenArr, isKiddush) {
+      if (!sel || !pList) return;
+      sel.innerHTML = '';
+      var firstOpen = null;
+      pList.forEach(function(p, i) {
+        var isTaken = takenArr.indexOf(p.name) !== -1;
+        var isClosed = isKiddush && kiddushClosed(p.shabbos);
+        var opt = document.createElement('option');
+        opt.value = p.name;
+        opt.setAttribute('data-shabbos', p.shabbos);
+        opt.textContent = p.name + ' — ' + p.date + (isTaken ? '  (sponsored)' : (isClosed ? '  (closed)' : (i === 0 ? '  (this week)' : '')));
+        if (isTaken || isClosed) opt.disabled = true;
+        else if (firstOpen === null) firstOpen = p.name;
+        sel.appendChild(opt);
+      });
+      if (firstOpen !== null) sel.value = firstOpen;
+    }
+    function fill() {
+      populate(kSel, taken.kiddush, true);
+      populate(sSel, taken.shaleshudis, false);
+      var note = document.getElementById('kiddush-closed-note');
+      if (note) note.style.display = (pList && pList.length && kiddushClosed(pList[0].shabbos)) ? 'block' : 'none';
+    }
+
+    fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&s=on&start=' + fmt(start) + '&end=' + fmt(end))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var items = (data.items || []).filter(function(it) { return it.category === 'parashat'; });
+        if (!items.length) throw new Error('none');
+        pList = items.map(function(it) {
+          var iso = (it.date || '').slice(0, 10);
+          var d = new Date(iso + 'T12:00:00');
+          return { name: (it.title || '').replace(/^Parashat\s+/, 'Parshas '), date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), shabbos: iso };
+        });
+        fill();
+      })
+      .catch(function() {
+        if (kSel) kSel.innerHTML = '<option value="">This Shabbos</option>';
+        if (sSel) sSel.innerHTML = '<option value="">This Shabbos</option>';
+      });
+
+    fetch('/api/donate-proxy/sponsor-slots')
+      .then(function(r) { return r.json(); })
+      .then(function(t) { taken = { kiddush: t.kiddush || [], shaleshudis: t.shaleshudis || [] }; fill(); })
+      .catch(function() {});
+  })();
+
+  function isDonationRecurring() {
+    return selectedOption === 'donation' && document.getElementById('donation-recurring-check').checked;
+  }
+
+  function updateTotal() {
+    var amount = 0;
+    if (selectedOption === 'membership') amount = 50;
+    else if (selectedOption === 'donation') amount = parseDonationAmount(document.getElementById('custom-amount').value);
+    else if (selectedOption === 'sponsorship') amount = sponsorTotal();
+    document.getElementById('total-display').textContent = '$' + amount.toFixed(2);
+    updateCommitmentSummary();
+  }
+
+  function updateCommitmentSummary() {
+    var el = document.getElementById('commitment-summary');
+    var text = '';
+
+    if (selectedOption === 'membership') {
+      var ongoing = document.getElementById('membership-ongoing-check').checked;
+      var mMonths = parseInt(document.getElementById('membership-months').value, 10);
+      if (ongoing) {
+        text = 'This charges $50.00 every month with no fixed end date, until you contact us to cancel.';
+      } else if (mMonths >= 2) {
+        text = 'This charges $50.00/month for ' + mMonths + ' months ($' + (50 * mMonths).toFixed(2) + ' total), then stops automatically. No charges after that.';
+      }
+    } else if (isDonationRecurring()) {
+      var amt = parseDonationAmount(document.getElementById('custom-amount').value);
+      var dMonths = parseInt(document.getElementById('donation-months').value, 10);
+      if (dMonths >= 2 && amt > 0) {
+        text = 'This charges $' + amt.toFixed(2) + '/month for ' + dMonths + ' months ($' + (amt * dMonths).toFixed(2) + ' total), then stops automatically. No charges after that.';
+      }
+    }
+
+    el.textContent = text;
+    el.classList.toggle('visible', !!text);
+  }
+
+
+  bindAmountInput(document.getElementById('custom-amount'));
+  bindMaskedInput(document.getElementById('card-input'), function(v) { return formatCardNumber(v); }, function(v) {
+    if (v.replace(/\D/g, '').length >= 16) document.getElementById('exp-input').focus();
+  });
+  bindMaskedInput(document.getElementById('exp-input'), function(v, deleting) { return formatExpDate(v, deleting); }, function(v) {
+    if (v.replace(/\D/g, '').length >= 4) document.getElementById('cvv-input').focus();
+  });
+  bindMaskedInput(document.getElementById('cvv-input'), function(v) { return String(v || '').replace(/\D/g, '').slice(0, 4); });
+
+  setPayMethod('card');
+  document.getElementById('membership-months').addEventListener('input', updateCommitmentSummary);
+  document.getElementById('donation-months').addEventListener('input', updateCommitmentSummary);
+  document.getElementById('donation-recurring-check').addEventListener('change', function() {
+    document.getElementById('donation-months-wrap').classList.toggle('visible', this.checked);
+    if (!this.checked) document.getElementById('donation-months').value = '';
+    updateCommitmentSummary();
+  });
+  document.getElementById('membership-ongoing-check').addEventListener('change', function() {
+    var monthsInput = document.getElementById('membership-months');
+    monthsInput.disabled = this.checked;
+    if (this.checked) monthsInput.value = '';
+    updateCommitmentSummary();
+  });
+
+  function showError(msg) {
+    var el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+  function hideError() { document.getElementById('error-msg').classList.remove('visible'); }
+
+  function submitDonorsFund(amount, desc, sponsorInfo, fname, lname) {
+    hideError();
+    if (!amount || amount < 1) { showError('Please enter a valid amount.'); return; }
+    var card = (document.getElementById('df-card').value || '').trim();
+    var auth = (document.getElementById('df-auth').value || '').trim();
+    if (!card) { showError('Please enter your Donors Fund card number or email.'); return; }
+    if (!auth) { showError('Please enter your PIN / CVV.'); return; }
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Processing...';
+    fetch('/api/donate-proxy/donorsfund', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: amount, donor: card, donorAuthorization: auth, description: desc, sponsorship: sponsorInfo, fname: fname, lname: lname })
+    }).then(function(r){ return r.json(); }).then(function(result){
+      if (result.success) {
+        document.getElementById('main-form').style.display = 'none';
+        document.getElementById('success-screen').classList.add('visible');
+        document.getElementById('success-title').textContent = 'Thank You!';
+        document.getElementById('success-msg').innerHTML = 'Your grant from The Donors Fund has been received.' + (result.confirmation ? '<br/><br/>Confirmation #' + result.confirmation : '');
+      } else {
+        showError(result.error || 'The grant could not be processed. Please check your card number and PIN.');
+        btn.disabled = false; btn.textContent = 'Complete Payment';
+      }
+    }).catch(function(){
+      showError('Something went wrong. Please try again.');
+      btn.disabled = false; btn.textContent = 'Complete Payment';
+    });
+  }
+
+  function handleSubmit() {
+    hideError();
+    if (!selectedOption) { showError('Please select a donation type.'); return; }
+    var fname = document.getElementById('fname').value.trim();
+    var lname = document.getElementById('lname').value.trim();
+    var email = document.getElementById('email').value.trim();
+    if (!fname || !lname) { showError('Please enter your full name.'); return; }
+    if (!email) { showError('Please enter your email address.'); return; }
+    var amount = selectedOption === 'membership' ? 50
+      : selectedOption === 'sponsorship' ? sponsorTotal()
+      : parseDonationAmount(document.getElementById('custom-amount').value);
+    if (!amount || amount < 1) { showError('Please enter a valid donation amount.'); return; }
+    var donationDesc = (document.getElementById('donation-desc').value || '').trim();
+    if (selectedOption === 'donation' && !donationDesc) { showError('Please tell us what this donation is for.'); return; }
+
+    var sponsorInfo = null;
+    if (selectedOption === 'sponsorship') {
+      var parts = [];
+      var kMsg = '', sMsg = '', kParsha = '', sParsha = '', kDate = '';
+      if (sponsor.kiddush) {
+        kMsg = (document.getElementById('kiddush-msg').value || '').trim();
+        if (!kMsg) { showError('Please finish the kiddush message — "Kiddush is sponsored by…"'); return; }
+        var kSelEl = document.getElementById('kiddush-parsha');
+        kParsha = kSelEl.value;
+        var kOpt = kSelEl.selectedOptions && kSelEl.selectedOptions[0];
+        kDate = kOpt ? (kOpt.getAttribute('data-shabbos') || '') : '';
+        parts.push('Kiddush Sponsorship' + (kParsha ? ' (' + kParsha + ')' : '') + ' - Kiddush is sponsored by ' + kMsg);
+      }
+      if (sponsor.shaleshudis) {
+        sMsg = (document.getElementById('shaleshudis-msg').value || '').trim();
+        if (!sMsg) { showError('Please finish the shaleshudis message — "Shaleshudis is sponsored by…"'); return; }
+        sParsha = document.getElementById('shaleshudis-parsha').value;
+        parts.push('Shaleshudis Sponsorship' + (sParsha ? ' (' + sParsha + ')' : '') + ' - Shaleshudis is sponsored by ' + sMsg);
+      }
+      donationDesc = parts.join(' | ');
+      sponsorInfo = {
+        kinds: [].concat(sponsor.kiddush ? ['kiddush'] : [], sponsor.shaleshudis ? ['shaleshudis'] : []),
+        kiddushParsha: kParsha, shaleshudisParsha: sParsha, kiddushMsg: kMsg, shaleshudisMsg: sMsg
+      };
+    }
+
+    var submitType = selectedOption === 'sponsorship' ? 'donation' : selectedOption;
+    var months = '';
+    if (selectedOption === 'membership') {
+      var ongoing = document.getElementById('membership-ongoing-check').checked;
+      if (ongoing) {
+        months = 'ongoing';
+      } else {
+        var mVal = parseInt(document.getElementById('membership-months').value, 10);
+        if (!mVal || mVal < 2) { showError('Please enter how many months your membership will run (2 or more), or check "No end date".'); return; }
+        months = String(mVal);
+      }
+    } else if (isDonationRecurring()) {
+      var dVal = parseInt(document.getElementById('donation-months').value, 10);
+      if (!dVal || dVal < 2) { showError('Please enter how many months this recurring donation should run (2 or more).'); return; }
+      months = String(dVal);
+      submitType = 'recurring_donation';
+    }
+
+    // Donors Fund path: one-time grant for whatever was selected above (donation or sponsorships).
+    if (payMethod === 'df') {
+      if (selectedOption === 'membership') { showError('Monthly membership needs a credit card for automatic billing.'); return; }
+      if (submitType === 'recurring_donation') { showError('Recurring donations need a credit card — uncheck "recurring" to give once from your Donors Fund.'); return; }
+      return submitDonorsFund(amount, donationDesc, sponsorInfo, fname, lname);
+    }
+
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+
+    getTokens(
+      async function() {
+        var cardInputEl = document.getElementById('card-input'); var cardToken = cardInputEl ? cardInputEl.value.replace(/\s/g, '') : '';
+        var cvvTokenEl = document.getElementById('cvv-input'); var cvvToken = cvvTokenEl ? cvvTokenEl.value : '';
+        var expInputEl = document.getElementById('exp-input'); var expRaw = expInputEl ? expInputEl.value.replace(/\D/g, '') : ''; var expToken = expRaw;
+
+        if (!cardToken) {
+          showError('Please enter your card number.');
+          btn.disabled = false; btn.textContent = 'Complete Payment'; return;
+        }
+
+        try {
+          var response = await fetch('/api/donate-proxy/pay', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: submitType,
+              amount: amount,
+              months: months,
+              cardToken: cardToken,
+              cvvToken: cvvToken,
+              exp: expToken,
+              fname: fname,
+              lname: lname,
+              email: email,
+              description: donationDesc,
+              sponsorship: sponsorInfo
+            })
+          });
+
+          var result = await response.json();
+
+          if (result.success) {
+            document.getElementById('main-form').style.display = 'none';
+            var screen = document.getElementById('success-screen');
+            screen.classList.add('visible');
+            if ((submitType === 'membership' || submitType === 'recurring_donation') && result.recurring === false) {
+              document.getElementById('success-title').textContent = 'Payment received — one step left';
+              document.getElementById('success-msg').innerHTML = 'Your first $50 payment went through, but the automatic monthly billing could <strong>not</strong> be set up, so no future payments are scheduled.<br/><br/>Please reach out to Chaim Katz to finish setting up your recurring membership.<br/><br/>A receipt will be sent to ' + email + '.';
+            } else if (submitType === 'membership') {
+              document.getElementById('success-title').textContent = 'Welcome, Member!';
+              var durationMsg = months === 'ongoing'
+                ? 'Your membership will continue every month until you contact us to cancel.'
+                : 'Your membership will run for ' + months + ' months and then stop automatically — no further charges after that.';
+              document.getElementById('success-msg').innerHTML = 'Your first month\'s payment has been processed. ' + durationMsg + '<br/><br/>A receipt will be sent to ' + email + '.';
+            } else if (submitType === 'recurring_donation') {
+              document.getElementById('success-title').textContent = 'Thank You!';
+              document.getElementById('success-msg').innerHTML = 'Your first monthly payment has been processed. This recurring donation will run for ' + months + ' months and then stop automatically — no further charges after that.<br/><br/>A receipt will be sent to ' + email + '.';
+            }
+          } else {
+            showError(result.error || 'Payment was declined. Please try a different card.');
+            btn.disabled = false; btn.textContent = 'Complete Payment';
+          }
+        } catch(err) {
+          showError('Something went wrong. Please try again.');
+          btn.disabled = false; btn.textContent = 'Complete Payment';
+        }
+      },
+      function() {
+        showError('Please check your card details and try again.');
+        btn.disabled = false; btn.textContent = 'Complete Payment';
+      },
+      30000
+    );
+  }
+</script>
+</body>
+</html>

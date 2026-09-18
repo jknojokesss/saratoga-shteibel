@@ -1,20 +1,23 @@
 import Head from 'next/head'
+import SiteLayout from '../components/SiteLayout'
+import { DONATE_FORM_URL } from '../components/brand'
 
-// The donation form (Cardknox) embedded at a clean saratogashteibel.org/donate URL.
 export default function Donate() {
   return (
     <>
       <Head>
-        <title>Saratoga Shteibel — Donate</title>
+        <title>Donate · Saratoga Shteibel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Donate to Saratoga Shteibel. Membership, kiddush, shaleshudis, or any amount. Card or Donors Fund." />
       </Head>
-      <div style={{ margin: 0, padding: 0, width: '100vw', height: '100vh', overflow: 'hidden' }}>
+      <SiteLayout current="donate" hideFooter flush>
         <iframe
-          src="https://saratoga-payment.vercel.app"
-          style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-          title="Saratoga Shteibel Donation"
+          src={DONATE_FORM_URL}
+          title="Saratoga Shteibel donation form"
+          className="donate-iframe"
+          allow="payment"
         />
-      </div>
+      </SiteLayout>
     </>
   )
 }
