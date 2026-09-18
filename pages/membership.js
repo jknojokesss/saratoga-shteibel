@@ -70,7 +70,7 @@ export default function Membership() {
       <Head><title>Membership Tracker</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@0,500;0,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" /></Head>
       <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#2a2a2a', padding: '20px 18px 60px' }}>
         <div style={{ fontFamily: SERIF, fontSize: 24, fontWeight: 600, color: NAVY }}>Membership Tracker</div>
-        <div style={{ fontSize: 13, color: MUTED, marginBottom: 4 }}>Aug 2025 – Jul 2026 · $50/mo · click a name to see their payments · hover a ✓ for payment details</div>
+        <div style={{ fontSize: 13, color: MUTED, marginBottom: 4 }}>{data.months.length ? `${lab(data.months[0])} – ${lab(data.months[data.months.length-1])}` : ''} · $50/mo · click a name to see their payments · hover a ✓ for payment details</div>
         <div style={{ fontSize: 13, color: NAVY, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <span>Collected: <b>${paidThisYear.toLocaleString()}</b> · {data.members.length} members</span>
           <button onClick={autofill} disabled={busy} style={{ padding: '6px 14px', border: `1px solid ${GOLD}`, borderRadius: 3, background: busy ? '#f0ebe0' : '#fff', color: NAVY, fontWeight: 500, fontFamily: SANS, fontSize: 12, cursor: busy ? 'default' : 'pointer' }}>{busy ? 'Matching…' : '↻ Autofill from Sola / Donors Fund / Zelle'}</button>

@@ -2,7 +2,19 @@
 import { supabaseAdmin } from '../../lib/supabaseAdmin'
 
 const ADMIN_CODE = process.env.SHUL_ADMIN_CODE
-const MONTHS = ['2025-08-01','2025-09-01','2025-10-01','2025-11-01','2025-12-01','2026-01-01','2026-02-01','2026-03-01','2026-04-01','2026-05-01','2026-06-01','2026-07-01']
+
+// Membership year runs Aug–Jul. Computed from today so it never needs a manual
+// yearly update — Sep 2026 correctly shows Aug 2026–Jul 2027, not last year's range.
+const MONTHS = (() => {
+  const now = new Date()
+  const startYear = now.getUTCMonth() >= 7 ? now.getUTCFullYear() : now.getUTCFullYear() - 1
+  const out = []
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(Date.UTC(startYear, 7 + i, 1)) // month 7 = August
+    out.push(d.toISOString().slice(0, 10))
+  }
+  return out
+})()
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
