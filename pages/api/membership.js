@@ -11,10 +11,17 @@ export default async function handler(req, res) {
 
   try {
     if (action === 'load') {
-      const { data: members } = await supabaseAdmin.from('books_members').select('id,name,monthly_rate,recurring').order('name')
+      const { data: members } = await supabaseAdmin.from('books_members').select('id,name,monthly_rate,recurring,active_from,vote_excluded').order('name')
       const { data: allocs } = await supabaseAdmin.from('books_membership').select('member_id,month,amount,source,note,status')
       const allocations = (allocs || []).map(a => ({ member_id: a.member_id, ym: String(a.month).slice(0, 7), amount: a.amount, source: a.source, note: a.note, status: a.status }))
-      return res.status(200).json({ months: MONTHS.map(m => m.slice(0, 7)), members: members || [], allocations })
+
+      // Voting eligibility = who's on the actual voter roster (shul_vote_codes) — the
+      // single source of truth, so manual exceptions show correctly on the chart too.
+      const monthsYm = MONTHS.map(m => m.slice(0, 7))
+      const { data: voterRows } = await supabaseAdmin.from('shul_vote_codes').select('member_id')
+      const voterIds = new Set((voterRows || []).map(v => v.member_id))
+      const enriched = (members || []).map(m => ({ ...m, eligible: voterIds.has(m.id) }))
+      return res.status(200).json({ months: monthsYm, members: enriched, allocations })
     }
 
     if (action === 'memberPayments') {
@@ -56,6 +63,44 @@ export default async function handler(req, res) {
       if (error) throw error
       await supabaseAdmin.from('books_member_aliases').insert({ member_id: data.id, alias: name.trim().toLowerCase() })
       return res.status(200).json({ ok: true, id: data.id })
+    }
+
+    if (action === 'autofill') {
+      const { data: aliasRows } = await supabaseAdmin.from('books_member_aliases').select('member_id,alias')
+      const aliasByMember = {}, exactAlias = {}
+      ;(aliasRows || []).forEach(r => { (aliasByMember[r.member_id] = aliasByMember[r.member_id] || []).push(r.alias); exactAlias[r.alias] = r.member_id })
+
+      const cands = []
+      const { data: sola } = await supabaseAdmin.from('books_sola').select('txn_date,amount,description,cardholder_name,ref_num').eq('result', 'Approved')
+      ;(sola || []).forEach(s => { const mid = exactAlias[(s.cardholder_name || '').trim().toLowerCase()]; if (mid) cands.push({ member_id: mid, date: s.txn_date, amount: Number(s.amount), source: 'sola', ref: s.ref_num, note: s.description, labeled: /member/i.test(s.description || '') }) })
+      const { data: df } = await supabaseAdmin.from('books_donorsfund').select('txn_date,amount,memo,shared_name,shared_fund_name,confirmation_number').eq('transaction_type', 'Grant')
+      ;(df || []).forEach(d => { const mid = exactAlias[(d.shared_name || '').trim().toLowerCase()]; if (mid) cands.push({ member_id: mid, date: d.txn_date, amount: Number(d.amount), source: 'donorsfund', ref: d.confirmation_number, note: d.memo || d.shared_fund_name, labeled: /member/i.test(d.memo || '') }) })
+      const { data: zelle } = await supabaseAdmin.from('books_chase').select('posting_date,amount,description').in('type', ['QUICKPAY_CREDIT', 'PARTNERFI_TO_CHASE'])
+      ;(zelle || []).forEach(z => { const desc = (z.description || '').toLowerCase(); for (const mid in aliasByMember) { if (aliasByMember[mid].some(a => a.length > 4 && desc.includes(a))) { cands.push({ member_id: Number(mid), date: z.posting_date, amount: Number(z.amount), source: 'zelle', ref: null, note: z.description, labeled: false }); break } } })
+
+      const months = MONTHS.map(m => m.slice(0, 7))
+      const idx = (ym) => months.indexOf(ym)
+      const plausible = cands.filter(c => c.date >= '2025-08-01' && c.amount >= 50 && c.amount % 50 === 0 && (c.labeled ? c.amount <= 600 : c.amount <= 300))
+        .sort((a, b) => (a.date < b.date ? -1 : 1))
+
+      const { data: existing } = await supabaseAdmin.from('books_membership').select('member_id,month,status')
+      const taken = {}
+      ;(existing || []).filter(a => a.status === 'confirmed').forEach(a => { (taken[a.member_id] = taken[a.member_id] || new Set()).add(String(a.month).slice(0, 7)) })
+      await supabaseAdmin.from('books_membership').delete().eq('status', 'suggested')
+
+      const rows = []
+      plausible.forEach(c => {
+        let n = Math.min(Math.round(c.amount / 50), 12)
+        let start = idx(c.date.slice(0, 7)); if (start < 0) start = 0
+        const t = (taken[c.member_id] = taken[c.member_id] || new Set())
+        for (let i = start; i < months.length && n > 0; i++) {
+          const ym = months[i]; if (t.has(ym)) continue
+          t.add(ym); n--
+          rows.push({ member_id: c.member_id, month: ym + '-01', amount: 50, source: c.source, source_ref: c.ref ? String(c.ref) : null, note: (c.labeled ? '[membership] ' : '') + (c.note || '').slice(0, 70), status: c.labeled ? 'confirmed' : 'suggested' })
+        }
+      })
+      if (rows.length) await supabaseAdmin.from('books_membership').upsert(rows, { onConflict: 'member_id,month', ignoreDuplicates: true })
+      return res.status(200).json({ ok: true, added: rows.length, confirmed: rows.filter(r => r.status === 'confirmed').length, suggested: rows.filter(r => r.status === 'suggested').length })
     }
 
     return res.status(400).json({ error: 'Unknown action.' })
