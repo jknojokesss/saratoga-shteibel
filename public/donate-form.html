@@ -320,6 +320,13 @@
     var n = parseFloat(parts[0] + (parts.length > 1 ? '.' + parts.slice(1).join('').slice(0, 2) : ''));
     return isFinite(n) ? n : 0;
   }
+  function formatMoneyDisplay(n) {
+    var amount = Number(n);
+    if (!isFinite(amount)) amount = 0;
+    var parts = Math.abs(amount).toFixed(2).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (amount < 0 ? '-$' : '$') + parts[0] + '.' + parts[1];
+  }
   function formatDonationAmount(str) {
     var raw = String(str || '').replace(/[^0-9.]/g, '');
     if (!raw) return '';
@@ -355,8 +362,32 @@
     }
     return formatted.length;
   }
+  function isAmexCard(str) {
+    var d = String(str || '').replace(/\D/g, '');
+    return d.charAt(0) === '3' && (d.charAt(1) === '4' || d.charAt(1) === '7');
+  }
   function formatCardNumber(str) {
-    return String(str || '').replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
+    var d = String(str || '').replace(/\D/g, '');
+    if (isAmexCard(d)) {
+      d = d.slice(0, 15);
+      if (d.length <= 4) return d;
+      if (d.length <= 10) return d.slice(0, 4) + ' ' + d.slice(4);
+      return d.slice(0, 4) + ' ' + d.slice(4, 10) + ' ' + d.slice(10);
+    }
+    return d.slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
+  }
+  function syncCardBrandUi(formatted) {
+    var amex = isAmexCard(formatted);
+    var cardEl = document.getElementById('card-input');
+    var cvvEl = document.getElementById('cvv-input');
+    if (cardEl) {
+      cardEl.maxLength = amex ? 17 : 19;
+      cardEl.placeholder = amex ? '•••• •••••• •••••' : '•••• •••• •••• ••••';
+    }
+    if (cvvEl) {
+      cvvEl.maxLength = amex ? 4 : 3;
+      cvvEl.placeholder = amex ? '••••' : '•••';
+    }
   }
   function formatExpDate(str, deleting) {
     var d = String(str || '').replace(/\D/g, '').slice(0, 4);
@@ -604,7 +635,7 @@
     if (selectedOption === 'membership') amount = 50;
     else if (selectedOption === 'donation') amount = parseDonationAmount(document.getElementById('custom-amount').value);
     else if (selectedOption === 'sponsorship') amount = sponsorTotal();
-    document.getElementById('total-display').textContent = '$' + amount.toFixed(2);
+    document.getElementById('total-display').textContent = formatMoneyDisplay(amount);
     updateCommitmentSummary();
   }
 
@@ -618,13 +649,13 @@
       if (ongoing) {
         text = 'This charges $50.00 every month with no fixed end date, until you contact us to cancel.';
       } else if (mMonths >= 2) {
-        text = 'This charges $50.00/month for ' + mMonths + ' months ($' + (50 * mMonths).toFixed(2) + ' total), then stops automatically. No charges after that.';
+        text = 'This charges $50.00/month for ' + mMonths + ' months (' + formatMoneyDisplay(50 * mMonths) + ' total), then stops automatically. No charges after that.';
       }
     } else if (isDonationRecurring()) {
       var amt = parseDonationAmount(document.getElementById('custom-amount').value);
       var dMonths = parseInt(document.getElementById('donation-months').value, 10);
       if (dMonths >= 2 && amt > 0) {
-        text = 'This charges $' + amt.toFixed(2) + '/month for ' + dMonths + ' months ($' + (amt * dMonths).toFixed(2) + ' total), then stops automatically. No charges after that.';
+        text = 'This charges ' + formatMoneyDisplay(amt) + '/month for ' + dMonths + ' months (' + formatMoneyDisplay(amt * dMonths) + ' total), then stops automatically. No charges after that.';
       }
     }
 
@@ -635,12 +666,18 @@
 
   bindAmountInput(document.getElementById('custom-amount'));
   bindMaskedInput(document.getElementById('card-input'), function(v) { return formatCardNumber(v); }, function(v) {
-    if (v.replace(/\D/g, '').length >= 16) document.getElementById('exp-input').focus();
+    syncCardBrandUi(v);
+    var digits = v.replace(/\D/g, '');
+    var need = isAmexCard(digits) ? 15 : 16;
+    if (digits.length >= need) document.getElementById('exp-input').focus();
   });
   bindMaskedInput(document.getElementById('exp-input'), function(v, deleting) { return formatExpDate(v, deleting); }, function(v) {
     if (v.replace(/\D/g, '').length >= 4) document.getElementById('cvv-input').focus();
   });
-  bindMaskedInput(document.getElementById('cvv-input'), function(v) { return String(v || '').replace(/\D/g, '').slice(0, 4); });
+  bindMaskedInput(document.getElementById('cvv-input'), function(v) {
+    var max = isAmexCard(document.getElementById('card-input').value) ? 4 : 3;
+    return String(v || '').replace(/\D/g, '').slice(0, max);
+  });
 
   setPayMethod('card');
   document.getElementById('membership-months').addEventListener('input', updateCommitmentSummary);
@@ -764,8 +801,8 @@
 
     getTokens(
       async function() {
-        var cardInputEl = document.getElementById('card-input'); var cardToken = cardInputEl ? cardInputEl.value.replace(/\s/g, '') : '';
-        var cvvTokenEl = document.getElementById('cvv-input'); var cvvToken = cvvTokenEl ? cvvTokenEl.value : '';
+        var cardInputEl = document.getElementById('card-input'); var cardToken = cardInputEl ? cardInputEl.value.replace(/\D/g, '') : '';
+        var cvvTokenEl = document.getElementById('cvv-input'); var cvvToken = cvvTokenEl ? cvvTokenEl.value.replace(/\D/g, '') : '';
         var expInputEl = document.getElementById('exp-input'); var expRaw = expInputEl ? expInputEl.value.replace(/\D/g, '') : ''; var expToken = expRaw;
 
         if (!cardToken) {
