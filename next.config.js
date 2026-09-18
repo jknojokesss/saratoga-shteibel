@@ -4,6 +4,13 @@ const nextConfig = {
   images: {
     domains: ['lh3.googleusercontent.com', 'storage.googleapis.com'],
   },
+  experimental: {
+    // pdfkit loads its built-in font files by path at runtime, which Next's file
+    // tracing can't see — without this the PDF route 500s on Vercel.
+    outputFileTracingIncludes: {
+      '/api/books-pdf': ['./node_modules/pdfkit/js/**/*'],
+    },
+  },
   async rewrites() {
     // beforeFiles so this runs BEFORE the filesystem route (index.js login page).
     return {
