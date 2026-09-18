@@ -71,7 +71,10 @@ export default function Membership() {
       <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#2a2a2a', padding: '20px 18px 60px' }}>
         <div style={{ fontFamily: SERIF, fontSize: 24, fontWeight: 600, color: NAVY }}>Membership Tracker</div>
         <div style={{ fontSize: 13, color: MUTED, marginBottom: 4 }}>Aug 2025 – Jul 2026 · $50/mo · click a name to see their payments · hover a ✓ for payment details</div>
-        <div style={{ fontSize: 13, color: NAVY, marginBottom: 10 }}>Collected: <b>${paidThisYear.toLocaleString()}</b> · {data.members.length} members</div>
+        <div style={{ fontSize: 13, color: NAVY, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span>Collected: <b>${paidThisYear.toLocaleString()}</b> · {data.members.length} members</span>
+          <button onClick={autofill} disabled={busy} style={{ padding: '6px 14px', border: `1px solid ${GOLD}`, borderRadius: 3, background: busy ? '#f0ebe0' : '#fff', color: NAVY, fontWeight: 500, fontFamily: SANS, fontSize: 12, cursor: busy ? 'default' : 'pointer' }}>{busy ? 'Matching…' : '↻ Autofill from Sola / Donors Fund / Zelle'}</button>
+        </div>
         <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: MUTED, display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 17, height: 17, background: '#dcecd5', color: '#2e7d32', border: `1px solid #2e7d3255`, borderRadius: 3, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12 }}>✓</span> confirmed (real Sola/DF payment)</span>
           <span style={{ fontSize: 12, color: MUTED, display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 17, height: 17, background: '#fbf1d1', color: '#a67f18', border: `1px solid #a67f1855`, borderRadius: 3, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12 }}>✓</span> suggested (unconfirmed)</span>
