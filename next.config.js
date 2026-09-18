@@ -8,7 +8,7 @@ const nextConfig = {
     // pdfkit loads its built-in font files by path at runtime, which Next's file
     // tracing can't see — without this the PDF route 500s on Vercel.
     outputFileTracingIncludes: {
-      '/api/books-pdf': ['./node_modules/pdfkit/js/**/*'],
+      '/api/books-pdf': ['./node_modules/pdfkit/js/**/*', './lib/fonts/*'],
     },
   },
   async rewrites() {
