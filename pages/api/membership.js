@@ -5,20 +5,21 @@ const ADMIN_CODE = process.env.SHUL_ADMIN_CODE
 
 // Membership year runs Aug–Jul. Computed from today so it never needs a manual
 // yearly update — Sep 2026 correctly shows Aug 2026–Jul 2027, not last year's range.
-const MONTHS = (() => {
+// yearOffset 0 = current membership year, -1 = the year before it, etc.
+function monthsForYear(yearOffset = 0) {
   const now = new Date()
-  const startYear = now.getUTCMonth() >= 7 ? now.getUTCFullYear() : now.getUTCFullYear() - 1
+  const startYear = (now.getUTCMonth() >= 7 ? now.getUTCFullYear() : now.getUTCFullYear() - 1) + yearOffset
   const out = []
   for (let i = 0; i < 12; i++) {
     const d = new Date(Date.UTC(startYear, 7 + i, 1)) // month 7 = August
     out.push(d.toISOString().slice(0, 10))
   }
   return out
-})()
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
-  const { passcode, action } = req.body || {}
+  const { passcode, action, yearOffset } = req.body || {}
   if (!ADMIN_CODE || passcode !== ADMIN_CODE) return res.status(401).json({ error: 'Wrong passcode.' })
 
   try {
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
 
       // Voting eligibility = who's on the actual voter roster (shul_vote_codes) — the
       // single source of truth, so manual exceptions show correctly on the chart too.
-      const monthsYm = MONTHS.map(m => m.slice(0, 7))
+      const monthsYm = monthsForYear(yearOffset || 0).map(m => m.slice(0, 7))
       const { data: voterRows } = await supabaseAdmin.from('shul_vote_codes').select('member_id')
       const voterIds = new Set((voterRows || []).map(v => v.member_id))
       const enriched = (members || []).map(m => ({ ...m, eligible: voterIds.has(m.id) }))
@@ -90,9 +91,12 @@ export default async function handler(req, res) {
       const { data: zelle } = await supabaseAdmin.from('books_chase').select('posting_date,amount,description').in('type', ['QUICKPAY_CREDIT', 'PARTNERFI_TO_CHASE'])
       ;(zelle || []).forEach(z => { const desc = (z.description || '').toLowerCase(); for (const mid in aliasByMember) { if (aliasByMember[mid].some(a => a.length > 4 && desc.includes(a))) { cands.push({ member_id: Number(mid), date: z.posting_date, amount: Number(z.amount), source: 'zelle', ref: null, note: z.description, labeled: false }); break } } })
 
-      const months = MONTHS.map(m => m.slice(0, 7))
+      // Autofill always targets the current membership year, regardless of which year is on screen.
+      const currentYearMonths = monthsForYear(0)
+      const months = currentYearMonths.map(m => m.slice(0, 7))
       const idx = (ym) => months.indexOf(ym)
-      const plausible = cands.filter(c => c.date >= '2025-08-01' && c.amount >= 50 && c.amount % 50 === 0 && (c.labeled ? c.amount <= 600 : c.amount <= 300))
+      const yearStart = currentYearMonths[0]
+      const plausible = cands.filter(c => c.date >= yearStart && c.amount >= 50 && c.amount % 50 === 0 && (c.labeled ? c.amount <= 600 : c.amount <= 300))
         .sort((a, b) => (a.date < b.date ? -1 : 1))
 
       const { data: existing } = await supabaseAdmin.from('books_membership').select('member_id,month,status')

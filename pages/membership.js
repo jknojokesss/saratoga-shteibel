@@ -15,14 +15,18 @@ export default function Membership() {
   const [sel, setSel] = useState(null)
   const [payments, setPayments] = useState(null)
   const [newName, setNewName] = useState('')
+  const [yearOffset, setYearOffset] = useState(0) // 0 = current membership year, -1 = prior year
 
   async function api(action, body) {
     const r = await fetch('/api/membership', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ passcode, action, ...body }) })
     const d = await r.json(); if (!r.ok) throw new Error(d.error || 'Failed'); return d
   }
-  async function load() {
+  async function load(offset = yearOffset) {
     setError(''); setBusy(true)
-    try { setData(await api('load')) } catch (e) { setError(e.message); setData(null) } finally { setBusy(false) }
+    try { setData(await api('load', { yearOffset: offset })) } catch (e) { setError(e.message); setData(null) } finally { setBusy(false) }
+  }
+  function switchYear(offset) {
+    setYearOffset(offset); setSel(null); setPayments(null); load(offset)
   }
   const key = (mid, ym) => mid + '|' + ym
   const allocMap = () => { const m = {}; (data.allocations || []).forEach(a => { m[key(a.member_id, a.ym)] = a }); return m }
@@ -73,7 +77,11 @@ export default function Membership() {
         <div style={{ fontSize: 13, color: MUTED, marginBottom: 4 }}>{data.months.length ? `${lab(data.months[0])} – ${lab(data.months[data.months.length-1])}` : ''} · $50/mo · click a name to see their payments · hover a ✓ for payment details</div>
         <div style={{ fontSize: 13, color: NAVY, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <span>Collected: <b>${paidThisYear.toLocaleString()}</b> · {data.members.length} members</span>
-          <button onClick={autofill} disabled={busy} style={{ padding: '6px 14px', border: `1px solid ${GOLD}`, borderRadius: 3, background: busy ? '#f0ebe0' : '#fff', color: NAVY, fontWeight: 500, fontFamily: SANS, fontSize: 12, cursor: busy ? 'default' : 'pointer' }}>{busy ? 'Matching…' : '↻ Autofill from Sola / Donors Fund / Zelle'}</button>
+          <div style={{ display: 'inline-flex', border: `1px solid ${BORDER}`, borderRadius: 3, overflow: 'hidden' }}>
+            <button onClick={() => switchYear(0)} disabled={busy} style={{ padding: '6px 12px', border: 'none', background: yearOffset === 0 ? NAVY : '#fff', color: yearOffset === 0 ? '#fff' : NAVY, fontFamily: SANS, fontSize: 12, fontWeight: 500, cursor: busy ? 'default' : 'pointer' }}>This year</button>
+            <button onClick={() => switchYear(-1)} disabled={busy} style={{ padding: '6px 12px', border: 'none', borderLeft: `1px solid ${BORDER}`, background: yearOffset === -1 ? NAVY : '#fff', color: yearOffset === -1 ? '#fff' : NAVY, fontFamily: SANS, fontSize: 12, fontWeight: 500, cursor: busy ? 'default' : 'pointer' }}>Past year</button>
+          </div>
+          {yearOffset === 0 && <button onClick={autofill} disabled={busy} style={{ padding: '6px 14px', border: `1px solid ${GOLD}`, borderRadius: 3, background: busy ? '#f0ebe0' : '#fff', color: NAVY, fontWeight: 500, fontFamily: SANS, fontSize: 12, cursor: busy ? 'default' : 'pointer' }}>{busy ? 'Matching…' : '↻ Autofill from Sola / Donors Fund / Zelle'}</button>}
         </div>
         <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: MUTED, display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 17, height: 17, background: '#dcecd5', color: '#2e7d32', border: `1px solid #2e7d3255`, borderRadius: 3, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12 }}>✓</span> confirmed (real Sola/DF payment)</span>
