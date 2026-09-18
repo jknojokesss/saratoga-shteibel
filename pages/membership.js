@@ -48,6 +48,14 @@ export default function Membership() {
     if (!newName.trim()) return
     try { await api('addMember', { name: newName }); setNewName(''); load() } catch (e) { setError(e.message) }
   }
+  async function setInactive(m, inactive) {
+    setError('')
+    try {
+      await api('setInactive', { member_id: m.id, inactive })
+      if (sel && sel.id === m.id) { setSel(null); setPayments(null) }
+      await load()
+    } catch (e) { setError(e.message) }
+  }
 
   if (!data) {
     return (
@@ -132,9 +140,29 @@ export default function Membership() {
           <button onClick={addMember} style={{ padding: '9px 18px', border: 'none', borderRadius: 3, background: GOLD, color: NAVY, fontWeight: 500, fontFamily: SANS, cursor: 'pointer', fontSize: 13 }}>Add</button>
         </div>
 
+        {data.pastMembers && data.pastMembers.length > 0 && (
+          <div style={{ marginTop: 22, maxWidth: 620 }}>
+            <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY }}>Past members <span style={{ fontFamily: SANS, fontSize: 12, fontWeight: 400, color: MUTED }}>({data.pastMembers.length}) · payment history is kept</span></div>
+            <div style={{ marginTop: 8, background: '#fff', border: `0.5px solid ${BORDER}`, borderRadius: 8, overflow: 'hidden' }}>
+              {data.pastMembers.map((pm, i) => (
+                <div key={pm.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '9px 14px', borderTop: i ? `0.5px solid ${BORDER}` : 'none' }}>
+                  <span onClick={() => pickMember(pm)} title="See their payments" style={{ flex: 1, cursor: 'pointer', color: NAVY, fontWeight: 500, fontSize: 13 }}>{pm.name}</span>
+                  <span style={{ fontSize: 12, color: MUTED }}>{pm.last_paid ? 'last paid ' + lab(pm.last_paid) : 'no payments'} · {pm.months_paid} mo on record</span>
+                  <button onClick={() => setInactive(pm, false)} style={{ padding: '4px 12px', border: `1px solid ${BORDER}`, borderRadius: 3, background: '#fff', color: NAVY, fontFamily: SANS, fontSize: 12, cursor: 'pointer' }}>Restore</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {sel && (
           <div style={{ marginTop: 20, background: '#fff', border: `0.5px solid ${BORDER}`, borderRadius: 8, padding: '16px 18px', maxWidth: 620 }}>
-            <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY, marginBottom: 2 }}>{sel.name} — matched payments</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+              <div style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: NAVY, marginBottom: 2 }}>{sel.name} — matched payments</div>
+              {yearOffset === 0 && data.members.some(x => x.id === sel.id) && (
+                <button onClick={() => { if (confirm(`Move ${sel.name} to past members? Their payment history is kept.`)) setInactive(sel, true) }} style={{ padding: '4px 12px', border: `1px solid ${BORDER}`, borderRadius: 3, background: '#fff', color: MUTED, fontFamily: SANS, fontSize: 12, cursor: 'pointer' }}>Move to past members</button>
+              )}
+            </div>
             <div style={{ fontSize: 12, color: MUTED, marginBottom: 12 }}>Every payment we matched to {sel.name} across Sola, Donors Fund &amp; Zelle. Use it to decide which months to mark above.</div>
             {payments === null && <div style={{ color: MUTED, fontSize: 13 }}>Loading…</div>}
             {payments && payments.length === 0 && <div style={{ color: MUTED, fontSize: 13 }}>No payments matched by name yet. (May have paid by check/cash, or the name differs — tell me and I'll add an alias.)</div>}

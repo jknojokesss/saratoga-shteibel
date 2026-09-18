@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
   try {
     if (action === 'load') {
-      const { data: members } = await supabaseAdmin.from('books_members').select('id,name,monthly_rate,recurring,active_from,vote_excluded').order('name')
+      const { data: members } = await supabaseAdmin.from('books_members').select('id,name,monthly_rate,recurring,active_from,vote_excluded,inactive_from').order('name')
       const { data: allocs } = await supabaseAdmin.from('books_membership').select('member_id,month,amount,source,note,status')
       const allocations = (allocs || []).map(a => ({ member_id: a.member_id, ym: String(a.month).slice(0, 7), amount: a.amount, source: a.source, note: a.note, status: a.status }))
 
@@ -33,8 +33,23 @@ export default async function handler(req, res) {
       const monthsYm = monthsForYear(yearOffset || 0).map(m => m.slice(0, 7))
       const { data: voterRows } = await supabaseAdmin.from('shul_vote_codes').select('member_id')
       const voterIds = new Set((voterRows || []).map(v => v.member_id))
-      const enriched = (members || []).map(m => ({ ...m, eligible: voterIds.has(m.id) }))
-      return res.status(200).json({ months: monthsYm, members: enriched, allocations })
+      // Members who left before the viewed year began move to "past members" (their history is kept,
+      // and they still appear in the earlier years they were part of).
+      const yearStart = monthsYm[0] + '-01'
+      const left = (m) => m.inactive_from && String(m.inactive_from) <= yearStart
+      const enriched = (members || []).filter(m => !left(m)).map(m => ({ ...m, eligible: voterIds.has(m.id) }))
+      const pastMembers = (members || []).filter(left).map(m => {
+        const paid = allocations.filter(a => a.member_id === m.id && a.status === 'confirmed').map(a => a.ym).sort()
+        return { id: m.id, name: m.name, inactive_from: m.inactive_from, last_paid: paid[paid.length - 1] || null, months_paid: paid.length }
+      })
+      return res.status(200).json({ months: monthsYm, members: enriched, pastMembers, allocations })
+    }
+
+    if (action === 'setInactive') {
+      const { member_id, inactive } = req.body
+      const { error } = await supabaseAdmin.from('books_members').update({ inactive_from: inactive ? monthsForYear(0)[0] : null }).eq('id', member_id)
+      if (error) throw error
+      return res.status(200).json({ ok: true })
     }
 
     if (action === 'memberPayments') {
