@@ -35,16 +35,21 @@ function periodLabel({ year, month, startDate, endDate }) {
   return `${year} (full calendar year)`
 }
 
-function aggregate(rows) {
+function aggregate(rows, withItems = false) {
   const agg = (sign) => {
     const map = {}
     rows.filter(r => (sign > 0 ? Number(r.amount) > 0 : Number(r.amount) < 0)).forEach(r => {
       const key = (r.category || 'Uncategorized') + (r.subcategory ? ' — ' + r.subcategory : '')
-      if (!map[key]) map[key] = { label: key, category: r.category, subcategory: r.subcategory || null, n: 0, total: 0 }
+      if (!map[key]) map[key] = { label: key, category: r.category, subcategory: r.subcategory || null, n: 0, total: 0, items: [] }
       map[key].n++; map[key].total += Number(r.amount)
+      if (withItems) map[key].items.push({ date: r.txn_date, source: r.source, who: r.counterparty, description: r.description, amount: Number(r.amount) })
     })
-    return Object.values(map).map(x => ({ ...x, total: Math.round(x.total * 100) / 100 }))
-      .sort((a, b) => Math.abs(b.total) - Math.abs(a.total))
+    return Object.values(map).map(x => {
+      const out = { ...x, total: Math.round(x.total * 100) / 100 }
+      if (withItems) out.items.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+      else delete out.items
+      return out
+    }).sort((a, b) => Math.abs(b.total) - Math.abs(a.total))
   }
   const income = agg(1)
   const expenses = agg(-1)

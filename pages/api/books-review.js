@@ -6,8 +6,9 @@ const ADMIN_CODE = process.env.SHUL_ADMIN_CODE
 export const CATEGORIES = {
   income: [
     { cat: 'Membership', sub: null },
+    { cat: 'Membership', sub: 'Full year' },
     { cat: 'Donations', sub: 'General' },
-    { cat: 'Donations', sub: 'Kibbudim' },
+    { cat: 'Donations', sub: 'Mi Sheberach Pledges' },
     { cat: 'Donations', sub: 'Kiddush sponsorship' },
     { cat: 'Donations', sub: 'Designated' },
     { cat: 'Donations', sub: 'Appeals & gifts' },
