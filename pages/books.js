@@ -10,6 +10,8 @@ const usd2 = (n) => (n < 0 ? '−' : '') + '$' + Math.abs(Number(n)).toLocaleStr
 const MON = { '01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec' }
 const niceDate = (d) => MON[d.slice(5, 7)] + ' ' + Number(d.slice(8, 10)) + ', ' + d.slice(0, 4)
 
+const MON_NAME = { '01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec' }
+
 export default function Books() {
   const [passcode, setPasscode] = useState('')
   const [data, setData] = useState(null)
@@ -17,21 +19,39 @@ export default function Books() {
   const [busy, setBusy] = useState(false)
   const [open, setOpen] = useState(null)      // label of expanded category
   const [detail, setDetail] = useState({})    // label -> list
+  const [selectedMonth, setSelectedMonth] = useState(null) // YYYY-MM or null (whole year)
+  const [pdfBusy, setPdfBusy] = useState(false)
 
   async function api(action, body) {
     const r = await fetch('/api/books-report', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ passcode, action, ...body }) })
     const d = await r.json(); if (!r.ok) throw new Error(d.error || 'Failed'); return d
   }
-  async function load(year) {
+  async function load(year, month) {
     setError(''); setBusy(true); setOpen(null); setDetail({})
-    try { setData(await api('summary', { year })) } catch (e) { setError(e.message) } finally { setBusy(false) }
+    setSelectedMonth(month || null)
+    try { setData(await api('summary', month ? { month } : { year })) } catch (e) { setError(e.message) } finally { setBusy(false) }
   }
   async function toggle(row) {
     if (open === row.label) { setOpen(null); return }
     setOpen(row.label)
     if (!detail[row.label]) {
-      try { const d = await api('detail', { year: data.year, category: row.category, subcategory: row.subcategory }); setDetail(x => ({ ...x, [row.label]: d.list })) } catch (e) { setError(e.message) }
+      const period = selectedMonth ? { month: selectedMonth } : { year: data.year }
+      try { const d = await api('detail', { ...period, category: row.category, subcategory: row.subcategory }); setDetail(x => ({ ...x, [row.label]: d.list })) } catch (e) { setError(e.message) }
     }
+  }
+  async function downloadPdf() {
+    setPdfBusy(true); setError('')
+    try {
+      const period = selectedMonth ? { month: selectedMonth } : { year: data.year }
+      const r = await fetch('/api/books-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ passcode, ...period }) })
+      if (!r.ok) { const d = await r.json(); throw new Error(d.error || 'Failed to generate PDF.') }
+      const blob = await r.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url; a.download = `saratoga-shteibel-${selectedMonth || data.year}.pdf`
+      document.body.appendChild(a); a.click(); a.remove()
+      URL.revokeObjectURL(url)
+    } catch (e) { setError(e.message) } finally { setPdfBusy(false) }
   }
 
   if (!data) return (
@@ -97,12 +117,23 @@ export default function Books() {
             <div style={{ color: '#a99f8c', fontSize: 12, letterSpacing: 2 }}>STATEMENT OF ACTIVITIES</div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '16px 0 22px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '16px 0 10px', flexWrap: 'wrap' }}>
             {data.years.map(y => (
-              <button key={y} onClick={() => load(y)} style={{ padding: '7px 18px', borderRadius: 20, border: `1px solid ${y === data.year ? NAVY : BORDER}`, background: y === data.year ? NAVY : '#fff', color: y === data.year ? '#fff' : NAVY, fontFamily: SANS, fontSize: 14, fontWeight: 500, cursor: 'pointer' }}>{y}</button>
+              <button key={y} onClick={() => load(y)} style={{ padding: '7px 18px', borderRadius: 20, border: `1px solid ${!selectedMonth && y === data.year ? NAVY : BORDER}`, background: !selectedMonth && y === data.year ? NAVY : '#fff', color: !selectedMonth && y === data.year ? '#fff' : NAVY, fontFamily: SANS, fontSize: 14, fontWeight: 500, cursor: 'pointer' }}>{y}</button>
             ))}
           </div>
-          <div style={{ textAlign: 'center', fontSize: 12, color: MUTED, marginBottom: 20 }}>{data.year === '2026' ? 'through ' + (data.lastDate ? niceDate(data.lastDate) : '') : 'full calendar year'}</div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 6, margin: '0 0 8px', flexWrap: 'wrap' }}>
+            {(data.months || []).filter(m => m.slice(0, 4) === data.year).sort().map(m => (
+              <button key={m} onClick={() => load(null, m)} style={{ padding: '4px 11px', borderRadius: 14, border: `1px solid ${selectedMonth === m ? GOLD : BORDER}`, background: selectedMonth === m ? '#faf1d9' : '#fff', color: selectedMonth === m ? '#8a6d1f' : MUTED, fontFamily: SANS, fontSize: 12, fontWeight: 500, cursor: 'pointer' }}>{MON_NAME[m.slice(5, 7)]}</button>
+            ))}
+            {selectedMonth && <button onClick={() => load(data.year)} style={{ padding: '4px 11px', borderRadius: 14, border: `1px solid ${BORDER}`, background: '#fff', color: MUTED, fontFamily: SANS, fontSize: 12, cursor: 'pointer' }}>✕ whole year</button>}
+          </div>
+
+          <div style={{ textAlign: 'center', fontSize: 12, color: MUTED, marginBottom: 4 }}>{data.label || (data.year === '2026' ? 'through ' + (data.lastDate ? niceDate(data.lastDate) : '') : 'full calendar year')}</div>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
+            <button onClick={downloadPdf} disabled={pdfBusy} style={{ padding: '7px 16px', borderRadius: 6, border: `1px solid ${NAVY}`, background: pdfBusy ? '#eee' : '#fff', color: NAVY, fontFamily: SANS, fontSize: 12, fontWeight: 500, cursor: pdfBusy ? 'default' : 'pointer' }}>{pdfBusy ? 'Generating…' : '⬇ Download board PDF'}</button>
+          </div>
 
           <div style={{ display: 'flex', gap: 12, marginBottom: 26, flexWrap: 'wrap' }}>
             {[
