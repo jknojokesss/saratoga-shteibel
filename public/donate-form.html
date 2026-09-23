@@ -4,35 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Saratoga Shteibel — Support Your Community</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.cardknox.com/ifields/2.15.2409.2601/ifields.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --cream: #faf7f2; --cream-dark: #f0ebe0; --navy: #1e2d4e; --navy-light: #2c3e6b;
-      --gold: #c9a84c; --gold-light: #e8d5a3; --text: #2a2a2a; --text-muted: #7a7068;
+      --gold: #c9a84c; --gold-light: #e8d5a3; --text: #242424; --text-muted: #5e564e;
       --border: #ddd5c4; --white: #ffffff;
     }
-    html, body { min-height: 100%; background: var(--cream); font-family: 'Jost', sans-serif; color: var(--text); }
+    html, body {
+      min-height: 100%; background: var(--cream); font-family: 'Jost', sans-serif; color: var(--text);
+      font-size: 15px; line-height: 1.5; font-weight: 400;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
     .hero { background: var(--navy); padding: 18px 20px 16px; text-align: center; border-top: 3px solid var(--gold); }
     .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; color: var(--gold-light); margin-bottom: 6px; line-height: 1.15; }
-    .hero p { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 300; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.82); font-weight: 400; }
     .container { max-width: 700px; margin: 20px auto; padding: 0 16px 48px; }
     .form-card { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 34px 36px; margin-bottom: 20px; }
-    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 500; color: var(--navy); margin-bottom: 22px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--navy);
+      margin-bottom: 22px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+      letter-spacing: 0.01em;
+    }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .field-full { margin-bottom: 16px; }
     .field-trio { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-    .field-label { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+    .field-label {
+      display: block; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 6px; font-weight: 600;
+    }
     input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="text"]:not([style]) {
       width: 100%; height: 46px; border: 1px solid var(--border); border-radius: 3px; padding: 0 14px;
-      font-family: 'Jost', sans-serif; font-size: 14px; color: var(--text); background: var(--cream);
+      font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500; color: var(--text); background: var(--cream);
       transition: border-color 0.2s, box-shadow 0.2s; outline: none;
     }
     input:focus, select:focus { border-color: var(--navy-light); background: var(--white); }
     select {
       width: 100%; height: 46px; border: 1px solid var(--border); border-radius: 3px; padding: 0 14px;
-      font-family: 'Jost', sans-serif; font-size: 14px; color: var(--text); background: var(--cream);
+      font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500; color: var(--text); background: var(--cream);
       outline: none;
     }
     .commitment-summary { display: none; background: #fff8e8; border: 1px solid var(--gold-light); border-radius: 3px; padding: 14px 16px; font-size: 13px; color: var(--navy); line-height: 1.6; margin-bottom: 20px; }
@@ -55,18 +67,22 @@
       flex: 1 1 calc(25% - 10px); min-width: 76px; border: 1px solid var(--border); border-radius: 4px;
       padding: 12px 10px; cursor: pointer; background: var(--white); font-family: 'Jost', sans-serif;
       font-size: 15px; font-weight: 600; color: var(--navy); transition: border-color .15s, background .15s;
+      letter-spacing: 0.01em;
     }
     .st-amount-btn:hover { border-color: var(--navy-light); background: #f8f8f8; }
     .st-amount-btn.selected { border-color: var(--navy); border-width: 1.5px; background: #f2f5fb; }
-    .st-amount-btn.other { font-weight: 500; font-size: 14px; }
+    .st-amount-btn.other { font-weight: 600; font-size: 14px; }
     #st-kiddush-custom-wrap .amount-input-wrap::before { height: 46px; }
     .donation-option { border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; cursor: pointer; transition: border-color .15s, background .15s; position: relative; user-select: none; background: var(--white); }
     .donation-option:hover { border-color: var(--navy-light); background: #f8f8f8; }
     .donation-option.selected { border-color: var(--navy); border-width: 1.5px; background: #f2f5fb; }
-    .opt-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
-    .opt-price { font-family: 'Jost', sans-serif; font-size: 16px; font-weight: 600; color: var(--navy); line-height: 1.3; margin-bottom: 2px; }
-    .opt-price small { font-family: 'Jost', sans-serif; font-size: 11px; color: var(--text-muted); font-weight: 400; }
-    .opt-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .opt-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600; color: var(--navy);
+      margin-bottom: 4px; letter-spacing: 0.01em; line-height: 1.2;
+    }
+    .opt-price { font-family: 'Jost', sans-serif; font-size: 16px; font-weight: 600; color: var(--navy); line-height: 1.35; margin-bottom: 4px; }
+    .opt-price small { font-family: 'Jost', sans-serif; font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .opt-desc { font-size: 13px; font-weight: 400; color: var(--text-muted); line-height: 1.55; }
     .opt-badge { position: absolute; top: 12px; right: 14px; background: var(--cream-dark); color: var(--navy); font-size: 9.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
     .custom-amount-wrap { margin-bottom: 20px; display: none; }
     .custom-amount-wrap.visible { display: block; }
@@ -94,7 +110,7 @@
       animation-duration: 0.001s;
     }
 
-    .recurring-note { background: #f0f3fa; border: 1px solid #c5cfe0; border-radius: 3px; padding: 12px 16px; font-size: 13px; color: var(--navy-light); margin-bottom: 20px; display: none; line-height: 1.6; }
+    .recurring-note { background: #f0f3fa; border: 1px solid #c5cfe0; border-radius: 3px; padding: 12px 16px; font-size: 14px; color: var(--navy); margin-bottom: 20px; display: none; line-height: 1.6; }
     .recurring-note.visible { display: block; }
     .ifield-wrap { width: 100%; height: 44px; border: 1px solid var(--border); border-radius: 3px; background: var(--cream); margin-bottom: 16px; overflow: hidden; }
     .ifield-wrap > * { height: 44px !important; max-height: 44px !important; }
