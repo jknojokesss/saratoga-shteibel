@@ -974,7 +974,7 @@
       };
     }
 
-    var submitType = selectedOption === 'sponsorship' ? 'donation' : selectedOption;
+    var submitType = (selectedOption === 'sponsorship' || selectedOption === 'st_kiddush') ? 'donation' : selectedOption;
     var months = '';
     if (selectedOption === 'membership') {
       var ongoing = document.getElementById('membership-ongoing-check').checked;
