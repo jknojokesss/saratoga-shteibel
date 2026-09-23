@@ -23,15 +23,23 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+    .display-serif {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+    }
     .hero { background: var(--navy); padding: 18px 20px 16px; text-align: center; border-top: 3px solid var(--gold); }
     .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; color: var(--gold-light); margin-bottom: 6px; line-height: 1.15; }
     .hero p { font-size: 14px; color: rgba(255,255,255,0.82); font-weight: 400; }
     .container { max-width: 700px; margin: 20px auto; padding: 0 16px 48px; }
     .form-card { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 34px 36px; margin-bottom: 20px; }
     .section-title {
-      font-family: 'Jost', sans-serif; font-size: 18px; font-weight: 600; color: var(--navy);
+      font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--navy);
       margin-bottom: 22px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
-      letter-spacing: 0.02em; text-transform: none;
+      letter-spacing: 0.02em; line-height: 1.15;
+      -webkit-font-smoothing: antialiased;
     }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .field-full { margin-bottom: 16px; }
@@ -80,13 +88,18 @@
     .donation-option { border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; cursor: pointer; transition: border-color .15s, background .15s; position: relative; user-select: none; background: var(--white); }
     .donation-option:hover { border-color: var(--navy-light); background: #f8f8f8; }
     .donation-option.selected { border-color: var(--navy); border-width: 1.5px; background: #f2f5fb; }
-    .opt-title {
-      font-family: 'Jost', sans-serif; font-size: 17px; font-weight: 600; color: #121a30;
-      margin-bottom: 4px; letter-spacing: -0.01em; line-height: 1.25;
+    .donation-options .opt-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--navy);
+      margin-bottom: 4px; letter-spacing: 0.02em; line-height: 1.2;
+      -webkit-font-smoothing: antialiased;
     }
-    .opt-price { font-family: 'Jost', sans-serif; font-size: 17px; font-weight: 600; color: #121a30; line-height: 1.35; margin-bottom: 4px; }
+    #pay-method-row .opt-title {
+      font-family: 'Jost', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 0;
+      color: var(--navy);
+    }
+    .opt-price { font-family: 'Jost', sans-serif; font-size: 16px; font-weight: 600; color: var(--navy); line-height: 1.35; margin-bottom: 4px; }
     .opt-price small { font-family: 'Jost', sans-serif; font-size: 13px; color: var(--text-muted); font-weight: 500; }
-    .opt-desc { font-size: 13px; font-weight: 500; color: #4a443c; line-height: 1.5; }
+    .opt-desc { font-size: 13px; font-weight: 400; color: var(--text-muted); line-height: 1.55; }
     .opt-badge { position: absolute; top: 12px; right: 14px; background: var(--cream-dark); color: var(--navy); font-size: 9.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
     .custom-amount-wrap { margin-bottom: 20px; display: none; }
     .custom-amount-wrap.visible { display: block; }
