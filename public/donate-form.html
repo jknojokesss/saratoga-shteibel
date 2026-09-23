@@ -52,7 +52,7 @@
     #opt-st-kiddush { grid-column: 1 / -1; }
     .st-amount-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
     .st-amount-btn {
-      flex: 1 1 calc(33.333% - 10px); min-width: 88px; border: 1px solid var(--border); border-radius: 4px;
+      flex: 1 1 calc(25% - 10px); min-width: 76px; border: 1px solid var(--border); border-radius: 4px;
       padding: 12px 10px; cursor: pointer; background: var(--white); font-family: 'Jost', sans-serif;
       font-size: 15px; font-weight: 600; color: var(--navy); transition: border-color .15s, background .15s;
     }
@@ -188,13 +188,7 @@
 
     <div class="custom-amount-wrap" id="st-kiddush-wrap">
       <label class="field-label">Simchas Torah Kiddush sponsorship *</label>
-      <div class="st-amount-grid" id="st-kiddush-amounts">
-        <button type="button" class="st-amount-btn" data-amount="180" onclick="selectStKiddushAmount(180)">$180</button>
-        <button type="button" class="st-amount-btn" data-amount="360" onclick="selectStKiddushAmount(360)">$360</button>
-        <button type="button" class="st-amount-btn" data-amount="500" onclick="selectStKiddushAmount(500)">$500</button>
-        <button type="button" class="st-amount-btn" data-amount="1000" onclick="selectStKiddushAmount(1000)">$1,000</button>
-        <button type="button" class="st-amount-btn other" data-amount="other" onclick="selectStKiddushAmount('other')">Other amount</button>
-      </div>
+      <div class="st-amount-grid" id="st-kiddush-amounts"></div>
       <div class="custom-amount-wrap" id="st-kiddush-custom-wrap" style="margin-bottom:16px;">
         <label class="field-label">Your amount *</label>
         <div class="amount-input-wrap">
@@ -301,27 +295,28 @@
       <input type="text" id="df-auth" placeholder="e.g. 1234" autocomplete="off" style="margin-bottom:16px;"/>
     </div>
 
+    <form id="card-payment-form" autocomplete="on" onsubmit="return false" style="margin:0;padding:0;border:0;">
     <div id="card-fields">
         <div class="field-full">
       <label class="field-label">Card Number *</label>
-      <input type="text" id="card-input" name="cardnumber" inputmode="numeric" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
-      <iframe data-ifields-id="card-number" data-ifields-placeholder="•••• •••• •••• ••••" src="https://cdn.cardknox.com/ifields/2.15.2409.2601/ifield.htm" title="Card Number" style="display:none;position:absolute;top:-9999px;"></iframe>
-      <input type="hidden" data-ifields-id="card-number-token" name="xCardNum"/>
+      <input type="tel" id="card-input" name="cardnumber" inputmode="numeric" autocomplete="section-payment cc-number" placeholder="•••• •••• •••• ••••" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+      <input type="hidden" data-ifields-id="card-number-token" name="xCardNum" autocomplete="off"/>
     </div>
 
     <div class="card-row">
       <div>
         <label class="field-label">Expiration Date * (MM/YY)</label>
-        <input type="text" id="exp-input" name="cc-exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+        <input type="tel" id="exp-input" name="cc-exp" inputmode="numeric" autocomplete="section-payment cc-exp" placeholder="MM/YY" maxlength="5" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       </div>
       <div>
         <label class="field-label">CVV *</label>
-        <input type="text" id="cvv-input" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+        <input type="tel" id="cvv-input" name="cvc" inputmode="numeric" autocomplete="section-payment cc-csc" placeholder="•••" maxlength="4" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       </div>
     </div>
 
     <label class="card-error" data-ifields-id="card-data-error"></label>
     </div>
+    </form>
     </div>
 
     <div class="total-bar">
@@ -434,6 +429,39 @@
       cvvEl.placeholder = amex ? '••••' : '•••';
     }
   }
+  function stAmountLabel(amount) {
+    return formatMoneyDisplay(amount).replace(/\.00$/, '');
+  }
+  var ST_KIDDUSH_PRESETS = [50, 100, 180, 250, 360, 500, 720, 1000, 1800];
+  function renderStKiddushAmountButtons() {
+    var wrap = document.getElementById('st-kiddush-amounts');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    ST_KIDDUSH_PRESETS.forEach(function(amt) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'st-amount-btn';
+      btn.setAttribute('data-amount', String(amt));
+      btn.textContent = stAmountLabel(amt);
+      btn.onclick = function() { selectStKiddushAmount(amt); };
+      wrap.appendChild(btn);
+    });
+    var other = document.createElement('button');
+    other.type = 'button';
+    other.className = 'st-amount-btn other';
+    other.setAttribute('data-amount', 'other');
+    other.textContent = 'Other amount';
+    other.onclick = function() { selectStKiddushAmount('other'); };
+    wrap.appendChild(other);
+  }
+  function readInputValue(el) {
+    if (!el) return '';
+    try {
+      var desc = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+      if (desc && desc.get) return desc.get.call(el) || '';
+    } catch (err) {}
+    return el.value || '';
+  }
   function formatExpDate(str, deleting) {
     var d = String(str || '').replace(/\D/g, '').slice(0, 4);
     if (d.length >= 1 && d.charAt(0) > '1') d = '0' + d.slice(0, 3);
@@ -451,7 +479,7 @@
   function bindMaskedInput(el, formatter, onComplete) {
     if (!el) return;
     function applyMask(deleting, moveCaret) {
-      var old = el.value;
+      var old = readInputValue(el);
       var pos = el.selectionStart || 0;
       var count = digitsBefore(old, pos);
       var next = formatter(old, deleting);
@@ -465,7 +493,8 @@
     }
     el.addEventListener('input', function(e) {
       var deleting = e.inputType && e.inputType.indexOf('delete') === 0;
-      applyMask(deleting, true);
+      var trusted = !e || e.isTrusted !== false;
+      applyMask(deleting, trusted);
     });
     el.addEventListener('change', function() { applyMask(false, false); });
     el.addEventListener('blur', function() { applyMask(false, false); });
@@ -482,8 +511,31 @@
       syncFns.forEach(function(sync) { if (typeof sync === 'function') sync(); });
     }
     run();
-    [50, 150, 400, 800, 1500].forEach(function(ms) { setTimeout(run, ms); });
+    [50, 150, 400, 800, 1500, 2500, 4000].forEach(function(ms) { setTimeout(run, ms); });
     window.addEventListener('pageshow', run);
+  }
+  function watchPaymentAutofill(syncFns) {
+    var fields = ['card-input', 'exp-input', 'cvv-input'].map(function(id) { return document.getElementById(id); }).filter(Boolean);
+    var last = fields.map(function(el) { return readInputValue(el); });
+    function tick() {
+      var changed = false;
+      fields.forEach(function(el, i) {
+        var v = readInputValue(el);
+        if (v !== last[i]) {
+          last[i] = v;
+          changed = true;
+        }
+      });
+      if (changed) runSync();
+    }
+    function runSync() {
+      syncFns.forEach(function(sync) { if (typeof sync === 'function') sync(); });
+    }
+    setInterval(tick, 120);
+    document.addEventListener('visibilitychange', function() { if (!document.hidden) tick(); });
+    fields.forEach(function(el) {
+      el.addEventListener('keyup', runSync);
+    });
   }
   function bindAmountInput(el) {
     if (!el) return;
@@ -504,7 +556,7 @@
   var selectedOption = null;
 
   setAccount(IFIELDS_KEY, "SaratogaShteibel", "1.0");
-  enableAutoFormatting(' ');
+  renderStKiddushAmountButtons();
 
   // Hide ghost iframes injected by iFields
   function hideGhostIframes() {
@@ -781,8 +833,10 @@
     var max = isAmexCard(document.getElementById('card-input').value) ? 4 : 3;
     return String(v || '').replace(/\D/g, '').slice(0, max);
   });
-  schedulePaymentAutofillSync([syncCardMask, syncExpMask, syncCvvMask]);
-  syncCardBrandUi(document.getElementById('card-input') ? document.getElementById('card-input').value : '');
+  var paymentSyncFns = [syncCardMask, syncExpMask, syncCvvMask];
+  schedulePaymentAutofillSync(paymentSyncFns);
+  watchPaymentAutofill(paymentSyncFns);
+  syncCardBrandUi(document.getElementById('card-input') ? readInputValue(document.getElementById('card-input')) : '');
 
   setPayMethod('card');
   document.getElementById('membership-months').addEventListener('input', updateCommitmentSummary);
@@ -919,67 +973,84 @@
       if (el) el.dispatchEvent(new Event('change', { bubbles: true }));
     });
 
-    getTokens(
-      async function() {
-        var cardInputEl = document.getElementById('card-input'); var cardToken = cardInputEl ? cardInputEl.value.replace(/\D/g, '') : '';
-        var cvvTokenEl = document.getElementById('cvv-input'); var cvvToken = cvvTokenEl ? cvvTokenEl.value.replace(/\D/g, '') : '';
-        var expInputEl = document.getElementById('exp-input'); var expRaw = expInputEl ? expInputEl.value.replace(/\D/g, '') : ''; var expToken = expRaw;
+    var paymentStarted = false;
+    async function processCardPayment() {
+      var cardInputEl = document.getElementById('card-input');
+      var cardToken = cardInputEl ? readInputValue(cardInputEl).replace(/\D/g, '') : '';
+      var cvvTokenEl = document.getElementById('cvv-input');
+      var cvvToken = cvvTokenEl ? readInputValue(cvvTokenEl).replace(/\D/g, '') : '';
+      var expInputEl = document.getElementById('exp-input');
+      var expToken = expInputEl ? readInputValue(expInputEl).replace(/\D/g, '') : '';
 
-        if (!cardToken) {
-          showError('Please enter your card number.');
-          btn.disabled = false; btn.textContent = 'Complete Payment'; return;
-        }
+      if (!cardToken || cardToken.length < 13) {
+        showError('Please enter your card number.');
+        btn.disabled = false; btn.textContent = 'Complete Payment';
+        return;
+      }
 
-        try {
-          var response = await fetch('/api/donate-proxy/pay', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: submitType,
-              amount: amount,
-              months: months,
-              cardToken: cardToken,
-              cvvToken: cvvToken,
-              exp: expToken,
-              fname: fname,
-              lname: lname,
-              email: email,
-              description: donationDesc,
-              sponsorship: sponsorInfo
-            })
-          });
+      try {
+        var response = await fetch('/api/donate-proxy/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: submitType,
+            amount: amount,
+            months: months,
+            cardToken: cardToken,
+            cvvToken: cvvToken,
+            exp: expToken,
+            fname: fname,
+            lname: lname,
+            email: email,
+            description: donationDesc,
+            sponsorship: sponsorInfo
+          })
+        });
 
-          var result = await response.json();
+        var result = await response.json();
 
-          if (result.success) {
-            document.getElementById('main-form').style.display = 'none';
-            var screen = document.getElementById('success-screen');
-            screen.classList.add('visible');
-            if ((submitType === 'membership' || submitType === 'recurring_donation') && result.recurring === false) {
-              document.getElementById('success-title').textContent = 'Payment received — one step left';
-              document.getElementById('success-msg').innerHTML = 'Your first $50 payment went through, but the automatic monthly billing could <strong>not</strong> be set up, so no future payments are scheduled.<br/><br/>Please reach out to Chaim Katz to finish setting up your recurring membership.<br/><br/>A receipt will be sent to ' + email + '.';
-            } else if (submitType === 'membership') {
-              document.getElementById('success-title').textContent = 'Welcome, Member!';
-              var durationMsg = months === 'ongoing'
-                ? 'Your membership will continue every month until you contact us to cancel.'
-                : 'Your membership will run for ' + months + ' months and then stop automatically — no further charges after that.';
-              document.getElementById('success-msg').innerHTML = 'Your first month\'s payment has been processed. ' + durationMsg + '<br/><br/>A receipt will be sent to ' + email + '.';
-            } else if (submitType === 'recurring_donation') {
-              document.getElementById('success-title').textContent = 'Thank You!';
-              document.getElementById('success-msg').innerHTML = 'Your first monthly payment has been processed. This recurring donation will run for ' + months + ' months and then stop automatically — no further charges after that.<br/><br/>A receipt will be sent to ' + email + '.';
-            }
-          } else {
-            showError(result.error || 'Payment was declined. Please try a different card.');
-            btn.disabled = false; btn.textContent = 'Complete Payment';
+        if (result.success) {
+          document.getElementById('main-form').style.display = 'none';
+          var screen = document.getElementById('success-screen');
+          screen.classList.add('visible');
+          if ((submitType === 'membership' || submitType === 'recurring_donation') && result.recurring === false) {
+            document.getElementById('success-title').textContent = 'Payment received — one step left';
+            document.getElementById('success-msg').innerHTML = 'Your first $50 payment went through, but the automatic monthly billing could <strong>not</strong> be set up, so no future payments are scheduled.<br/><br/>Please reach out to Chaim Katz to finish setting up your recurring membership.<br/><br/>A receipt will be sent to ' + email + '.';
+          } else if (submitType === 'membership') {
+            document.getElementById('success-title').textContent = 'Welcome, Member!';
+            var durationMsg = months === 'ongoing'
+              ? 'Your membership will continue every month until you contact us to cancel.'
+              : 'Your membership will run for ' + months + ' months and then stop automatically — no further charges after that.';
+            document.getElementById('success-msg').innerHTML = 'Your first month\'s payment has been processed. ' + durationMsg + '<br/><br/>A receipt will be sent to ' + email + '.';
+          } else if (submitType === 'recurring_donation') {
+            document.getElementById('success-title').textContent = 'Thank You!';
+            document.getElementById('success-msg').innerHTML = 'Your first monthly payment has been processed. This recurring donation will run for ' + months + ' months and then stop automatically — no further charges after that.<br/><br/>A receipt will be sent to ' + email + '.';
           }
-        } catch(err) {
-          showError('Something went wrong. Please try again.');
+        } else {
+          showError(result.error || 'Payment was declined. Please try a different card.');
           btn.disabled = false; btn.textContent = 'Complete Payment';
         }
-      },
-      function() {
-        showError('Please check your card details and try again.');
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
         btn.disabled = false; btn.textContent = 'Complete Payment';
+      }
+    }
+
+    function startPaymentOnce() {
+      if (paymentStarted) return;
+      paymentStarted = true;
+      processCardPayment();
+    }
+
+    getTokens(
+      function() { startPaymentOnce(); },
+      function() {
+        var digits = readInputValue(document.getElementById('card-input')).replace(/\D/g, '');
+        if (digits.length >= 13) startPaymentOnce();
+        else {
+          showError('Please check your card details and try again.');
+          btn.disabled = false; btn.textContent = 'Complete Payment';
+        }
       },
       30000
     );
