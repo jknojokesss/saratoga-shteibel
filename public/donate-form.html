@@ -75,6 +75,13 @@
       pointer-events: none;
     }
     #card-input, #exp-input, #cvv-input { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+    @keyframes donateAutofillStart { from { opacity: 1; } to { opacity: 1; } }
+    #card-input:-webkit-autofill,
+    #exp-input:-webkit-autofill,
+    #cvv-input:-webkit-autofill {
+      animation-name: donateAutofillStart;
+      animation-duration: 0.001s;
+    }
 
     .recurring-note { background: #f0f3fa; border: 1px solid #c5cfe0; border-radius: 3px; padding: 12px 16px; font-size: 13px; color: var(--navy-light); margin-bottom: 20px; display: none; line-height: 1.6; }
     .recurring-note.visible { display: block; }
@@ -226,10 +233,10 @@
     <div id="cc-section">
     <div class="section-title" data-kicker="Step 2" style="margin-top:36px">Your Information</div>
     <div class="field-row">
-      <div><label class="field-label">First Name *</label><input type="text" id="fname" placeholder="Jane"/></div>
-      <div><label class="field-label">Last Name *</label><input type="text" id="lname" placeholder="Cohen"/></div>
+      <div><label class="field-label">First Name *</label><input type="text" id="fname" name="fname" autocomplete="given-name" placeholder="Jane"/></div>
+      <div><label class="field-label">Last Name *</label><input type="text" id="lname" name="lname" autocomplete="family-name" placeholder="Cohen"/></div>
     </div>
-    <div class="field-full"><label class="field-label">Email *</label><input type="email" id="email" placeholder="jane@example.com"/></div>
+    <div class="field-full"><label class="field-label">Email *</label><input type="email" id="email" name="email" autocomplete="email" placeholder="jane@example.com"/></div>
 
                 <div class="section-title" data-kicker="Step 3" style="margin-top:36px">Payment Information</div>
 
@@ -259,7 +266,7 @@
     <div id="card-fields">
         <div class="field-full">
       <label class="field-label">Card Number *</label>
-      <input type="text" id="card-input" inputmode="numeric" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+      <input type="text" id="card-input" name="cardnumber" inputmode="numeric" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       <iframe data-ifields-id="card-number" data-ifields-placeholder="•••• •••• •••• ••••" src="https://cdn.cardknox.com/ifields/2.15.2409.2601/ifield.htm" title="Card Number" style="display:none;position:absolute;top:-9999px;"></iframe>
       <input type="hidden" data-ifields-id="card-number-token" name="xCardNum"/>
     </div>
@@ -267,11 +274,11 @@
     <div class="card-row">
       <div>
         <label class="field-label">Expiration Date * (MM/YY)</label>
-        <input type="text" id="exp-input" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+        <input type="text" id="exp-input" name="cc-exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       </div>
       <div>
         <label class="field-label">CVV *</label>
-        <input type="text" id="cvv-input" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+        <input type="text" id="cvv-input" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       </div>
     </div>
 
@@ -374,18 +381,40 @@
   }
   function bindMaskedInput(el, formatter, onComplete) {
     if (!el) return;
-    el.addEventListener('input', function(e) {
-      var deleting = e.inputType && e.inputType.indexOf('delete') === 0;
+    function applyMask(deleting, moveCaret) {
       var old = el.value;
       var pos = el.selectionStart || 0;
       var count = digitsBefore(old, pos);
       var next = formatter(old, deleting);
-      el.value = next;
-      var caret = caretFromDigitCount(next, count);
-      if (deleting && next.charAt(caret) === '/') caret = Math.max(0, caret);
-      try { el.setSelectionRange(caret, caret); } catch (err) {}
+      if (next !== old) el.value = next;
+      if (moveCaret) {
+        var caret = caretFromDigitCount(next, count);
+        if (deleting && next.charAt(caret) === '/') caret = Math.max(0, caret);
+        try { el.setSelectionRange(caret, caret); } catch (err) {}
+      }
       if (typeof onComplete === 'function') onComplete(next);
+    }
+    el.addEventListener('input', function(e) {
+      var deleting = e.inputType && e.inputType.indexOf('delete') === 0;
+      applyMask(deleting, true);
     });
+    el.addEventListener('change', function() { applyMask(false, false); });
+    el.addEventListener('blur', function() { applyMask(false, false); });
+    el.addEventListener('focus', function() {
+      requestAnimationFrame(function() { applyMask(false, false); });
+    });
+    el.addEventListener('animationstart', function(e) {
+      if (e.animationName === 'donateAutofillStart') applyMask(false, false);
+    });
+    return function syncFromAutofill() { applyMask(false, false); };
+  }
+  function schedulePaymentAutofillSync(syncFns) {
+    function run() {
+      syncFns.forEach(function(sync) { if (typeof sync === 'function') sync(); });
+    }
+    run();
+    [50, 150, 400, 800, 1500].forEach(function(ms) { setTimeout(run, ms); });
+    window.addEventListener('pageshow', run);
   }
   function bindAmountInput(el) {
     if (!el) return;
@@ -634,13 +663,14 @@
 
 
   bindAmountInput(document.getElementById('custom-amount'));
-  bindMaskedInput(document.getElementById('card-input'), function(v) { return formatCardNumber(v); }, function(v) {
+  var syncCardMask = bindMaskedInput(document.getElementById('card-input'), function(v) { return formatCardNumber(v); }, function(v) {
     if (v.replace(/\D/g, '').length >= 16) document.getElementById('exp-input').focus();
   });
-  bindMaskedInput(document.getElementById('exp-input'), function(v, deleting) { return formatExpDate(v, deleting); }, function(v) {
+  var syncExpMask = bindMaskedInput(document.getElementById('exp-input'), function(v, deleting) { return formatExpDate(v, deleting); }, function(v) {
     if (v.replace(/\D/g, '').length >= 4) document.getElementById('cvv-input').focus();
   });
-  bindMaskedInput(document.getElementById('cvv-input'), function(v) { return String(v || '').replace(/\D/g, '').slice(0, 4); });
+  var syncCvvMask = bindMaskedInput(document.getElementById('cvv-input'), function(v) { return String(v || '').replace(/\D/g, '').slice(0, 4); });
+  schedulePaymentAutofillSync([syncCardMask, syncExpMask, syncCvvMask]);
 
   setPayMethod('card');
   document.getElementById('membership-months').addEventListener('input', updateCommitmentSummary);
@@ -761,6 +791,11 @@
     var btn = document.getElementById('submit-btn');
     btn.disabled = true;
     btn.textContent = 'Processing...';
+
+    ['card-input', 'exp-input', 'cvv-input'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
 
     getTokens(
       async function() {
