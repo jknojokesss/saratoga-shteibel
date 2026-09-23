@@ -39,7 +39,7 @@
     .commitment-summary.visible { display: block; }
     .checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 13px; color: var(--text); }
     .checkbox-row input { width: auto; height: auto; }
-    #email, #fname, #lname, #custom-amount {
+    #email, #fname, #lname, #custom-amount, #st-kiddush-custom-amount {
       border: 1px solid var(--border) !important;
       background: var(--cream) !important;
       height: 46px !important;
@@ -49,6 +49,17 @@
       border-radius: 3px !important;
     }
     .donation-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 22px; }
+    #opt-st-kiddush { grid-column: 1 / -1; }
+    .st-amount-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+    .st-amount-btn {
+      flex: 1 1 calc(33.333% - 10px); min-width: 88px; border: 1px solid var(--border); border-radius: 4px;
+      padding: 12px 10px; cursor: pointer; background: var(--white); font-family: 'Jost', sans-serif;
+      font-size: 15px; font-weight: 600; color: var(--navy); transition: border-color .15s, background .15s;
+    }
+    .st-amount-btn:hover { border-color: var(--navy-light); background: #f8f8f8; }
+    .st-amount-btn.selected { border-color: var(--navy); border-width: 1.5px; background: #f2f5fb; }
+    .st-amount-btn.other { font-weight: 500; font-size: 14px; }
+    #st-kiddush-custom-wrap .amount-input-wrap::before { height: 46px; }
     .donation-option { border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; cursor: pointer; transition: border-color .15s, background .15s; position: relative; user-select: none; background: var(--white); }
     .donation-option:hover { border-color: var(--navy-light); background: #f8f8f8; }
     .donation-option.selected { border-color: var(--navy); border-width: 1.5px; background: #f2f5fb; }
@@ -75,6 +86,13 @@
       pointer-events: none;
     }
     #card-input, #exp-input, #cvv-input { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+    @keyframes donateAutofillStart { from { opacity: 1; } to { opacity: 1; } }
+    #card-input:-webkit-autofill,
+    #exp-input:-webkit-autofill,
+    #cvv-input:-webkit-autofill {
+      animation-name: donateAutofillStart;
+      animation-duration: 0.001s;
+    }
 
     .recurring-note { background: #f0f3fa; border: 1px solid #c5cfe0; border-radius: 3px; padding: 12px 16px; font-size: 13px; color: var(--navy-light); margin-bottom: 20px; display: none; line-height: 1.6; }
     .recurring-note.visible { display: block; }
@@ -161,6 +179,33 @@
         <div class="opt-price">$25</div>
         <div class="opt-desc">Sponsor shaleshudis</div>
       </div>
+      <div class="donation-option" id="opt-st-kiddush" onclick="selectOption('st_kiddush')">
+        <div class="opt-title">Simchas Torah Kiddush</div>
+        <div class="opt-price"><small>choose amount</small></div>
+        <div class="opt-desc">Sponsor the Simchas Torah kiddush — pick a level or enter your own</div>
+      </div>
+    </div>
+
+    <div class="custom-amount-wrap" id="st-kiddush-wrap">
+      <label class="field-label">Simchas Torah Kiddush sponsorship *</label>
+      <div class="st-amount-grid" id="st-kiddush-amounts">
+        <button type="button" class="st-amount-btn" data-amount="180" onclick="selectStKiddushAmount(180)">$180</button>
+        <button type="button" class="st-amount-btn" data-amount="360" onclick="selectStKiddushAmount(360)">$360</button>
+        <button type="button" class="st-amount-btn" data-amount="500" onclick="selectStKiddushAmount(500)">$500</button>
+        <button type="button" class="st-amount-btn" data-amount="1000" onclick="selectStKiddushAmount(1000)">$1,000</button>
+        <button type="button" class="st-amount-btn other" data-amount="other" onclick="selectStKiddushAmount('other')">Other amount</button>
+      </div>
+      <div class="custom-amount-wrap" id="st-kiddush-custom-wrap" style="margin-bottom:16px;">
+        <label class="field-label">Your amount *</label>
+        <div class="amount-input-wrap">
+          <input type="text" id="st-kiddush-custom-amount" inputmode="decimal" autocomplete="off" placeholder="0.00" maxlength="15"/>
+        </div>
+      </div>
+      <label class="field-label">Dedication (optional)</label>
+      <input type="text" id="st-kiddush-msg" placeholder="e.g. In honor of …"/>
+      <div class="recurring-note visible" style="margin-top:14px;margin-bottom:0;">
+        <strong>Simchas Torah Kiddush.</strong> Choose a sponsorship level above or enter another amount. One-time payment.
+      </div>
     </div>
 
     <div class="custom-amount-wrap" id="custom-amount-wrap">
@@ -226,10 +271,10 @@
     <div id="cc-section">
     <div class="section-title" data-kicker="Step 2" style="margin-top:36px">Your Information</div>
     <div class="field-row">
-      <div><label class="field-label">First Name *</label><input type="text" id="fname" placeholder="Jane"/></div>
-      <div><label class="field-label">Last Name *</label><input type="text" id="lname" placeholder="Cohen"/></div>
+      <div><label class="field-label">First Name *</label><input type="text" id="fname" name="fname" autocomplete="given-name" placeholder="Jane"/></div>
+      <div><label class="field-label">Last Name *</label><input type="text" id="lname" name="lname" autocomplete="family-name" placeholder="Cohen"/></div>
     </div>
-    <div class="field-full"><label class="field-label">Email *</label><input type="email" id="email" placeholder="jane@example.com"/></div>
+    <div class="field-full"><label class="field-label">Email *</label><input type="email" id="email" name="email" autocomplete="email" placeholder="jane@example.com"/></div>
 
                 <div class="section-title" data-kicker="Step 3" style="margin-top:36px">Payment Information</div>
 
@@ -259,7 +304,7 @@
     <div id="card-fields">
         <div class="field-full">
       <label class="field-label">Card Number *</label>
-      <input type="text" id="card-input" inputmode="numeric" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+      <input type="text" id="card-input" name="cardnumber" inputmode="numeric" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       <iframe data-ifields-id="card-number" data-ifields-placeholder="•••• •••• •••• ••••" src="https://cdn.cardknox.com/ifields/2.15.2409.2601/ifield.htm" title="Card Number" style="display:none;position:absolute;top:-9999px;"></iframe>
       <input type="hidden" data-ifields-id="card-number-token" name="xCardNum"/>
     </div>
@@ -267,11 +312,11 @@
     <div class="card-row">
       <div>
         <label class="field-label">Expiration Date * (MM/YY)</label>
-        <input type="text" id="exp-input" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+        <input type="text" id="exp-input" name="cc-exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       </div>
       <div>
         <label class="field-label">CVV *</label>
-        <input type="text" id="cvv-input" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
+        <input type="text" id="cvv-input" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4" style="width:100%;height:44px;border:1px solid #ddd5c4;border-radius:3px;background:#faf7f2;padding:0 14px;font-family:Jost,sans-serif;font-size:14px;color:#2a2a2a;outline:none;display:block;box-sizing:border-box;margin-bottom:16px;"/>
       </div>
     </div>
 
@@ -320,6 +365,13 @@
     var n = parseFloat(parts[0] + (parts.length > 1 ? '.' + parts.slice(1).join('').slice(0, 2) : ''));
     return isFinite(n) ? n : 0;
   }
+  function formatMoneyDisplay(n) {
+    var amount = Number(n);
+    if (!isFinite(amount)) amount = 0;
+    var parts = Math.abs(amount).toFixed(2).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (amount < 0 ? '-$' : '$') + parts[0] + '.' + parts[1];
+  }
   function formatDonationAmount(str) {
     var raw = String(str || '').replace(/[^0-9.]/g, '');
     if (!raw) return '';
@@ -355,8 +407,32 @@
     }
     return formatted.length;
   }
+  function isAmexCard(str) {
+    var d = String(str || '').replace(/\D/g, '');
+    return d.charAt(0) === '3' && (d.charAt(1) === '4' || d.charAt(1) === '7');
+  }
   function formatCardNumber(str) {
-    return String(str || '').replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
+    var d = String(str || '').replace(/\D/g, '');
+    if (isAmexCard(d)) {
+      d = d.slice(0, 15);
+      if (d.length <= 4) return d;
+      if (d.length <= 10) return d.slice(0, 4) + ' ' + d.slice(4);
+      return d.slice(0, 4) + ' ' + d.slice(4, 10) + ' ' + d.slice(10);
+    }
+    return d.slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
+  }
+  function syncCardBrandUi(formatted) {
+    var amex = isAmexCard(formatted);
+    var cardEl = document.getElementById('card-input');
+    var cvvEl = document.getElementById('cvv-input');
+    if (cardEl) {
+      cardEl.maxLength = amex ? 17 : 19;
+      cardEl.placeholder = amex ? '•••• •••••• •••••' : '•••• •••• •••• ••••';
+    }
+    if (cvvEl) {
+      cvvEl.maxLength = amex ? 4 : 3;
+      cvvEl.placeholder = amex ? '••••' : '•••';
+    }
   }
   function formatExpDate(str, deleting) {
     var d = String(str || '').replace(/\D/g, '').slice(0, 4);
@@ -374,18 +450,40 @@
   }
   function bindMaskedInput(el, formatter, onComplete) {
     if (!el) return;
-    el.addEventListener('input', function(e) {
-      var deleting = e.inputType && e.inputType.indexOf('delete') === 0;
+    function applyMask(deleting, moveCaret) {
       var old = el.value;
       var pos = el.selectionStart || 0;
       var count = digitsBefore(old, pos);
       var next = formatter(old, deleting);
-      el.value = next;
-      var caret = caretFromDigitCount(next, count);
-      if (deleting && next.charAt(caret) === '/') caret = Math.max(0, caret);
-      try { el.setSelectionRange(caret, caret); } catch (err) {}
+      if (next !== old) el.value = next;
+      if (moveCaret) {
+        var caret = caretFromDigitCount(next, count);
+        if (deleting && next.charAt(caret) === '/') caret = Math.max(0, caret);
+        try { el.setSelectionRange(caret, caret); } catch (err) {}
+      }
       if (typeof onComplete === 'function') onComplete(next);
+    }
+    el.addEventListener('input', function(e) {
+      var deleting = e.inputType && e.inputType.indexOf('delete') === 0;
+      applyMask(deleting, true);
     });
+    el.addEventListener('change', function() { applyMask(false, false); });
+    el.addEventListener('blur', function() { applyMask(false, false); });
+    el.addEventListener('focus', function() {
+      requestAnimationFrame(function() { applyMask(false, false); });
+    });
+    el.addEventListener('animationstart', function(e) {
+      if (e.animationName === 'donateAutofillStart') applyMask(false, false);
+    });
+    return function syncFromAutofill() { applyMask(false, false); };
+  }
+  function schedulePaymentAutofillSync(syncFns) {
+    function run() {
+      syncFns.forEach(function(sync) { if (typeof sync === 'function') sync(); });
+    }
+    run();
+    [50, 150, 400, 800, 1500].forEach(function(ms) { setTimeout(run, ms); });
+    window.addEventListener('pageshow', run);
   }
   function bindAmountInput(el) {
     if (!el) return;
@@ -467,6 +565,36 @@
 
   var sponsor = { kiddush: false, shaleshudis: false };
   var payMethod = 'card';
+  var stKiddushChoice = null;
+
+  function clearStKiddushUi() {
+    stKiddushChoice = null;
+    document.getElementById('opt-st-kiddush').classList.remove('selected');
+    document.getElementById('st-kiddush-wrap').classList.remove('visible');
+    document.querySelectorAll('.st-amount-btn').forEach(function(btn) { btn.classList.remove('selected'); });
+    document.getElementById('st-kiddush-custom-wrap').classList.remove('visible');
+    document.getElementById('st-kiddush-custom-amount').value = '';
+  }
+
+  function selectStKiddushAmount(choice) {
+    stKiddushChoice = choice;
+    document.querySelectorAll('.st-amount-btn').forEach(function(btn) {
+      var val = btn.getAttribute('data-amount');
+      btn.classList.toggle('selected', val === String(choice));
+    });
+    var customWrap = document.getElementById('st-kiddush-custom-wrap');
+    var isOther = choice === 'other';
+    customWrap.classList.toggle('visible', isOther);
+    if (!isOther) document.getElementById('st-kiddush-custom-amount').value = '';
+    else document.getElementById('st-kiddush-custom-amount').focus();
+    updateTotal();
+  }
+
+  function stKiddushAmount() {
+    if (stKiddushChoice === 'other') return parseDonationAmount(document.getElementById('st-kiddush-custom-amount').value);
+    if (typeof stKiddushChoice === 'number') return stKiddushChoice;
+    return 0;
+  }
 
   function selectOption(type) {
     selectedOption = type;
@@ -474,9 +602,12 @@
     renderSponsor();
     document.getElementById('opt-donation').classList.toggle('selected', type === 'donation');
     document.getElementById('opt-membership').classList.toggle('selected', type === 'membership');
+    document.getElementById('opt-st-kiddush').classList.toggle('selected', type === 'st_kiddush');
     document.getElementById('custom-amount-wrap').classList.toggle('visible', type === 'donation');
+    document.getElementById('st-kiddush-wrap').classList.toggle('visible', type === 'st_kiddush');
     document.getElementById('membership-months-wrap').classList.toggle('visible', type === 'membership');
     document.getElementById('recurring-note').classList.toggle('visible', type === 'membership');
+    if (type !== 'st_kiddush') clearStKiddushUi();
     // Membership requires a card (automatic monthly billing) — Donors Fund can't do that here.
     if (type === 'membership') setPayMethod('card');
     document.getElementById('pm-df').style.display = (type === 'membership') ? 'none' : 'block';
@@ -489,6 +620,7 @@
     sponsor[kind] = !sponsor[kind];
     if (sponsor.kiddush || sponsor.shaleshudis) {
       selectedOption = 'sponsorship';
+      clearStKiddushUi();
       ['opt-donation','opt-membership'].forEach(function(id){ document.getElementById(id).classList.remove('selected'); });
       ['custom-amount-wrap','membership-months-wrap','recurring-note'].forEach(function(id){ document.getElementById(id).classList.remove('visible'); });
       document.getElementById('pm-df').style.display = 'block';
@@ -604,7 +736,8 @@
     if (selectedOption === 'membership') amount = 50;
     else if (selectedOption === 'donation') amount = parseDonationAmount(document.getElementById('custom-amount').value);
     else if (selectedOption === 'sponsorship') amount = sponsorTotal();
-    document.getElementById('total-display').textContent = '$' + amount.toFixed(2);
+    else if (selectedOption === 'st_kiddush') amount = stKiddushAmount();
+    document.getElementById('total-display').textContent = formatMoneyDisplay(amount);
     updateCommitmentSummary();
   }
 
@@ -618,13 +751,13 @@
       if (ongoing) {
         text = 'This charges $50.00 every month with no fixed end date, until you contact us to cancel.';
       } else if (mMonths >= 2) {
-        text = 'This charges $50.00/month for ' + mMonths + ' months ($' + (50 * mMonths).toFixed(2) + ' total), then stops automatically. No charges after that.';
+        text = 'This charges $50.00/month for ' + mMonths + ' months (' + formatMoneyDisplay(50 * mMonths) + ' total), then stops automatically. No charges after that.';
       }
     } else if (isDonationRecurring()) {
       var amt = parseDonationAmount(document.getElementById('custom-amount').value);
       var dMonths = parseInt(document.getElementById('donation-months').value, 10);
       if (dMonths >= 2 && amt > 0) {
-        text = 'This charges $' + amt.toFixed(2) + '/month for ' + dMonths + ' months ($' + (amt * dMonths).toFixed(2) + ' total), then stops automatically. No charges after that.';
+        text = 'This charges ' + formatMoneyDisplay(amt) + '/month for ' + dMonths + ' months (' + formatMoneyDisplay(amt * dMonths) + ' total), then stops automatically. No charges after that.';
       }
     }
 
@@ -634,13 +767,22 @@
 
 
   bindAmountInput(document.getElementById('custom-amount'));
-  bindMaskedInput(document.getElementById('card-input'), function(v) { return formatCardNumber(v); }, function(v) {
-    if (v.replace(/\D/g, '').length >= 16) document.getElementById('exp-input').focus();
+  bindAmountInput(document.getElementById('st-kiddush-custom-amount'));
+  var syncCardMask = bindMaskedInput(document.getElementById('card-input'), function(v) { return formatCardNumber(v); }, function(v) {
+    syncCardBrandUi(v);
+    var digits = v.replace(/\D/g, '');
+    var need = isAmexCard(digits) ? 15 : 16;
+    if (digits.length >= need) document.getElementById('exp-input').focus();
   });
-  bindMaskedInput(document.getElementById('exp-input'), function(v, deleting) { return formatExpDate(v, deleting); }, function(v) {
+  var syncExpMask = bindMaskedInput(document.getElementById('exp-input'), function(v, deleting) { return formatExpDate(v, deleting); }, function(v) {
     if (v.replace(/\D/g, '').length >= 4) document.getElementById('cvv-input').focus();
   });
-  bindMaskedInput(document.getElementById('cvv-input'), function(v) { return String(v || '').replace(/\D/g, '').slice(0, 4); });
+  var syncCvvMask = bindMaskedInput(document.getElementById('cvv-input'), function(v) {
+    var max = isAmexCard(document.getElementById('card-input').value) ? 4 : 3;
+    return String(v || '').replace(/\D/g, '').slice(0, max);
+  });
+  schedulePaymentAutofillSync([syncCardMask, syncExpMask, syncCvvMask]);
+  syncCardBrandUi(document.getElementById('card-input') ? document.getElementById('card-input').value : '');
 
   setPayMethod('card');
   document.getElementById('membership-months').addEventListener('input', updateCommitmentSummary);
@@ -702,10 +844,20 @@
     if (!email) { showError('Please enter your email address.'); return; }
     var amount = selectedOption === 'membership' ? 50
       : selectedOption === 'sponsorship' ? sponsorTotal()
+      : selectedOption === 'st_kiddush' ? stKiddushAmount()
       : parseDonationAmount(document.getElementById('custom-amount').value);
+    if (selectedOption === 'st_kiddush' && !stKiddushChoice) {
+      showError('Please choose a Simchas Torah Kiddush sponsorship amount.');
+      return;
+    }
     if (!amount || amount < 1) { showError('Please enter a valid donation amount.'); return; }
     var donationDesc = (document.getElementById('donation-desc').value || '').trim();
     if (selectedOption === 'donation' && !donationDesc) { showError('Please tell us what this donation is for.'); return; }
+    if (selectedOption === 'st_kiddush') {
+      donationDesc = 'Simchas Torah Kiddush';
+      var stMsg = (document.getElementById('st-kiddush-msg').value || '').trim();
+      if (stMsg) donationDesc += ' — ' + stMsg;
+    }
 
     var sponsorInfo = null;
     if (selectedOption === 'sponsorship') {
@@ -762,10 +914,15 @@
     btn.disabled = true;
     btn.textContent = 'Processing...';
 
+    ['card-input', 'exp-input', 'cvv-input'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
     getTokens(
       async function() {
-        var cardInputEl = document.getElementById('card-input'); var cardToken = cardInputEl ? cardInputEl.value.replace(/\s/g, '') : '';
-        var cvvTokenEl = document.getElementById('cvv-input'); var cvvToken = cvvTokenEl ? cvvTokenEl.value : '';
+        var cardInputEl = document.getElementById('card-input'); var cardToken = cardInputEl ? cardInputEl.value.replace(/\D/g, '') : '';
+        var cvvTokenEl = document.getElementById('cvv-input'); var cvvToken = cvvTokenEl ? cvvTokenEl.value.replace(/\D/g, '') : '';
         var expInputEl = document.getElementById('exp-input'); var expRaw = expInputEl ? expInputEl.value.replace(/\D/g, '') : ''; var expToken = expRaw;
 
         if (!cardToken) {

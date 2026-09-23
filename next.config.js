@@ -30,6 +30,14 @@ const nextConfig = {
       ],
     }
   },
+  async headers() {
+    return [
+      {
+        source: '/donate-form.html',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+    ]
+  },
   async redirects() {
     // This repo now serves ONLY the Saratoga vote + donation. The leftover JK
     // client-portal pages are dead weight here — bounce them to the donation
@@ -39,6 +47,14 @@ const nextConfig = {
       destination: '/saratoga-home',
       permanent: false,
     }))
+  },
+  async headers() {
+    return [
+      {
+        source: '/donate-form.html',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+    ]
   },
 }
 
