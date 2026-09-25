@@ -46,8 +46,8 @@
       "phone": "",
       "paid": 0,
       "items": [
-        { "service": "Shachris", "honor": "Chamishi", "price": null },
-        { "service": "Shachris", "honor": "Hagba & Gelila (2)", "price": null }
+        { "service": "Shachris", "honor": "Chamishi", "price": 180 },
+        { "service": "Shachris", "honor": "Hagba & Gelila (2)", "price": 75 }
       ]
     },
     {
