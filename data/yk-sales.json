@@ -6,7 +6,7 @@
       "id": "alex-medjuck",
       "name": "Alex Medjuck",
       "phone": "17325692784",
-      "paid": 0,
+      "paid": 600,
       "items": [
         { "service": "Kol Nidrei", "honor": "Pesicha", "price": 600 }
       ]
@@ -24,7 +24,7 @@
     {
       "id": "litchfield",
       "name": "Avrumi Litchfield",
-      "phone": "",
+      "phone": "13473197519",
       "paid": 0,
       "items": [
         { "service": "Shachris", "honor": "Cohen / Levi", "price": 75 },
@@ -86,6 +86,7 @@
       "name": "Pepose",
       "phone": "",
       "paid": 0,
+      "skipInvoice": true,
       "items": [
         { "service": "Neila", "honor": "Pesicha", "price": 2600 }
       ]
