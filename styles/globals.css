@@ -173,12 +173,12 @@ body {
   margin-top: 0;
 }
 
-.home-st-arrow-around {
+.home-st-arrow-side {
   position: absolute;
-  top: -1.55rem;
-  left: 0;
-  width: 100%;
-  height: calc(100% + 1.55rem);
+  top: -1.35rem;
+  right: 0;
+  width: calc(50% - 8px);
+  height: calc(100% + 1.35rem);
   pointer-events: none;
   z-index: 4;
   color: var(--gold);
@@ -242,9 +242,9 @@ body {
   .home-st-block {
     margin-top: 0.5rem;
   }
-  .home-st-arrow-around {
-    top: -1.65rem;
-    height: calc(100% + 1.65rem);
+  .home-st-arrow-side {
+    top: -1.45rem;
+    height: calc(100% + 1.45rem);
   }
   .home-btn {
     gap: 16px;
