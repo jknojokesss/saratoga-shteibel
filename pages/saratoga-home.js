@@ -67,14 +67,14 @@ export default function SaratogaHome() {
               <p className="home-st-hook">Donate for Simchas Torah kiddush</p>
 
               <div className="home-actions-cluster">
-                <svg className="home-st-arrow-around" viewBox="0 0 480 280" preserveAspectRatio="none" aria-hidden="true">
+                <svg className="home-st-arrow-side" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <marker id="st-thin-head" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
                       <path d="M0,0 L7,3.5 L0,7 Z" fill="currentColor" />
                     </marker>
                   </defs>
                   <path
-                    d="M 318 6 L 318 18 L 468 18 L 468 252 L 252 252 Q 228 248, 224 210 Q 220 168, 258 132 L 292 118"
+                    d="M 72 4 L 72 58 L 18 58"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
