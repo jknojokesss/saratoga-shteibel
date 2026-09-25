@@ -64,29 +64,25 @@ export default function SaratogaHome() {
             </h1>
 
             <div className="home-st-block">
-              <p className="home-st-hook">
-                Donate for Simchas Torah{' '}
-                <span className="home-st-kiddush-arrow">
-                  kiddush
-                  <svg viewBox="0 0 52 64" className="home-st-arrow-thin" aria-hidden="true">
-                    <defs>
-                      <marker id="st-thin-head" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                        <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" />
-                      </marker>
-                    </defs>
-                    <path
-                      d="M 1 1 H 18 Q 46 6, 48 58"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      markerEnd="url(#st-thin-head)"
-                    />
-                  </svg>
-                </span>
-              </p>
+              <p className="home-st-hook">Donate for Simchas Torah kiddush</p>
 
               <div className="home-actions-cluster">
+                <svg className="home-st-arrow-around" viewBox="0 0 480 280" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <marker id="st-thin-head" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                      <path d="M0,0 L7,3.5 L0,7 Z" fill="currentColor" />
+                    </marker>
+                  </defs>
+                  <path
+                    d="M 318 6 L 318 18 L 468 18 L 468 252 L 252 252 Q 228 248, 224 210 Q 220 168, 258 132 L 292 118"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    markerEnd="url(#st-thin-head)"
+                  />
+                </svg>
                 <nav className="home-actions" aria-label="Site">
                   {ACTIONS.map((action) => (
                     <Link
