@@ -66,25 +66,27 @@ export default function SaratogaHome() {
             <div className="home-st-block">
               <div className="home-st-callout">
                 <p className="home-st-kicker font-display">Simchas Torah</p>
-                <p className="home-st-hook">Donate for Simchas Torah kiddush</p>
-              </div>
-
-              <div className="home-st-arrow-bridge" aria-hidden="true">
-                <svg viewBox="0 0 240 54" className="home-st-curve-svg">
-                  <defs>
-                    <marker id="st-solid-head" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
-                      <path d="M0,0 L12,6 L0,12 Z" fill="currentColor" />
-                    </marker>
-                  </defs>
-                  <path
-                    d="M 162 3 C 178 4, 192 22, 186 48"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="7"
-                    strokeLinecap="round"
-                    markerEnd="url(#st-solid-head)"
-                  />
-                </svg>
+                <p className="home-st-hook">
+                  Donate for Simchas Torah{' '}
+                  <span className="home-st-kiddush-arrow">
+                    kiddush
+                    <svg viewBox="0 0 52 64" className="home-st-arrow-thin" aria-hidden="true">
+                      <defs>
+                        <marker id="st-thin-head" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                          <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" />
+                        </marker>
+                      </defs>
+                      <path
+                        d="M 1 1 H 18 Q 46 6, 48 58"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        markerEnd="url(#st-thin-head)"
+                      />
+                    </svg>
+                  </span>
+                </p>
               </div>
 
               <div className="home-actions-cluster">
