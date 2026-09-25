@@ -5,7 +5,7 @@
     {
       "id": "alex-medjuck",
       "name": "Alex Medjuck",
-      "phone": "",
+      "phone": "17325692784",
       "paid": 0,
       "items": [
         { "service": "Kol Nidrei", "honor": "Pesicha", "price": 600 }
@@ -14,7 +14,7 @@
     {
       "id": "chaim-gross",
       "name": "Chaim Gross",
-      "phone": "",
+      "phone": "17182073588",
       "paid": 0,
       "items": [
         { "service": "Shachris", "honor": "Pesicha", "price": 100 },
@@ -34,7 +34,7 @@
     {
       "id": "coriat",
       "name": "Coriat",
-      "phone": "",
+      "phone": "16178007122",
       "paid": 0,
       "items": [
         { "service": "Shachris", "honor": "Reviei", "price": 100 }
@@ -43,7 +43,7 @@
     {
       "id": "eli-grynhaus",
       "name": "Eli Grynhaus",
-      "phone": "",
+      "phone": "18483734337",
       "paid": 0,
       "items": [
         { "service": "Shachris", "honor": "Chamishi", "price": 180 },
@@ -53,7 +53,7 @@
     {
       "id": "yitzy-schwinder",
       "name": "Yitzy Schwinder",
-      "phone": "",
+      "phone": "17326692980",
       "paid": 0,
       "items": [
         { "service": "Shachris", "honor": "Shishi", "price": 140 },
@@ -74,7 +74,7 @@
     {
       "id": "meir-foster",
       "name": "Meir Foster",
-      "phone": "",
+      "phone": "18456718074",
       "paid": 0,
       "items": [
         { "service": "Shachris", "honor": "Hagba & Gelila (1)", "price": 50 },
