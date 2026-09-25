@@ -170,24 +170,10 @@ body {
 
 .home-actions-cluster {
   position: relative;
-  margin-top: 0;
-}
-
-.home-st-arrow-side {
-  position: absolute;
-  top: -1.35rem;
-  right: 0;
-  width: calc(50% - 8px);
-  height: calc(100% + 1.35rem);
-  pointer-events: none;
-  z-index: 4;
-  color: var(--gold);
-  overflow: visible;
+  margin-top: 0.25rem;
 }
 
 .home-actions {
-  position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
@@ -241,10 +227,6 @@ body {
   }
   .home-st-block {
     margin-top: 0.5rem;
-  }
-  .home-st-arrow-side {
-    top: -1.45rem;
-    height: calc(100% + 1.45rem);
   }
   .home-btn {
     gap: 16px;
