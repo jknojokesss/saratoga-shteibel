@@ -64,30 +64,27 @@ export default function SaratogaHome() {
             </h1>
 
             <div className="home-st-block">
-              <div className="home-st-callout">
-                <p className="home-st-kicker font-display">Simchas Torah</p>
-                <p className="home-st-hook">
-                  Donate for Simchas Torah{' '}
-                  <span className="home-st-kiddush-arrow">
-                    kiddush
-                    <svg viewBox="0 0 52 64" className="home-st-arrow-thin" aria-hidden="true">
-                      <defs>
-                        <marker id="st-thin-head" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                          <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" />
-                        </marker>
-                      </defs>
-                      <path
-                        d="M 1 1 H 18 Q 46 6, 48 58"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.75"
-                        strokeLinecap="round"
-                        markerEnd="url(#st-thin-head)"
-                      />
-                    </svg>
-                  </span>
-                </p>
-              </div>
+              <p className="home-st-hook">
+                Donate for Simchas Torah{' '}
+                <span className="home-st-kiddush-arrow">
+                  kiddush
+                  <svg viewBox="0 0 52 64" className="home-st-arrow-thin" aria-hidden="true">
+                    <defs>
+                      <marker id="st-thin-head" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                        <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" />
+                      </marker>
+                    </defs>
+                    <path
+                      d="M 1 1 H 18 Q 46 6, 48 58"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      markerEnd="url(#st-thin-head)"
+                    />
+                  </svg>
+                </span>
+              </p>
 
               <div className="home-actions-cluster">
                 <nav className="home-actions" aria-label="Site">
