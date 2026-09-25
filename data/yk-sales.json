@@ -1,0 +1,93 @@
+{
+  "title": "Yom Kippur 5786 Honors",
+  "invoiceDate": "2025-09-25",
+  "buyers": [
+    {
+      "id": "alex-medjuck",
+      "name": "Alex Medjuck",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Kol Nidrei", "honor": "Pesicha", "price": 600 }
+      ]
+    },
+    {
+      "id": "chaim-gross",
+      "name": "Chaim Gross",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Shachris", "honor": "Pesicha", "price": null },
+        { "service": "Shachris", "honor": "Shlishi", "price": null }
+      ]
+    },
+    {
+      "id": "lichtfield",
+      "name": "Lichtfield",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Shachris", "honor": "Cohen / Levi", "price": null },
+        { "service": "Mincha", "honor": "Cohen / Levi", "price": null }
+      ]
+    },
+    {
+      "id": "coriat",
+      "name": "Coriat",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Shachris", "honor": "Reviei", "price": 100 }
+      ]
+    },
+    {
+      "id": "eli-grynhaus",
+      "name": "Eli Grynhaus",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Shachris", "honor": "Chamishi", "price": null },
+        { "service": "Shachris", "honor": "Hagba & Gelila (2)", "price": null }
+      ]
+    },
+    {
+      "id": "yitzy-schwinder",
+      "name": "Yitzy Schwinder",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Shachris", "honor": "Shishi", "price": null },
+        { "service": "Mincha", "honor": "Maftir Yonah", "price": null },
+        { "service": "Mincha", "honor": "Hagba & Gelila", "price": null }
+      ]
+    },
+    {
+      "id": "friedman",
+      "name": "Friedman",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Shachris", "honor": "Maftir", "price": null }
+      ]
+    },
+    {
+      "id": "meir-foster",
+      "name": "Meir Foster",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Shachris", "honor": "Hagba & Gelila (1)", "price": null },
+        { "service": "Mincha", "honor": "Pesicha", "price": null }
+      ]
+    },
+    {
+      "id": "pepose",
+      "name": "Pepose",
+      "phone": "",
+      "paid": 0,
+      "items": [
+        { "service": "Neila", "honor": "Pesicha", "price": 2600 }
+      ]
+    }
+  ]
+}
