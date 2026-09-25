@@ -8,7 +8,9 @@ export default async function handler(req, res) {
   if (!ADMIN_CODE || passcode !== ADMIN_CODE) return res.status(401).json({ error: 'Wrong passcode.' })
   try {
     const data = loadYkSales()
-    const buyers = (data.buyers || []).map((b) => {
+    const buyers = (data.buyers || [])
+      .filter((b) => !b.skipInvoice)
+      .map((b) => {
       const items = b.items || []
       const priced = items.filter((it) => it.price != null && it.price !== '')
       const subtotal = priced.reduce((s, it) => s + Number(it.qty || 1) * Number(it.price), 0)

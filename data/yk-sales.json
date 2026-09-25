@@ -66,6 +66,7 @@
       "name": "Friedman",
       "phone": "",
       "paid": 0,
+      "skipInvoice": true,
       "items": [
         { "service": "Shachris", "honor": "Maftir", "price": null }
       ]
