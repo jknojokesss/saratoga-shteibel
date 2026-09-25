@@ -69,9 +69,25 @@ export default function SaratogaHome() {
                 <p className="home-st-hook">Donate for Simchas Torah kiddush</p>
               </div>
 
-              <div className="home-actions-cluster">
-                <div className="home-st-arrow-solid" aria-hidden="true" />
+              <div className="home-st-arrow-bridge" aria-hidden="true">
+                <svg viewBox="0 0 240 54" className="home-st-curve-svg">
+                  <defs>
+                    <marker id="st-solid-head" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+                      <path d="M0,0 L12,6 L0,12 Z" fill="currentColor" />
+                    </marker>
+                  </defs>
+                  <path
+                    d="M 162 3 C 178 4, 192 22, 186 48"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="7"
+                    strokeLinecap="round"
+                    markerEnd="url(#st-solid-head)"
+                  />
+                </svg>
+              </div>
 
+              <div className="home-actions-cluster">
                 <nav className="home-actions" aria-label="Site">
                   {ACTIONS.map((action) => (
                     <Link
