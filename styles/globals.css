@@ -174,34 +174,46 @@ body {
 
 .home-st-hook {
   margin: 0.45rem 0 0.85rem;
-  font-size: clamp(0.95rem, 3.4vw, 1.12rem);
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: 0.06em;
+  font-size: clamp(0.92rem, 3.2vw, 1.08rem);
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1.35;
 }
 
-.home-st-em {
-  color: var(--navy);
-  font-weight: 600;
-}
-
 .home-actions-cluster {
   position: relative;
-  margin-top: 0.35rem;
+  margin-top: 0.15rem;
 }
 
-.home-st-arrow {
+/* Solid arrow: stem + head, rotated toward the Donate tile (right column) */
+.home-st-arrow-solid {
   position: absolute;
   z-index: 2;
   pointer-events: none;
-  width: clamp(88px, 26vw, 120px);
-  height: auto;
-  right: 22%;
-  top: -2.35rem;
-  color: var(--gold);
-  filter: drop-shadow(0 1px 0 rgba(30, 45, 78, 0.12));
+  top: -2.75rem;
+  right: calc(25% - 5px);
+  width: 7px;
+  height: 2.35rem;
+  background: var(--gold);
+  border-radius: 3px;
+  transform: rotate(38deg);
+  transform-origin: top center;
+  box-shadow: 0 1px 0 rgba(30, 45, 78, 0.15);
+}
+
+.home-st-arrow-solid::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -11px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 14px solid var(--gold);
 }
 
 .home-actions {
@@ -273,9 +285,10 @@ body {
   .home-st-block {
     margin-top: 0.75rem;
   }
-  .home-st-arrow {
-    top: -2.65rem;
-    right: 23%;
+  .home-st-arrow-solid {
+    top: -3rem;
+    height: 2.6rem;
+    right: calc(25% - 6px);
   }
   .home-btn {
     gap: 16px;
