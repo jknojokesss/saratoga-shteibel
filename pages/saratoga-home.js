@@ -63,18 +63,45 @@ export default function SaratogaHome() {
               />
             </h1>
 
-            <nav className="home-actions" aria-label="Site">
-              {ACTIONS.map((action) => (
-                <Link
-                  key={action.href}
-                  href={action.href}
-                  className={`home-btn ${action.className}`}
-                >
-                  <span className="home-btn-icon">{action.icon}</span>
-                  <span>{action.label}</span>
-                </Link>
-              ))}
-            </nav>
+            <div className="home-st-block">
+              <div className="home-st-callout">
+                <p className="home-st-kicker font-display">Simchas Torah</p>
+                <p className="home-st-hook">
+                  Donate for Simchas Torah <span className="home-st-em">right here</span>
+                </p>
+              </div>
+
+              <div className="home-actions-cluster">
+                <svg className="home-st-arrow" viewBox="0 0 140 72" aria-hidden="true">
+                  <defs>
+                    <marker id="home-st-arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                      <path d="M0,0 L8,4 L0,8 Z" fill="currentColor" />
+                    </marker>
+                  </defs>
+                  <path
+                    d="M8 12 C 48 8, 72 20, 118 58"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    markerEnd="url(#home-st-arrowhead)"
+                  />
+                </svg>
+
+                <nav className="home-actions" aria-label="Site">
+                  {ACTIONS.map((action) => (
+                    <Link
+                      key={action.href}
+                      href={action.href}
+                      className={`home-btn ${action.className}${action.href === '/donate' ? ' home-btn-donate-spotlight' : ''}`}
+                    >
+                      <span className="home-btn-icon">{action.icon}</span>
+                      <span>{action.label}</span>
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            </div>
           </div>
         </div>
       </SiteLayout>
