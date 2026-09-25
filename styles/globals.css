@@ -152,12 +152,84 @@ body {
   mix-blend-mode: multiply;
 }
 
+.home-st-block {
+  width: min(88vw, 480px);
+  margin-top: 0.5rem;
+}
+
+.home-st-callout {
+  text-align: center;
+  padding: 0 8px 4px;
+  border-bottom: 2px solid var(--gold);
+}
+
+.home-st-kicker {
+  margin: 0;
+  font-size: clamp(1.65rem, 5.5vw, 2.15rem);
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+.home-st-hook {
+  margin: 0.45rem 0 0.85rem;
+  font-size: clamp(0.95rem, 3.4vw, 1.12rem);
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.home-st-em {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.home-actions-cluster {
+  position: relative;
+  margin-top: 0.35rem;
+}
+
+.home-st-arrow {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  width: clamp(88px, 26vw, 120px);
+  height: auto;
+  right: 22%;
+  top: -2.35rem;
+  color: var(--gold);
+  filter: drop-shadow(0 1px 0 rgba(30, 45, 78, 0.12));
+}
+
 .home-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  width: min(88vw, 480px);
-  margin-top: 1.75rem;
+  width: 100%;
+  margin-top: 0;
+}
+
+.home-btn-donate-spotlight {
+  box-shadow:
+    0 0 0 3px var(--navy),
+    0 14px 32px rgba(201, 168, 76, 0.35);
+  animation: home-donate-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes home-donate-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px var(--navy),
+      0 14px 32px rgba(201, 168, 76, 0.32);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px var(--gold-light),
+      0 18px 36px rgba(201, 168, 76, 0.45);
+  }
 }
 
 .home-btn {
@@ -197,7 +269,13 @@ body {
 @media (min-width: 640px) {
   .home-actions {
     gap: 20px;
-    margin-top: 2.25rem;
+  }
+  .home-st-block {
+    margin-top: 0.75rem;
+  }
+  .home-st-arrow {
+    top: -2.65rem;
+    right: 23%;
   }
   .home-btn {
     gap: 16px;
