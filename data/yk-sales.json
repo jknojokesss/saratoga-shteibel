@@ -23,12 +23,12 @@
     },
     {
       "id": "lichtfield",
-      "name": "Lichtfield",
+      "name": "Avrumi Lichtfield",
       "phone": "",
       "paid": 0,
       "items": [
-        { "service": "Shachris", "honor": "Cohen / Levi", "price": null },
-        { "service": "Mincha", "honor": "Cohen / Levi", "price": null }
+        { "service": "Shachris", "honor": "Cohen / Levi", "price": 75 },
+        { "service": "Mincha", "honor": "Cohen / Levi", "price": 50 }
       ]
     },
     {
