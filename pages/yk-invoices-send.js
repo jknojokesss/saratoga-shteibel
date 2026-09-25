@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import { paymentInstructionLines } from '../lib/ykPaymentInfo'
+import { whatsappPaymentLines } from '../lib/ykPaymentInfo'
 
 const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4', GREEN = '#2e7d32'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
@@ -19,8 +19,7 @@ const message = (name, balance) => {
       ? [
           `Attached is your invoice. Balance due: ${money(balance)}. Thank you for your support.`,
           '',
-          'How to pay:',
-          ...paymentInstructionLines,
+          ...whatsappPaymentLines(),
         ].join('\n')
       : 'Attached is your invoice — paid in full. Thank you for your support of the Shteibel.',
   ]
