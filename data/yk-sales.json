@@ -17,8 +17,8 @@
       "phone": "",
       "paid": 0,
       "items": [
-        { "service": "Shachris", "honor": "Pesicha", "price": null },
-        { "service": "Shachris", "honor": "Shlishi", "price": null }
+        { "service": "Shachris", "honor": "Pesicha", "price": 100 },
+        { "service": "Shachris", "honor": "Shlishi", "price": 120 }
       ]
     },
     {
