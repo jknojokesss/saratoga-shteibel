@@ -56,9 +56,9 @@
       "phone": "",
       "paid": 0,
       "items": [
-        { "service": "Shachris", "honor": "Shishi", "price": null },
-        { "service": "Mincha", "honor": "Maftir Yonah", "price": null },
-        { "service": "Mincha", "honor": "Hagba & Gelila", "price": null }
+        { "service": "Shachris", "honor": "Shishi", "price": 140 },
+        { "service": "Mincha", "honor": "Maftir Yonah", "price": 2600 },
+        { "service": "Mincha", "honor": "Hagba & Gelila", "price": 75 }
       ]
     },
     {
