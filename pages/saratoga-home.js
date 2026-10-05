@@ -63,24 +63,18 @@ export default function SaratogaHome() {
               />
             </h1>
 
-            <div className="home-st-block">
-              <p className="home-st-hook">Donate for Simchas Torah kiddush</p>
-
-              <div className="home-actions-cluster">
-                <nav className="home-actions" aria-label="Site">
-                  {ACTIONS.map((action) => (
-                    <Link
-                      key={action.href}
-                      href={action.href}
-                      className={`home-btn ${action.className}${action.href === '/donate' ? ' home-btn-donate-spotlight' : ''}`}
-                    >
-                      <span className="home-btn-icon">{action.icon}</span>
-                      <span>{action.label}</span>
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-            </div>
+            <nav className="home-actions" aria-label="Site">
+              {ACTIONS.map((action) => (
+                <Link
+                  key={action.href}
+                  href={action.href}
+                  className={`home-btn ${action.className}`}
+                >
+                  <span className="home-btn-icon">{action.icon}</span>
+                  <span>{action.label}</span>
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
       </SiteLayout>

@@ -152,39 +152,12 @@ body {
   mix-blend-mode: multiply;
 }
 
-.home-st-block {
-  width: min(88vw, 480px);
-  margin-top: 0.35rem;
-}
-
-.home-st-hook {
-  margin: 0 0 0.2rem;
-  text-align: center;
-  font-size: clamp(0.92rem, 3.2vw, 1.08rem);
-  font-weight: 600;
-  color: var(--navy);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  line-height: 1.35;
-}
-
-.home-actions-cluster {
-  position: relative;
-  margin-top: 0.25rem;
-}
-
 .home-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  width: 100%;
-  margin-top: 0;
-}
-
-.home-btn-donate-spotlight {
-  box-shadow:
-    0 0 0 2px var(--navy),
-    0 12px 28px rgba(201, 168, 76, 0.28);
+  width: min(88vw, 480px);
+  margin-top: 1.75rem;
 }
 
 .home-btn {
@@ -224,9 +197,7 @@ body {
 @media (min-width: 640px) {
   .home-actions {
     gap: 20px;
-  }
-  .home-st-block {
-    margin-top: 0.5rem;
+    margin-top: 2.25rem;
   }
   .home-btn {
     gap: 16px;
