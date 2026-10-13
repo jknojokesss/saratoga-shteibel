@@ -6,7 +6,10 @@ export default async function handler(req, res) {
   try {
     const { data } = await supabaseAdmin
       .from('site_settings').select('value').eq('key', 'shabbos_schedule_url').maybeSingle()
-    if (!data?.value) return res.status(404).send('No schedule has been posted yet.')
+    if (!data?.value) {
+      res.writeHead(302, { Location: '/zmanim/this-week.pdf' })
+      return res.end()
+    }
 
     const upstream = await fetch(data.value)
     if (!upstream.ok) return res.status(502).send('Could not load the schedule.')

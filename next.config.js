@@ -16,7 +16,7 @@ const nextConfig = {
     return {
       beforeFiles: [
         // Clean URL for this week's zmanim flyer.
-        { source: '/shabbos-schedule.pdf', destination: '/zmanim/this-week.pdf' },
+        { source: '/shabbos-schedule.pdf', destination: '/api/schedule-file' },
         {
           source: '/',
           has: [{ type: 'host', value: 'saratogashteibel.org' }],
@@ -29,14 +29,6 @@ const nextConfig = {
         },
       ],
     }
-  },
-  async headers() {
-    return [
-      {
-        source: '/donate-form.html',
-        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
-      },
-    ]
   },
   async redirects() {
     // This repo now serves ONLY the Saratoga vote + donation. The leftover JK
