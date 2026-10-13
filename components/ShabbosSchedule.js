@@ -76,12 +76,20 @@ export default function ShabbosSchedule({ scheduleUrl, previewUrl, compact = fal
             className="block w-full cursor-pointer"
           />
         </div>
+      ) : scheduleUrl ? (
+        <div className="flyer-frame">
+          <div className="text-[#7a7068] text-[14px] text-center px-5 py-12 leading-relaxed">
+            The flyer preview did not load in your browser.
+            <br />
+            <a href={scheduleUrl} target="_blank" rel="noreferrer" className="inline-block mt-4 text-[#1e2d4e] font-medium underline">
+              Open PDF
+            </a>
+          </div>
+        </div>
       ) : (
         <div className="flyer-frame">
           <div className="text-[#7a7068] text-[14px] text-center px-5 py-12">
-            {scheduleUrl && pdfFailed
-              ? 'Tap Open PDF for this week\'s zmanim.'
-              : 'This week\'s zmanim will be posted here.'}
+            This week&apos;s zmanim will be posted here.
           </div>
         </div>
       )}
