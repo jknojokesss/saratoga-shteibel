@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
+import { AdminBackLink } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
 const NAVY = '#1e2d4e'
 const GOLD = '#c9a84c'
@@ -11,7 +13,7 @@ const FONT_SERIF = "'Cormorant Garamond', Georgia, serif"
 const FONT_SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
 export default function ShulVoteAdmin() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -40,7 +42,9 @@ export default function ShulVoteAdmin() {
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
       </Head>
       <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: FONT_SANS }}>
-        <div style={{ maxWidth: 520, margin: '0 auto', background: '#fff', borderRadius: 4, padding: '30px 28px', border: `1px solid ${BORDER}`, borderTop: `3px solid ${GOLD}` }}>
+        <div style={{ maxWidth: 520, margin: '0 auto' }}>
+          <AdminBackLink />
+        <div style={{ background: '#fff', borderRadius: 4, padding: '30px 28px', border: `1px solid ${BORDER}`, borderTop: `3px solid ${GOLD}` }}>
           <div style={{ fontFamily: FONT_SERIF, fontSize: 24, color: NAVY, marginBottom: 4, fontWeight: 500 }}>Gabbai Sheini — Admin</div>
           <div style={{ width: 44, height: 1.5, background: GOLD, marginBottom: 24 }} />
 
@@ -138,6 +142,7 @@ export default function ShulVoteAdmin() {
               {error && <div style={{ fontSize: 13, color: '#B23A2E', marginTop: 12 }}>{error}</div>}
             </div>
           )}
+        </div>
         </div>
       </div>
     </>

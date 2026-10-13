@@ -31,14 +31,25 @@ const nextConfig = {
     }
   },
   async redirects() {
-    // This repo now serves ONLY the Saratoga vote + donation. The leftover JK
-    // client-portal pages are dead weight here — bounce them to the donation
-    // home so the portal is unreachable from this domain.
-    return ['/dashboard', '/financials', '/reset-password'].map((source) => ({
+    const portalOff = ['/dashboard', '/financials', '/reset-password'].map((source) => ({
       source,
       destination: '/saratoga-home',
       permanent: false,
     }))
+    const adminMoved = [
+      ['/zmanim-admin', '/admin/zmanim'],
+      ['/announcements-admin', '/admin/announcements'],
+      ['/shul-vote-admin', '/admin/shul-vote'],
+      ['/board-vote-admin', '/admin/board-vote'],
+      ['/board-vote-send', '/admin/board-vote-send'],
+      ['/auction-admin', '/admin/auction'],
+      ['/books-upload', '/admin/books-upload'],
+      ['/books-review', '/admin/books-review'],
+      ['/books', '/admin/books'],
+      ['/membership', '/admin/membership'],
+      ['/yk-invoices-send', '/admin/yk-invoices'],
+    ].map(([source, destination]) => ({ source, destination, permanent: false }))
+    return [...portalOff, ...adminMoved]
   },
   async headers() {
     return [

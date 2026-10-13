@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
+import { AdminBackLink } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
 const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
 const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
 export default function BoardVoteAdmin() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)

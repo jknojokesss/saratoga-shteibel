@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
+import { AdminBackLink } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
 const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4', GREEN = '#2e7d32'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
@@ -11,7 +13,7 @@ const message = (code) => `Saratoga Shteibel — Board Election\n\nPlease use th
 const waLink = (phone, code) => `https://wa.me/${(phone || '').replace(/\D/g, '')}?text=${encodeURIComponent(message(code))}`
 
 export default function BoardVoteSend() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [voters, setVoters] = useState(null)
   const [sent, setSent] = useState({})
   const [error, setError] = useState('')

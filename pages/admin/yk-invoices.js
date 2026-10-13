@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import { whatsappPaymentLines } from '../lib/ykPaymentInfo'
+import { AdminBackLink } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
+import { whatsappPaymentLines } from '../../lib/ykPaymentInfo'
 
 const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4', GREEN = '#2e7d32'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
@@ -33,7 +35,7 @@ const waLink = (phone, name, balance) => {
 }
 
 export default function YkInvoicesSend() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [title, setTitle] = useState('')
   const [buyers, setBuyers] = useState(null)
   const [sent, setSent] = useState({})

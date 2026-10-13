@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
+import { AdminBackLink } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
 const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4', GREEN = '#2e7d32', RUST = '#b2543a'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
@@ -12,7 +14,7 @@ const SOURCES = [
 ]
 
 export default function BooksUpload() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [authed, setAuthed] = useState(false)
   const [files, setFiles] = useState({})
   const [result, setResult] = useState({})
