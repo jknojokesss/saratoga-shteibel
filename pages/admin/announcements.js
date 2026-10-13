@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
+import { AdminBackLink } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
 const NAVY = '#1e2d4e'
 const GOLD = '#c9a84c'
@@ -20,7 +22,7 @@ const inputStyle = { width: '100%', boxSizing: 'border-box', fontSize: 14, paddi
 const labelStyle = { fontSize: 11, letterSpacing: 0.6, textTransform: 'uppercase', color: MUTED, display: 'block', marginBottom: 5 }
 
 export default function AnnouncementsAdmin() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [items, setItems] = useState(null)
   const [draft, setDraft] = useState({ tag: '', title: '', body: '', pin: '#c9a84c', sort_order: 0 })
   const [error, setError] = useState('')
@@ -102,6 +104,7 @@ export default function AnnouncementsAdmin() {
       </Head>
       <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: SANS, color: '#2a2a2a' }}>
         <div style={{ maxWidth: 620, margin: '0 auto' }}>
+          <AdminBackLink />
           <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY }}>Bulletin Board — Admin</div>
           <div style={{ width: 44, height: 1.5, background: GOLD, margin: '8px 0 24px' }} />
 

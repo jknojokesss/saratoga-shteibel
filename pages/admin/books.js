@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
+import { AdminBackLink } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
 const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4'
 const GREEN = '#2e7d32', RUST = '#b2543a'
@@ -13,7 +15,7 @@ const niceDate = (d) => MON[d.slice(5, 7)] + ' ' + Number(d.slice(8, 10)) + ', '
 const MON_NAME = { '01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec' }
 
 export default function Books() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)

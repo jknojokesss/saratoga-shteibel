@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import { AdminPageShell, adminCardStyle } from '../../components/AdminChrome'
+import { useAdminPasscode } from '../../lib/useAdminPasscode'
+import { adminFontsLink } from '../../lib/adminTheme'
 
 const NAVY = '#1e2d4e'
 const GOLD = '#c9a84c'
@@ -33,7 +36,7 @@ function readFileAsDataUrl(file) {
 }
 
 export default function ZmanimAdmin() {
-  const [passcode, setPasscode] = useState('')
+  const [passcode, setPasscode] = useAdminPasscode()
   const [pdfFile, setPdfFile] = useState(null)
   const [previewFile, setPreviewFile] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -77,37 +80,22 @@ export default function ZmanimAdmin() {
     }
   }
 
-  const card = {
-    background: '#fff',
-    border: `1px solid ${BORDER}`,
-    borderRadius: 4,
-    padding: '22px 20px',
-    marginBottom: 16,
-    borderTop: `3px solid ${GOLD}`,
-  }
-
   return (
     <>
       <Head>
         <title>Zmanim — Admin</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="robots" content="noindex" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Jost:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
+        <link href={adminFontsLink} rel="stylesheet" />
       </Head>
-      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: SANS, color: '#2a2a2a' }}>
-        <div style={{ maxWidth: 480, margin: '0 auto' }}>
-          <div style={{ fontFamily: SERIF, fontSize: 28, fontWeight: 600, color: NAVY }}>Zmanim flyer</div>
-          <div style={{ width: 44, height: 1.5, background: GOLD, margin: '8px 0 12px' }} />
+      <AdminPageShell title="Zmanim flyer" maxWidth={480}>
           <p style={{ fontSize: 14, color: MUTED, lineHeight: 1.55, marginBottom: 20 }}>
-            Upload this week&apos;s schedule. The public page is{' '}
+            Upload this week&apos;s schedule. Public page:{' '}
             <Link href="/this-week" style={{ color: NAVY }}>/this-week</Link>.
-            Same passcode as other shul admin tools.
+            Sign in at <Link href="/admin" style={{ color: NAVY }}>/admin</Link> first to prefill the passcode.
           </p>
 
-          <div style={card}>
+          <div style={adminCardStyle()}>
             <label style={{ fontSize: 11, letterSpacing: 0.6, textTransform: 'uppercase', color: MUTED, display: 'block', marginBottom: 5 }}>
               Admin passcode
             </label>
@@ -162,13 +150,7 @@ export default function ZmanimAdmin() {
               {busy ? 'Uploading…' : 'Upload to site'}
             </button>
           </div>
-
-          <p style={{ fontSize: 12, color: MUTED }}>
-            The old Bulletin Board admin at <code>/announcements-admin</code> needed a working announcements database just to sign in.
-            Use this page for zmanim only.
-          </p>
-        </div>
-      </div>
+      </AdminPageShell>
     </>
   )
 }
