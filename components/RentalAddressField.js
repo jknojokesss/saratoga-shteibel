@@ -10,6 +10,7 @@ export default function RentalAddressField({ value, onChange, required = true })
   const [suggestions, setSuggestions] = useState([])
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [verified, setVerified] = useState(false)
   const debounceRef = useRef(null)
   const wrapRef = useRef(null)
 
@@ -30,6 +31,7 @@ export default function RentalAddressField({ value, onChange, required = true })
   function scheduleSearch(text) {
     if (debounceRef.current) clearTimeout(debounceRef.current)
     const trimmed = text.trim()
+    setVerified(false)
     if (trimmed.length < 3) {
       setSuggestions([])
       setOpen(false)
@@ -41,48 +43,56 @@ export default function RentalAddressField({ value, onChange, required = true })
         const r = await fetch(`/api/rentals/address-search?q=${encodeURIComponent(trimmed)}`)
         const d = await r.json()
         if (!r.ok) throw new Error(d.error || 'Lookup failed')
-        setSuggestions(d.results || [])
-        setOpen((d.results || []).length > 0)
+        const next = d.results || []
+        setSuggestions(next)
+        setOpen(next.length > 0)
       } catch {
         setSuggestions([])
         setOpen(false)
       } finally {
         setLoading(false)
       }
-    }, 280)
+    }, 320)
   }
 
   function pick(label) {
     setQuery(label)
     onChange(label)
+    setVerified(true)
     setOpen(false)
     setSuggestions([])
   }
 
+  const showMaps = Boolean(value?.trim() && (verified || /\d/.test(value)))
+
   return (
     <div className={styles.field} ref={wrapRef}>
-      <label className={styles.label} htmlFor="address">Street address *</label>
-      <input
-        id="address"
-        required={required}
-        className={styles.input}
-        value={query}
-        autoComplete="street-address"
-        placeholder="Start typing — pick from maps"
-        onChange={(e) => {
-          const next = e.target.value
-          setQuery(next)
-          onChange(next)
-          scheduleSearch(next)
-        }}
-        onFocus={() => {
-          if (suggestions.length) setOpen(true)
-        }}
-        aria-autocomplete="list"
-        aria-expanded={open}
-        aria-controls="address-suggestions"
-      />
-      {loading ? <p className={styles.addressStatus}>Looking up address…</p> : null}
+      <label className={styles.label} htmlFor="address">
+        Address {required ? '*' : ''}
+      </label>
+      <div className={styles.addressInputWrap}>
+        <input
+          id="address"
+          required={required}
+          className={styles.input}
+          value={query}
+          autoComplete="street-address"
+          placeholder="e.g. 12 Saratoga Pl"
+          onChange={(e) => {
+            const next = e.target.value
+            setQuery(next)
+            onChange(next)
+            scheduleSearch(next)
+          }}
+          onFocus={() => {
+            if (suggestions.length) setOpen(true)
+          }}
+          aria-autocomplete="list"
+          aria-expanded={open}
+          aria-controls="address-suggestions"
+        />
+        {loading ? <span className={styles.addressSpinner} aria-hidden="true" /> : null}
+      </div>
       {open && suggestions.length ? (
         <ul id="address-suggestions" className={styles.addressSuggestions} role="listbox">
           {suggestions.map((s) => (
@@ -94,14 +104,13 @@ export default function RentalAddressField({ value, onChange, required = true })
           ))}
         </ul>
       ) : null}
-      {value?.trim() ? (
+      {showMaps ? (
         <p className={styles.addressMapsLink}>
           <a href={mapsUrlForAddress(value)} target="_blank" rel="noreferrer">
-            Open in Google Maps
+            View on map
           </a>
         </p>
       ) : null}
-      <p className={styles.hint}>Choose a suggested address from the list when possible.</p>
     </div>
   )
 }
