@@ -5,7 +5,7 @@ import SiteLayout from '../components/SiteLayout'
 const ZMANIM = {
   href: '/this-week',
   label: 'Zmanim',
-  className: 'btn-navy home-btn-zmanim',
+  className: 'btn-navy',
   icon: (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -72,17 +72,12 @@ export default function SaratogaHome() {
             </h1>
 
             <nav className="home-actions" aria-label="Site">
-              <Link href={ZMANIM.href} className={`home-btn ${ZMANIM.className}`}>
-                <span className="home-btn-icon">{ZMANIM.icon}</span>
-                <span>{ZMANIM.label}</span>
-              </Link>
-
-              <div className="home-actions-right">
-                <Link href={DONATE.href} className={`home-btn ${DONATE.className}`}>
-                  <span className="home-btn-icon">{DONATE.icon}</span>
-                  <span>{DONATE.label}</span>
+              <div className="home-actions-side">
+                <Link href={ZMANIM.href} className={`home-btn home-btn-compact ${ZMANIM.className}`}>
+                  <span className="home-btn-icon">{ZMANIM.icon}</span>
+                  <span>{ZMANIM.label}</span>
                 </Link>
-                <Link href="/homes" className="home-btn home-btn-homes">
+                <Link href="/homes" className="home-btn home-btn-compact home-btn-homes">
                   <span className="home-btn-icon">{HOMES_ICON}</span>
                   <span className="home-btn-homes-text">
                     <span className="home-btn-homes-new">New!</span>
@@ -90,6 +85,10 @@ export default function SaratogaHome() {
                   </span>
                 </Link>
               </div>
+              <Link href={DONATE.href} className={`home-btn home-btn-donate ${DONATE.className}`}>
+                <span className="home-btn-icon home-btn-icon-lg">{DONATE.icon}</span>
+                <span>{DONATE.label}</span>
+              </Link>
             </nav>
           </div>
         </div>
