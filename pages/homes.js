@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import MarketListingsSection from '../components/MarketListingsSection'
 import RentalsListingCards from '../components/RentalsListingCards'
+import PageHero from '../components/PageHero'
 import SiteLayout from '../components/SiteLayout'
 import InquireEmailLink, { InquireEmailHint } from '../components/InquireEmailLink'
 import { generalInquiryDraft } from '../lib/rentals/inquiryMailto'
@@ -42,15 +43,11 @@ export default function HomesPage({ listings, marketListings }) {
       </Head>
       <SiteLayout current="homes">
         <div className={styles.page}>
-          <header className={styles.hero}>
-            <div className="mx-auto max-w-3xl px-5 sm:px-8 text-center">
-              <p className={styles.kicker}>Neighborhood</p>
-              <h1 className={styles.title}>Homes near the shul</h1>
-              <p className={styles.heroSub}>
-                Near 166 Woodleigh Place, Toms River — community rentals plus area homes for sale.
-              </p>
-            </div>
-          </header>
+          <PageHero
+            kicker="Neighborhood"
+            title="Homes near the shul"
+            subtitle="Near 166 Woodleigh Place, Toms River — community rentals plus area homes for sale."
+          />
 
           <div className={styles.body}>
             {!hasShul && !hasMarket ? (
@@ -81,8 +78,8 @@ export default function HomesPage({ listings, marketListings }) {
                     >
                       <h2 id="market-listings-heading" className={styles.sectionTitleBuying}>Buying</h2>
                       <p className={styles.sectionIntro}>
-                        Phase 1 and Phase 2 homes for sale near the shul — tap a card for Zillow. Walk times are to 166
-                        Woodleigh Place.
+                        Saratoga Phase 1 & 2 plus Walden Woods (separate community). Walk times are to 166 Woodleigh
+                        Place.
                       </p>
                     </div>
                   ) : null}

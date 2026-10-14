@@ -38,7 +38,11 @@ function MarketCard({ item, wideGrid }) {
         )}
         <div className={styles.marketCardShade} aria-hidden />
         <span className={styles.marketType}>{typeLabel(item.listingType)}</span>
-        {item.phase ? <span className={styles.marketPhaseBadge}>Phase {item.phase}</span> : null}
+        {item.community === 'walden-woods' ? (
+          <span className={styles.marketCommunityBadge}>Walden Woods</span>
+        ) : item.phase ? (
+          <span className={styles.marketPhaseBadge}>Phase {item.phase}</span>
+        ) : null}
         {item.priceLabel ? <span className={styles.marketPriceOnPhoto}>{item.priceLabel}</span> : null}
       </div>
       <div className={styles.marketCardBody}>
@@ -59,7 +63,22 @@ function PhaseBlock({ phase, listings, wideGrid }) {
   if (!listings.length) return null
   return (
     <div className={styles.marketPhaseBlock}>
-      <h3 className={styles.marketPhaseTitle}>Phase {phase}</h3>
+      <h3 className={styles.marketPhaseTitle}>Saratoga · Phase {phase}</h3>
+      <div className={wideGrid ? styles.marketGridWide : styles.marketGrid} role="list">
+        {listings.map((item) => (
+          <MarketCard key={item.id} item={item} wideGrid={wideGrid} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function CommunityBlock({ listings, wideGrid }) {
+  if (!listings.length) return null
+  return (
+    <div className={styles.marketCommunityBlock}>
+      <h3 className={styles.marketCommunityTitle}>Walden Woods</h3>
+      <p className={styles.marketCommunityIntro}>Separate community — not part of Saratoga Phase 1 or 2.</p>
       <div className={wideGrid ? styles.marketGridWide : styles.marketGrid} role="list">
         {listings.map((item) => (
           <MarketCard key={item.id} item={item} wideGrid={wideGrid} />
@@ -76,21 +95,16 @@ export default function MarketListingsSection({ listings, contentOnly = false, w
     ? `${styles.listingsCol} ${styles.buyingCol} ${styles.buyingColWide}`
     : `${styles.listingsCol} ${styles.buyingCol}`
 
-  const phase1 = listings.filter((l) => l.phase === 1)
-  const phase2 = listings.filter((l) => l.phase === 2)
-  const unphased = listings.filter((l) => l.phase !== 1 && l.phase !== 2)
+  const saratoga = listings.filter((l) => !l.community)
+  const walden = listings.filter((l) => l.community === 'walden-woods')
+  const phase1 = saratoga.filter((l) => l.phase === 1)
+  const phase2 = saratoga.filter((l) => l.phase === 2)
 
   const grid = (
     <div className={styles.marketPhases}>
       <PhaseBlock phase={1} listings={phase1} wideGrid={wideGrid} />
       <PhaseBlock phase={2} listings={phase2} wideGrid={wideGrid} />
-      {unphased.length ? (
-        <div className={wideGrid ? styles.marketGridWide : styles.marketGrid} role="list">
-          {unphased.map((item) => (
-            <MarketCard key={item.id} item={item} wideGrid={wideGrid} />
-          ))}
-        </div>
-      ) : null}
+      <CommunityBlock listings={walden} wideGrid={wideGrid} />
     </div>
   )
 

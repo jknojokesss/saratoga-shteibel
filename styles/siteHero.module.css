@@ -1,0 +1,52 @@
+.hero {
+  background: var(--navy);
+  color: var(--paper-hi);
+  padding: 2.5rem 1.25rem 2.75rem;
+  border-bottom: 1px solid #8a6e39;
+}
+
+.heroInner {
+  margin: 0 auto;
+  max-width: 48rem;
+  padding: 0 1.25rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .heroInner {
+    padding: 0 2rem;
+  }
+}
+
+.kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 0.65rem;
+}
+
+.title {
+  font-family: 'Jost', -apple-system, system-ui, sans-serif;
+  font-size: clamp(1.65rem, 4.2vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.heroSub {
+  margin: 0.75rem auto 0;
+  font-size: 0.95rem;
+  color: #c5cdd6;
+  max-width: 36rem;
+  line-height: 1.55;
+}
+
+.heroActions {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+}
