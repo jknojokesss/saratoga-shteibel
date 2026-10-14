@@ -86,35 +86,55 @@
   margin: -0.25rem 0 0.75rem;
 }
 
-.addressStatus {
-  font-size: 0.78rem;
-  color: var(--muted);
-  margin: 0.35rem 0 0;
+.addressInputWrap {
+  position: relative;
+}
+
+.addressInputWrap .input {
+  padding-right: 2rem;
+}
+
+.addressSpinner {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-top: -0.425rem;
+  border: 2px solid rgba(20, 24, 29, 0.12);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: addressSpin 0.7s linear infinite;
+}
+
+@keyframes addressSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .addressSuggestions {
   list-style: none;
-  margin: 0.35rem 0 0;
+  margin: -1px 0 0;
   padding: 0;
   border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--paper-hi);
-  max-height: 11rem;
+  border-radius: 0 0 3px 3px;
+  background: var(--paper);
+  max-height: 10.5rem;
   overflow-y: auto;
-  box-shadow: 0 8px 20px rgba(22, 29, 37, 0.1);
 }
 
 .addressSuggestionBtn {
   display: block;
   width: 100%;
   text-align: left;
-  padding: 0.55rem 0.65rem;
+  padding: 0.6rem 0.75rem;
   border: none;
   border-bottom: 1px solid rgba(20, 24, 29, 0.06);
   background: transparent;
   font-family: inherit;
-  font-size: 0.82rem;
-  line-height: 1.4;
+  font-size: 0.9rem;
+  line-height: 1.35;
   color: var(--ink);
   cursor: pointer;
 }
@@ -128,8 +148,8 @@
 }
 
 .addressMapsLink {
-  margin: 0.4rem 0 0;
-  font-size: 0.82rem;
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
 }
 
 .addressMapsLink a {

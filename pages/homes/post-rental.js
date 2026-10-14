@@ -121,7 +121,6 @@ export default function PostRentalPage() {
                     </label>
                   </div>
 
-                  <p className={styles.sectionTitle}>Property</p>
                   <RentalAddressField
                     value={form.address}
                     onChange={(address) => setForm({ ...form, address })}
