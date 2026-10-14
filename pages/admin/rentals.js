@@ -302,7 +302,7 @@ export default function AdminRentals() {
             <div>
               <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY, marginBottom: 4 }}>Rentals</div>
               <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>
-                Inquiries are saved below — follow up by phone or email. Listings expire after 60 days unless renewed.
+                Public Inquire opens email to saratogashteibel@gmail.com. Saved form inquiries (if any) are below. Listings expire after 60 days unless renewed.
               </p>
             </div>
             <button type="button" disabled={busy} onClick={() => exportCsv(true)} style={btnSmall}>
