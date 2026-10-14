@@ -65,7 +65,8 @@ export default function RentalsPage({ listings }) {
                   <article key={item.id} className={styles.card}>
                     <h2 className={styles.cardTitle}>{item.title}</h2>
                     <p className={styles.meta}>
-                      {item.neighborhood}
+                      {item.address}
+                      {item.neighborhood ? ` · ${item.neighborhood}` : ''}
                       {item.availableDate ? ` · Available ${formatDate(item.availableDate)}` : ''}
                     </p>
                     <p className={styles.rent}>{formatRent(item.monthlyRent)}<span className={styles.rentSuffix}> / mo</span></p>

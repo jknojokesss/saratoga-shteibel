@@ -5,7 +5,7 @@ import { fetchAllListingsAdmin } from '../../../lib/rentals/queries'
 const ADMIN_CODE = process.env.SHUL_ADMIN_CODE
 
 const SELECT =
-  'id,title,neighborhood,monthly_rent,bedrooms,bathrooms,available_date,description,distance_to_shul,contact_name,contact_phone,contact_email,status,created_at,expires_at'
+  'id,title,address,neighborhood,monthly_rent,bedrooms,bathrooms,available_date,description,distance_to_shul,contact_name,contact_phone,contact_email,status,created_at,expires_at'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })

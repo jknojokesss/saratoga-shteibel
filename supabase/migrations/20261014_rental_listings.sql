@@ -2,7 +2,8 @@
 create table if not exists public.rental_listings (
   id uuid primary key default gen_random_uuid(),
   title text not null,
-  neighborhood text not null,
+  address text not null default '',
+  neighborhood text not null default '',
   monthly_rent integer not null check (monthly_rent > 0),
   bedrooms numeric(4,1),
   bathrooms numeric(4,1),
