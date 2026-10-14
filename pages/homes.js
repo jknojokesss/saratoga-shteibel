@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import MarketListingsSection from '../components/MarketListingsSection'
 import RentalsListingCards from '../components/RentalsListingCards'
 import PageHero from '../components/PageHero'
@@ -52,7 +53,8 @@ export default function HomesPage({ listings, marketListings }) {
           <div className={styles.body}>
             {!hasShul && !hasMarket ? (
               <p className={styles.empty} role="status">
-                No listings right now. Check back soon, or ask in shul if you have a property to post.
+                No listings right now.{' '}
+                <Link href="/homes/post-rental" className={styles.inlineAction}>Submit a rental</Link> for review, or ask in shul.
               </p>
             ) : (
               <section
@@ -66,7 +68,8 @@ export default function HomesPage({ listings, marketListings }) {
                     <div className={styles.homesHeaderCell}>
                       <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
                       <p className={styles.sectionIntro}>
-                        Community postings — Inquire opens email and copies a draft to paste.
+                        Community postings — Inquire opens email and copies a draft to paste.{' '}
+                        <Link href="/homes/post-rental" className={styles.inlineAction}>List your rental</Link>
                       </p>
                     </div>
                   ) : null}

@@ -39,7 +39,7 @@ function fmtDate(iso) {
 
 function statusLabel(row) {
   if (row.status === 'leased') return 'Leased'
-  if (row.status === 'hidden') return 'Hidden'
+  if (row.status === 'hidden') return 'Pending approval'
   if (row.active) return 'Active'
   return 'Expired'
 }
@@ -302,6 +302,7 @@ export default function AdminRentals() {
             <div>
               <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY, marginBottom: 4 }}>Rentals</div>
               <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>
+                Public submissions arrive as <strong>Pending approval</strong> (hidden). Set to Active to publish.
                 Inquiries are saved below — follow up by phone or email. Listings expire after 60 days unless renewed.
               </p>
             </div>
