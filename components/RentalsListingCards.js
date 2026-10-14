@@ -1,5 +1,3 @@
-import RentalEmailInquire from './RentalEmailInquire'
-import { inquiryDraftForListing } from '../lib/rentals/inquiryMailto'
 import styles from '../styles/rentals.module.css'
 
 function formatDate(iso) {
@@ -26,9 +24,7 @@ function bedBathLabel(bed, bath) {
 export default function RentalsListingCards({ listings, contentOnly = false }) {
   const inner = (
     <>
-      {listings.map((item) => {
-        const draft = inquiryDraftForListing(item)
-        return (
+      {listings.map((item) => (
         <article key={item.id} className={styles.card}>
           <h3 className={styles.cardTitle}>{item.title}</h3>
           <p className={styles.meta}>
@@ -53,15 +49,8 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
             </p>
           ) : null}
           {item.description ? <p className={styles.desc}>{item.description}</p> : null}
-          <RentalEmailInquire
-            draftId={item.id}
-            subject={draft.subject}
-            body={draft.body}
-            buttonLabel="Email the shul about this rental"
-          />
         </article>
-        )
-      })}
+      ))}
     </>
   )
 
@@ -72,7 +61,7 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
   return (
     <section className={styles.splitSection} aria-labelledby="shul-listings-heading">
       <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
-      <p className={styles.sectionIntro}>Community postings — tap Inquire to email the shul office.</p>
+      <p className={styles.sectionIntro}>Community postings — contact the number on the listing directly.</p>
       {inner}
     </section>
   )

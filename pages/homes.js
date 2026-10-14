@@ -4,8 +4,6 @@ import RentalsListingCards from '../components/RentalsListingCards'
 import PageHero from '../components/PageHero'
 import SiteLayout from '../components/SiteLayout'
 import ListRentalPromo from '../components/ListRentalPromo'
-import RentalEmailInquire from '../components/RentalEmailInquire'
-import { generalInquiryDraft } from '../lib/rentals/inquiryMailto'
 import { MARKET_LISTINGS } from '../lib/rentals/marketListings'
 import { fetchActiveListings } from '../lib/rentals/queries'
 import { absoluteUrl } from '../lib/site'
@@ -23,8 +21,6 @@ const OG_IMAGE = absoluteUrl('/logo.png')
 export default function HomesPage({ listings, marketListings }) {
   const hasShul = listings.length > 0
   const hasMarket = marketListings.length > 0
-  const generalInquiry = generalInquiryDraft()
-
   return (
     <>
       <Head>
@@ -69,7 +65,7 @@ export default function HomesPage({ listings, marketListings }) {
                     <div className={styles.homesHeaderCell}>
                       <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
                       <p className={styles.sectionIntro}>
-                        Community postings — tap Inquire on a listing to email the shul.
+                        Community postings — call the contact number on each listing.
                       </p>
                     </div>
                   ) : null}
@@ -97,17 +93,6 @@ export default function HomesPage({ listings, marketListings }) {
                 </div>
               </section>
             )}
-
-            <div className={styles.generalInquireWrap}>
-              <p className={styles.generalInquireHint}>
-                General housing questions — edit the draft and email saratogashteibel@gmail.com
-              </p>
-              <RentalEmailInquire
-                subject={generalInquiry.subject}
-                body={generalInquiry.body}
-                buttonLabel="Email the shul"
-              />
-            </div>
 
             <p className={styles.disclaimer}>{DISCLAIMER}</p>
           </div>
