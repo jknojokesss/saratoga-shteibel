@@ -1,0 +1,57 @@
+.promo {
+  background: var(--paper-hi);
+  border: 1px solid rgba(20, 24, 29, 0.1);
+  border-top: 3px solid var(--gold);
+  border-radius: 4px;
+  padding: 1.15rem 1.25rem 1.35rem;
+  margin-bottom: 1.5rem;
+}
+
+.promoCompact {
+  margin-bottom: 0;
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.newLabel {
+  margin: 0 0 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.title {
+  margin: 0 0 0.45rem;
+  font-family: 'Jost', -apple-system, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.25;
+}
+
+.text {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 42rem;
+}
+
+.cta {
+  display: inline-block;
+  padding: 0.75rem 1.35rem;
+  background: var(--navy);
+  color: var(--paper-hi) !important;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+}
+
+.cta:hover {
+  background: var(--navy-2);
+}

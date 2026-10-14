@@ -74,6 +74,23 @@ export default function SaratogaHome() {
                   <span>{action.label}</span>
                 </Link>
               ))}
+              <div className="home-action-new">
+                <span className="home-new-label">New</span>
+                <Link href="/homes/post-rental" className="home-btn home-btn-rental btn-navy">
+                  <span className="home-btn-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span>List rental</span>
+                </Link>
+              </div>
             </nav>
           </div>
         </div>
