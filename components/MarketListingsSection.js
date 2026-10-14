@@ -18,8 +18,7 @@ export default function MarketListingsSection({ listings }) {
           List prices from MLS syndication (Oct 2026) — confirm on Zillow before making decisions. Links open in a new tab.
         </p>
       </div>
-      <div className={styles.marketScrollWrap}>
-        <div className={styles.marketRow} role="list">
+      <div className={styles.marketGrid} role="list">
           {listings.map((item) => (
             <a
               key={item.id}
@@ -35,7 +34,7 @@ export default function MarketListingsSection({ listings }) {
                     src={item.imageUrl}
                     alt=""
                     fill
-                    sizes="(max-width: 640px) 78vw, 300px"
+                    sizes="(max-width: 520px) 100vw, 280px"
                     className={styles.marketCardImg}
                   />
                 ) : (
@@ -51,7 +50,6 @@ export default function MarketListingsSection({ listings }) {
               </div>
             </a>
           ))}
-        </div>
       </div>
     </section>
   )
