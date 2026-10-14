@@ -11,11 +11,11 @@ export default function MarketListingsSection({ listings }) {
   if (!listings?.length) return null
 
   return (
-    <section className={styles.marketSection} aria-labelledby="market-listings-heading">
+    <section className={`${styles.marketSection} ${styles.splitSection}`} aria-labelledby="market-listings-heading">
       <div className={styles.marketSectionHeader}>
-        <h2 id="market-listings-heading" className={styles.sectionTitle}>On the market nearby</h2>
+        <h2 id="market-listings-heading" className={styles.sectionTitle}>Buying</h2>
         <p className={styles.sectionIntro}>
-          List prices from MLS syndication (Oct 2026) — confirm on Zillow before making decisions. Links open in a new tab.
+          Area homes for sale (MLS prices, Oct 2026). Confirm on Zillow — links open in a new tab.
         </p>
       </div>
       <div className={styles.marketGrid} role="list">

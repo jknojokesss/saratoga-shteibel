@@ -29,9 +29,49 @@
 }
 
 .body {
-  max-width: 44rem;
+  max-width: 72rem;
   margin: 0 auto;
   padding: 1.75rem 1.25rem 3rem;
+}
+
+.splitLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .splitLayout {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 2rem;
+  }
+}
+
+.splitCol {
+  min-width: 0;
+}
+
+.splitSection {
+  margin: 0;
+}
+
+.columnEmpty {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--paper-hi);
+  border: 1px dashed rgba(20, 24, 29, 0.15);
+  border-radius: 4px;
+}
+
+@media (max-width: 899px) {
+  .splitCol + .splitCol {
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(20, 24, 29, 0.12);
+  }
 }
 
 .card {
@@ -139,9 +179,9 @@
 }
 
 .marketSection {
-  margin-top: 2.25rem;
-  padding-top: 1.75rem;
-  border-top: 1px solid rgba(20, 24, 29, 0.12);
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .marketSectionHeader {
@@ -254,12 +294,41 @@
 }
 
 .marketBlurb {
-  display: block;
-  font-size: 0.8rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.78rem;
   color: var(--muted);
-  line-height: 1.45;
-  margin-bottom: 0.55rem;
+  line-height: 1.4;
+  margin-bottom: 0.45rem;
   flex: 1;
+}
+
+@media (min-width: 900px) {
+  .splitCol .marketCard {
+    flex-direction: column;
+  }
+
+  .splitCol .marketCardMedia {
+    flex: none;
+    max-width: none;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: unset;
+  }
+
+  .splitCol .marketCardBody {
+    padding: 0.65rem 0.75rem 0.8rem;
+  }
+
+  .splitCol .marketTitle {
+    font-size: 0.88rem;
+  }
+
+  .splitCol .marketPrice {
+    font-size: 1.05rem;
+  }
 }
 
 .marketSource {

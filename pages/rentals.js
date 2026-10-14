@@ -42,10 +42,14 @@ export default function RentalsPage({ listings, marketListings }) {
                 No listings right now. Check back soon, or ask in shul if you have a property to post.
               </p>
             ) : (
-              <>
-                <RentalsListingCards listings={listings} />
-                <MarketListingsSection listings={marketListings} />
-              </>
+              <div className={styles.splitLayout}>
+                <div className={styles.splitCol}>
+                  <RentalsListingCards listings={listings} />
+                </div>
+                <div className={styles.splitCol}>
+                  <MarketListingsSection listings={marketListings} />
+                </div>
+              </div>
             )}
 
             <div className={styles.generalInquireWrap}>

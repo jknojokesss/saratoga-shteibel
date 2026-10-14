@@ -23,12 +23,13 @@ function bedBathLabel(bed, bath) {
 }
 
 export default function RentalsListingCards({ listings }) {
-  if (!listings.length) return null
-
   return (
-    <section aria-labelledby="shul-listings-heading">
-      <h2 id="shul-listings-heading" className={styles.sectionTitle}>Posted here</h2>
-      <p className={styles.sectionIntro}>From owners and agents in the community. Tap Inquire to email the shul office.</p>
+    <section className={styles.splitSection} aria-labelledby="shul-listings-heading">
+      <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
+      <p className={styles.sectionIntro}>Community postings — tap Inquire to email the shul office.</p>
+      {!listings.length ? (
+        <p className={styles.columnEmpty} role="status">No rentals posted here right now.</p>
+      ) : null}
       {listings.map((item) => (
         <article key={item.id} className={styles.card}>
           <h3 className={styles.cardTitle}>{item.title}</h3>
