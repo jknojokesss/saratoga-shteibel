@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 const LINKS = [
   { href: '/this-week', label: 'Zmanim' },
   { href: '/visit', label: 'Visit' },
-  { href: '/rentals', label: 'Homes' },
+  { href: '/homes', label: 'Homes' },
 ]
 
 export default function SiteLayout({ children, current = '', hideFooter = false, flush = false }) {
@@ -107,7 +107,7 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
               <Link href="/this-week" className="text-[11px] tracking-[0.14em] uppercase text-gold-light hover:text-white">Zmanim</Link>
               <Link href="/visit" className="text-[11px] tracking-[0.14em] uppercase text-gold-light hover:text-white">Visit</Link>
-              <Link href="/rentals" className="text-[11px] tracking-[0.14em] uppercase text-gold-light hover:text-white">Homes</Link>
+              <Link href="/homes" className="text-[11px] tracking-[0.14em] uppercase text-gold-light hover:text-white">Homes</Link>
               <Link href="/donate" className="border border-gold text-gold-light text-[11px] tracking-[0.14em] uppercase px-3 py-2 hover:bg-gold hover:text-navy transition-colors rounded-sm">
                 Donate
               </Link>

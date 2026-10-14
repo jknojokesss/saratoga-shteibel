@@ -36,7 +36,7 @@ const nextConfig = {
       destination: '/saratoga-home',
       permanent: false,
     }))
-    const homesAlias = [{ source: '/homes', destination: '/rentals', permanent: false }]
+    const homesAlias = [{ source: '/rentals', destination: '/homes', permanent: true }]
     const adminMoved = [
       ['/zmanim-admin', '/admin/zmanim'],
       ['/announcements-admin', '/admin/announcements'],
