@@ -13,6 +13,7 @@ const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
 const EMPTY_FORM = {
   title: '',
+  address: '',
   neighborhood: '',
   monthly_rent: '',
   bedrooms: '',
@@ -112,7 +113,8 @@ export default function AdminRentals() {
     setEditId(row.id)
     setForm({
       title: row.title,
-      neighborhood: row.neighborhood,
+      address: row.address || '',
+      neighborhood: row.neighborhood || '',
       monthly_rent: String(row.monthlyRent),
       bedrooms: row.bedrooms != null ? String(row.bedrooms) : '',
       bathrooms: row.bathrooms != null ? String(row.bathrooms) : '',
@@ -313,8 +315,16 @@ export default function AdminRentals() {
               <div style={{ fontWeight: 600, marginBottom: 12, color: NAVY }}>{editId ? 'Edit listing' : 'Add listing'}</div>
               <label style={labelStyle}>Title *</label>
               <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} style={inputStyle} />
-              <label style={labelStyle}>Neighborhood *</label>
-              <input required value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} style={inputStyle} placeholder="e.g. Woodleigh" />
+              <label style={labelStyle}>Address *</label>
+              <input
+                required
+                value={form.address}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+                style={inputStyle}
+                placeholder="e.g. 12 Example Dr, Toms River"
+              />
+              <label style={labelStyle}>Neighborhood</label>
+              <input value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} style={inputStyle} placeholder="e.g. Woodleigh (optional)" />
               <label style={labelStyle}>Owner email (private, for your records)</label>
               <input type="email" value={form.owner_email} onChange={(e) => setForm({ ...form, owner_email: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Monthly rent *</label>
@@ -388,7 +398,10 @@ export default function AdminRentals() {
                       <tr key={row.id} style={{ borderTop: `1px solid ${BORDER}`, background: inquiryListing?.id === row.id ? '#f0f2ef' : undefined }}>
                         <td style={{ padding: '10px 8px', verticalAlign: 'top' }}>
                           <div style={{ fontWeight: 600 }}>{row.title}</div>
-                          <div style={{ color: MUTED, fontSize: 12 }}>{row.neighborhood}</div>
+                          <div style={{ color: MUTED, fontSize: 12 }}>
+                            {row.address}
+                            {row.neighborhood ? ` · ${row.neighborhood}` : ''}
+                          </div>
                           {row.leasedAt ? <div style={{ fontSize: 11, color: MUTED }}>Leased {fmtDate(row.leasedAt)}</div> : null}
                         </td>
                         <td style={{ padding: '10px 8px', fontSize: 12, wordBreak: 'break-all' }}>{row.ownerEmail || '—'}</td>
