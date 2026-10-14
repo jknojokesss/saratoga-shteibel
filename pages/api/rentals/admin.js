@@ -11,8 +11,11 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
   const { passcode, action, listing, id } = req.body || {}
-  if (!ADMIN_CODE || passcode !== ADMIN_CODE) {
-    return res.status(401).json({ error: 'Wrong passcode.' })
+  if (!ADMIN_CODE) {
+    return res.status(503).json({ error: 'Admin is not configured on the server (SHUL_ADMIN_CODE).' })
+  }
+  if (passcode !== ADMIN_CODE) {
+    return res.status(401).json({ error: 'Wrong passcode. Use the same code as Membership / Financials.' })
   }
 
   try {
@@ -90,6 +93,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Unknown action.' })
   } catch (e) {
     console.error('rentals/admin', action, e)
-    return res.status(500).json({ error: 'Request failed.' })
+    const msg = String(e?.message || e || '')
+    if (msg.includes('rental_listings') || msg.includes('schema cache')) {
+      return res.status(503).json({
+        error: 'Rentals database table is missing. Run supabase/migrations/20261014_rental_listings.sql in Supabase.',
+      })
+    }
+    return res.status(500).json({ error: 'Request failed. Try again or check server logs.' })
   }
 }

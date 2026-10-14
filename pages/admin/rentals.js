@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
 import { AdminBackLink } from '../../components/AdminChrome'
 import { useAdminPasscode } from '../../lib/useAdminPasscode'
@@ -42,6 +42,13 @@ export default function AdminRentals() {
   const [busy, setBusy] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const [editId, setEditId] = useState(null)
+  const autoTried = useRef(false)
+
+  useEffect(() => {
+    if (!passcode || listings !== null || autoTried.current) return
+    autoTried.current = true
+    load()
+  }, [passcode, listings])
 
   async function api(action, body = {}) {
     const r = await fetch('/api/rentals/admin', {
@@ -56,6 +63,10 @@ export default function AdminRentals() {
 
   async function load() {
     setError('')
+    if (!passcode.trim()) {
+      setError('Enter the admin passcode (same as Membership and Financials).')
+      return
+    }
     setBusy(true)
     try {
       const d = await api('list')
@@ -63,6 +74,7 @@ export default function AdminRentals() {
     } catch (e) {
       setError(e.message)
       setListings(null)
+      autoTried.current = false
     } finally {
       setBusy(false)
     }
@@ -180,7 +192,11 @@ export default function AdminRentals() {
             style={{ background: '#fff', border: `1px solid ${BORDER}`, borderTop: `3px solid ${GOLD}`, borderRadius: 4, padding: '28px 26px', width: 320 }}
           >
             <AdminBackLink />
-            <div style={{ fontFamily: SERIF, fontSize: 24, fontWeight: 600, color: NAVY, marginBottom: 16 }}>Rentals</div>
+            <div style={{ fontFamily: SERIF, fontSize: 24, fontWeight: 600, color: NAVY, marginBottom: 8 }}>Rentals</div>
+            <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.5, marginBottom: 14 }}>
+              Same passcode as <strong>Membership</strong> and <strong>Financials</strong>. If you already signed in at{' '}
+              <a href="/admin" style={{ color: NAVY }}>/admin</a>, this page should open automatically.
+            </p>
             <input
               type="password"
               name="password"
