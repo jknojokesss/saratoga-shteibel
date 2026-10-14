@@ -2,7 +2,8 @@ import Head from 'next/head'
 import MarketListingsSection from '../components/MarketListingsSection'
 import RentalsListingCards from '../components/RentalsListingCards'
 import SiteLayout from '../components/SiteLayout'
-import { generalInquiryMailto } from '../lib/rentals/inquiryMailto'
+import InquireEmailLink, { InquireEmailHint } from '../components/InquireEmailLink'
+import { generalInquiryDraft } from '../lib/rentals/inquiryMailto'
 import { MARKET_LISTINGS } from '../lib/rentals/marketListings'
 import { fetchActiveListings } from '../lib/rentals/queries'
 import styles from '../styles/rentals.module.css'
@@ -13,6 +14,7 @@ const DISCLAIMER =
 export default function RentalsPage({ listings, marketListings }) {
   const hasShul = listings.length > 0
   const hasMarket = marketListings.length > 0
+  const generalInquiry = generalInquiryDraft()
 
   return (
     <>
@@ -67,11 +69,16 @@ export default function RentalsPage({ listings, marketListings }) {
             )}
 
             <div className={styles.generalInquireWrap}>
-              <a href={generalInquiryMailto()} className={styles.inquireBox}>
+              <InquireEmailLink
+                subject={generalInquiry.subject}
+                body={generalInquiry.body}
+                className={styles.inquireBox}
+              >
                 Inquire
-              </a>
+              </InquireEmailLink>
+              <InquireEmailHint />
               <p className={styles.generalInquireHint}>
-                Questions about housing near the shul — opens your email to saratogashteibel@gmail.com
+                Questions about housing near the shul — email saratogashteibel@gmail.com
               </p>
             </div>
 
