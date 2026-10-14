@@ -87,6 +87,17 @@
   border-radius: 4px;
 }
 
+.inlineAction {
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.inlineAction:hover {
+  color: var(--gold);
+}
+
 @media (max-width: 899px) {
   .homesHeaderCell + .homesHeaderCell,
   .listingsCol + .listingsCol {
