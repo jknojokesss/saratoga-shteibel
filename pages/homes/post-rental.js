@@ -4,11 +4,12 @@ import { useState } from 'react'
 import PageHero from '../../components/PageHero'
 import SiteLayout from '../../components/SiteLayout'
 import { openMailtoDraft } from '../../lib/rentals/mailtoDraft'
+import RentalAddressField from '../../components/RentalAddressField'
 import { submissionApprovalDraftFromForm } from '../../lib/rentals/submissionMailto'
+import { listingTitleFromFields } from '../../lib/rentals/listingTitle'
 import styles from '../../styles/rentalSubmit.module.css'
 
 const EMPTY = {
-  title: '',
   address: '',
   neighborhood: '',
   monthly_rent: '',
@@ -32,7 +33,8 @@ export default function PostRentalPage() {
     e.preventDefault()
     setError('')
 
-    const emailDraft = submissionApprovalDraftFromForm(form)
+    const payload = { ...form, title: listingTitleFromFields(form) }
+    const emailDraft = submissionApprovalDraftFromForm(payload)
     const emailOpened = openMailtoDraft(emailDraft)
 
     setBusy(true)
@@ -40,7 +42,7 @@ export default function PostRentalPage() {
       const r = await fetch('/api/rentals/submit-listing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       })
       const d = await r.json()
       if (!r.ok) throw new Error(d.error || 'Could not submit')
@@ -121,28 +123,10 @@ export default function PostRentalPage() {
                   </div>
 
                   <p className={styles.sectionTitle}>Property</p>
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="title">Headline *</label>
-                    <input
-                      id="title"
-                      required
-                      className={styles.input}
-                      value={form.title}
-                      onChange={(e) => setForm({ ...form, title: e.target.value })}
-                      placeholder="e.g. 3 bed townhome near shul"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="address">Street address *</label>
-                    <input
-                      id="address"
-                      required
-                      className={styles.input}
-                      value={form.address}
-                      onChange={(e) => setForm({ ...form, address: e.target.value })}
-                      placeholder="e.g. 12 Example Dr, Toms River"
-                    />
-                  </div>
+                  <RentalAddressField
+                    value={form.address}
+                    onChange={(address) => setForm({ ...form, address })}
+                  />
                   <div className={styles.field}>
                     <label className={styles.label} htmlFor="neighborhood">Area / phase</label>
                     <input
