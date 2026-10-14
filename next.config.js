@@ -36,6 +36,7 @@ const nextConfig = {
       destination: '/saratoga-home',
       permanent: false,
     }))
+    const homesAlias = [{ source: '/homes', destination: '/rentals', permanent: false }]
     const adminMoved = [
       ['/zmanim-admin', '/admin/zmanim'],
       ['/announcements-admin', '/admin/announcements'],
@@ -49,7 +50,7 @@ const nextConfig = {
       ['/membership', '/admin/membership'],
       ['/yk-invoices-send', '/admin/yk-invoices'],
     ].map(([source, destination]) => ({ source, destination, permanent: false }))
-    return [...portalOff, ...adminMoved]
+    return [...portalOff, ...homesAlias, ...adminMoved]
   },
   async headers() {
     return [

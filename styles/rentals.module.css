@@ -144,28 +144,46 @@
   border-top: 1px solid rgba(20, 24, 29, 0.12);
 }
 
-.marketGrid {
+.marketSectionHeader {
+  margin-bottom: 1rem;
+}
+
+.marketScrollWrap {
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  padding: 0 1.25rem 0.25rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-color: rgba(20, 24, 29, 0.25) transparent;
+}
+
+.marketRow {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  flex-direction: row;
+  gap: 0.85rem;
+  align-items: stretch;
 }
 
 .marketCard {
-  display: block;
+  flex: 0 0 min(78vw, 17.5rem);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   color: inherit;
-  background: var(--navy);
-  color: var(--paper-hi);
-  padding: 1rem 1.1rem 1.05rem;
+  background: var(--paper-hi);
   border-radius: 4px;
-  border: 1px solid #0f1419;
-  box-shadow: 0 8px 20px rgba(15, 20, 25, 0.12);
-  transition: background 0.15s ease, transform 0.15s ease;
+  border: 1px solid rgba(20, 24, 29, 0.1);
+  border-top: 2px solid var(--gold);
+  box-shadow: 0 10px 24px rgba(15, 20, 25, 0.08);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .marketCard:hover {
-  background: var(--navy-2);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(15, 20, 25, 0.12);
 }
 
 .marketCard:focus-visible {
@@ -173,45 +191,77 @@
   outline-offset: 2px;
 }
 
+.marketCardMedia {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--navy);
+  overflow: hidden;
+}
+
+.marketCardImg {
+  object-fit: cover;
+}
+
+.marketCardImgFallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, var(--navy) 0%, var(--navy-2) 100%);
+}
+
 .marketType {
-  display: block;
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
+  position: absolute;
+  left: 0.55rem;
+  top: 0.55rem;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.35rem;
+  color: var(--paper-hi);
+  background: rgba(15, 20, 25, 0.72);
+  border-radius: 2px;
+}
+
+.marketCardBody {
+  padding: 0.85rem 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .marketTitle {
   display: block;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  line-height: 1.3;
-  margin-bottom: 0.25rem;
+  line-height: 1.35;
+  margin-bottom: 0.35rem;
+  color: var(--ink);
 }
 
 .marketPrice {
   display: block;
   font-family: 'Frank Ruhl Libre', Georgia, serif;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.2rem;
+  color: var(--ink);
 }
 
 .marketBlurb {
   display: block;
-  font-size: 0.82rem;
-  color: #c5cdd6;
+  font-size: 0.8rem;
+  color: var(--muted);
   line-height: 1.45;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
+  flex: 1;
 }
 
 .marketSource {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--gold-light);
+  color: var(--navy-2);
+  margin-top: auto;
 }
 
 .inquireBox {
