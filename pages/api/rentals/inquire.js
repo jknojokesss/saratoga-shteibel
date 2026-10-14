@@ -3,7 +3,10 @@ import { getClientIp, hashClientIp } from '../../../lib/rentals/clientIp'
 import { validateInquiryInput } from '../../../lib/rentals/inquiryValidate'
 import { fetchListingForInquiry } from '../../../lib/rentals/queries'
 import { isInquiryRateLimited } from '../../../lib/rentals/rateLimit'
-import { sendRentalInquiryEmail } from '../../../lib/rentals/sendInquiryEmail'
+import { isRentalsEmailConfigured, sendRentalInquiryEmail } from '../../../lib/rentals/sendInquiryEmail'
+
+const SUCCESS_MESSAGE =
+  'Thank you. Your request was received. Someone from the shul will follow up with you.'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
@@ -14,7 +17,7 @@ export default async function handler(req, res) {
   try {
     const { errors, data, spam } = validateInquiryInput(req.body || {})
     if (spam) {
-      return res.status(200).json({ ok: true, message: 'Thank you. The owner will be in touch if the listing is available.' })
+      return res.status(200).json({ ok: true, message: SUCCESS_MESSAGE })
     }
     if (errors.length) {
       return res.status(400).json({ error: errors.join(' ') })
@@ -30,8 +33,13 @@ export default async function handler(req, res) {
     if (!listing) {
       return res.status(404).json({ error: 'This listing is no longer available.' })
     }
-    const sendResult = await sendRentalInquiryEmail({ listing, inquiry: data })
-    const emailStatus = sendResult.ok ? 'sent' : 'failed'
+
+    let emailStatus = 'failed'
+    if (isRentalsEmailConfigured()) {
+      const sendResult = await sendRentalInquiryEmail({ listing, inquiry: data })
+      emailStatus = sendResult.ok ? 'sent' : 'failed'
+      if (!sendResult.ok) console.error('rentals/inquire email failed', sendResult.error)
+    }
 
     const { error: insertError } = await supabaseAdmin.from('rental_inquiries').insert({
       listing_id: data.listing_id,
@@ -45,21 +53,7 @@ export default async function handler(req, res) {
     })
     if (insertError) throw insertError
 
-    if (!sendResult.ok) {
-      console.error('rentals/inquire email failed', sendResult.error)
-      return res.status(200).json({
-        ok: true,
-        message:
-          'Your request was saved. We could not send email automatically; the shul will follow up.',
-        emailDelivered: false,
-      })
-    }
-
-    return res.status(200).json({
-      ok: true,
-      message: 'Thank you. Your request was sent to the shul office.',
-      emailDelivered: true,
-    })
+    return res.status(200).json({ ok: true, message: SUCCESS_MESSAGE })
   } catch (e) {
     console.error('rentals/inquire', e)
     const msg = String(e?.message || e || '')

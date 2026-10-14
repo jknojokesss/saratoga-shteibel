@@ -2,7 +2,7 @@ import { supabaseAdmin } from '../../../lib/supabaseAdmin'
 import { inquiriesToCsv } from '../../../lib/rentals/csv'
 import { rowToAdminInquiry } from '../../../lib/rentals/inquiryValidate'
 import { fetchAllListingsAdmin, ADMIN_SELECT } from '../../../lib/rentals/queries'
-import { sendRentalInquiryEmail } from '../../../lib/rentals/sendInquiryEmail'
+import { isRentalsEmailConfigured, sendRentalInquiryEmail } from '../../../lib/rentals/sendInquiryEmail'
 import { expiryFromNow, validateListingInput, rowToAdmin } from '../../../lib/rentals/validate'
 
 const ADMIN_CODE = process.env.SHUL_ADMIN_CODE
@@ -122,6 +122,9 @@ export default async function handler(req, res) {
     }
 
     if (action === 'resend_inquiry') {
+      if (!isRentalsEmailConfigured()) {
+        return res.status(400).json({ error: 'Inquiry email is not enabled yet.' })
+      }
       if (!inquiryId) return res.status(400).json({ error: 'Missing inquiry id.' })
       const { data: inquiry, error: iErr } = await supabaseAdmin
         .from('rental_inquiries')

@@ -230,19 +230,6 @@ export default function AdminRentals() {
     }
   }
 
-  async function resendInquiry(inq) {
-    setBusy(true)
-    setError('')
-    try {
-      await api('resend_inquiry', { inquiryId: inq.id })
-      if (inquiryListing) await openInquiries(inquiryListing)
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setBusy(false)
-    }
-  }
-
   async function exportCsv(all) {
     setBusy(true)
     setError('')
@@ -313,7 +300,7 @@ export default function AdminRentals() {
             <div>
               <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY, marginBottom: 4 }}>Rentals</div>
               <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>
-                Owner email is private — inquiries go by email. Listings expire after 60 days unless renewed.
+                Inquiries are saved below — follow up by phone or email. Listings expire after 60 days unless renewed.
               </p>
             </div>
             <button type="button" disabled={busy} onClick={() => exportCsv(true)} style={btnSmall}>
@@ -328,8 +315,8 @@ export default function AdminRentals() {
               <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Neighborhood *</label>
               <input required value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} style={inputStyle} placeholder="e.g. Woodleigh" />
-              <label style={labelStyle}>Owner email * (private)</label>
-              <input required type="email" value={form.owner_email} onChange={(e) => setForm({ ...form, owner_email: e.target.value })} style={inputStyle} />
+              <label style={labelStyle}>Owner email (private, for your records)</label>
+              <input type="email" value={form.owner_email} onChange={(e) => setForm({ ...form, owner_email: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Monthly rent *</label>
               <input required type="number" min="1" value={form.monthly_rent} onChange={(e) => setForm({ ...form, monthly_rent: e.target.value })} style={inputStyle} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -445,8 +432,6 @@ export default function AdminRentals() {
                           <th style={{ padding: '6px 4px' }}>Requester</th>
                           <th style={{ padding: '6px 4px' }}>Contact</th>
                           <th style={{ padding: '6px 4px' }}>Message</th>
-                          <th style={{ padding: '6px 4px' }}>Email</th>
-                          <th style={{ padding: '6px 4px' }} />
                         </tr>
                       </thead>
                       <tbody>
@@ -459,17 +444,7 @@ export default function AdminRentals() {
                               {inq.requesterEmail ? <><br />{inq.requesterEmail}</> : null}
                               {inq.moveInDate ? <><br /><span style={{ color: MUTED }}>Move-in: {inq.moveInDate}</span></> : null}
                             </td>
-                            <td style={{ padding: '8px 4px', maxWidth: 160 }}>{inq.message || '—'}</td>
-                            <td style={{ padding: '8px 4px' }}>
-                              <span style={{ color: inq.emailStatus === 'failed' ? '#B23A2E' : '#2e7d32' }}>
-                                {inq.emailStatus}
-                              </span>
-                            </td>
-                            <td style={{ padding: '8px 4px' }}>
-                              {inq.emailStatus === 'failed' ? (
-                                <button type="button" disabled={busy} onClick={() => resendInquiry(inq)} style={btnSmall}>Resend</button>
-                              ) : null}
-                            </td>
+                            <td style={{ padding: '8px 4px', maxWidth: 200 }}>{inq.message || '—'}</td>
                           </tr>
                         ))}
                       </tbody>
