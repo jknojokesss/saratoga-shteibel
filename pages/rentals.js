@@ -17,21 +17,21 @@ export default function RentalsPage({ listings, marketListings }) {
   return (
     <>
       <Head>
-        <title>Rentals · Saratoga Shteibel</title>
+        <title>Homes near the shul · Saratoga Shteibel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Homes and apartments for rent near Saratoga Shteibel, 166 Woodleigh Place, Toms River, NJ."
+          content="Homes and apartments for rent or sale near Saratoga Shteibel, 166 Woodleigh Place, Toms River, NJ."
         />
       </Head>
       <SiteLayout current="rentals">
         <div className={styles.page}>
           <header className={styles.hero}>
             <div className="mx-auto max-w-3xl px-5 sm:px-8 text-center">
-              <p className={styles.kicker}>Neighborhood Rentals</p>
-              <h1 className={styles.title}>Rentals near the shul</h1>
+              <p className={styles.kicker}>Neighborhood</p>
+              <h1 className={styles.title}>Homes near the shul</h1>
               <p className={styles.heroSub}>
-                Near 166 Woodleigh Place, Toms River — community postings and area listings.
+                Near 166 Woodleigh Place, Toms River — community rentals plus area homes for sale.
               </p>
             </div>
           </header>
@@ -52,7 +52,9 @@ export default function RentalsPage({ listings, marketListings }) {
               <a href={generalInquiryMailto()} className={styles.inquireBox}>
                 Inquire
               </a>
-              <p className={styles.generalInquireHint}>General rental questions — opens your email to saratogashteibel@gmail.com</p>
+              <p className={styles.generalInquireHint}>
+                Questions about housing near the shul — opens your email to saratogashteibel@gmail.com
+              </p>
             </div>
 
             <p className={styles.disclaimer}>{DISCLAIMER}</p>
