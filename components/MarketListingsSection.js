@@ -1,0 +1,37 @@
+import styles from '../styles/rentals.module.css'
+
+function typeLabel(t) {
+  if (t === 'sale') return 'For sale'
+  if (t === 'rent') return 'For rent'
+  return 'Listing'
+}
+
+export default function MarketListingsSection({ listings }) {
+  if (!listings?.length) return null
+
+  return (
+    <section className={styles.marketSection} aria-labelledby="market-listings-heading">
+      <h2 id="market-listings-heading" className={styles.sectionTitle}>On the market nearby</h2>
+      <p className={styles.sectionIntro}>
+        Homes and rentals listed on other sites — we do not verify these; links open in a new tab.
+      </p>
+      <div className={styles.marketGrid}>
+        {listings.map((item) => (
+          <a
+            key={item.id}
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.marketCard}
+          >
+            <span className={styles.marketType}>{typeLabel(item.listingType)}</span>
+            <span className={styles.marketTitle}>{item.title}</span>
+            {item.priceLabel ? <span className={styles.marketPrice}>{item.priceLabel}</span> : null}
+            {item.blurb ? <span className={styles.marketBlurb}>{item.blurb}</span> : null}
+            <span className={styles.marketSource}>View on {item.source || 'site'} →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}
