@@ -164,6 +164,9 @@
   text-transform: uppercase;
   text-decoration: none;
   border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .emailBtn:hover {

@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import PageHero from '../../components/PageHero'
 import SiteLayout from '../../components/SiteLayout'
-import InquireEmailLink, { InquireEmailHint } from '../../components/InquireEmailLink'
+import { openMailtoDraft } from '../../lib/rentals/mailtoDraft'
+import { submissionApprovalDraftFromForm } from '../../lib/rentals/submissionMailto'
 import styles from '../../styles/rentalSubmit.module.css'
 
 const EMPTY = {
@@ -30,6 +31,10 @@ export default function PostRentalPage() {
   async function onSubmit(e) {
     e.preventDefault()
     setError('')
+
+    const emailDraft = submissionApprovalDraftFromForm(form)
+    const emailOpened = openMailtoDraft(emailDraft)
+
     setBusy(true)
     try {
       const r = await fetch('/api/rentals/submit-listing', {
@@ -41,7 +46,8 @@ export default function PostRentalPage() {
       if (!r.ok) throw new Error(d.error || 'Could not submit')
       setDone({
         message: d.message,
-        emailDraft: d.emailDraft,
+        emailOpened,
+        emailDraft: d.emailDraft || emailDraft,
       })
       setForm(EMPTY)
     } catch (err) {
@@ -49,6 +55,10 @@ export default function PostRentalPage() {
     } finally {
       setBusy(false)
     }
+  }
+
+  function openEmailAgain() {
+    if (done?.emailDraft) openMailtoDraft(done.emailDraft)
   }
 
   return (
@@ -67,7 +77,7 @@ export default function PostRentalPage() {
           <PageHero
             kicker="Homes"
             title="List a rental"
-            subtitle="Community postings near the shul — reviewed before they go live."
+            subtitle="Fill out the form — your email app opens with everything filled in. Tap Send to finish."
           />
           <div className={styles.wrap}>
             <Link href="/homes" className={styles.backLink}>← Back to Homes</Link>
@@ -77,20 +87,14 @@ export default function PostRentalPage() {
                 <h2 className={styles.successTitle}>Submitted for review</h2>
                 <p className={styles.successBody}>{done.message}</p>
                 <p className={styles.successBody}>
-                  To make sure we see it quickly, tap below to open an email to the shul — your listing details
-                  are copied so you can paste them into the message.
+                  {done.emailOpened
+                    ? 'Your email app should have opened with the full listing. Press Send in that message so we receive it for approval.'
+                    : 'If your email app did not open, tap the button below to try again.'}
                 </p>
                 {done.emailDraft ? (
-                  <>
-                    <InquireEmailLink
-                      subject={done.emailDraft.subject}
-                      body={done.emailDraft.body}
-                      className={styles.emailBtn}
-                    >
-                      Email the shul
-                    </InquireEmailLink>
-                    <InquireEmailHint />
-                  </>
+                  <button type="button" className={styles.emailBtn} onClick={openEmailAgain}>
+                    Open email again
+                  </button>
                 ) : null}
                 <p className={styles.clipHint} style={{ marginTop: '1.25rem' }}>
                   You can also check back on{' '}
@@ -256,8 +260,12 @@ export default function PostRentalPage() {
 
                   {error ? <p className={styles.error} role="alert">{error}</p> : null}
                   <button type="submit" className={styles.submit} disabled={busy}>
-                    {busy ? 'Saving…' : 'Submit for approval'}
+                    {busy ? 'Saving…' : 'Submit & open email'}
                   </button>
+                  <p className={styles.hint} style={{ marginTop: '0.75rem', marginBottom: 0 }}>
+                    Opens your mail app to saratogashteibel@gmail.com with the details pre-filled — press Send to
+                    complete.
+                  </p>
                 </form>
               </>
             )}
