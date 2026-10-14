@@ -48,12 +48,12 @@ export default function ShabbosSchedule({ scheduleUrl, previewUrl, compact = fal
         ? 'flex flex-wrap items-end justify-between gap-3'
         : 'flex flex-col items-center text-center mb-6'}`}>
         <div className={compact ? 'min-w-0 text-left' : ''}>
-          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-[#c9a84c] ${compact ? '' : 'justify-center'}`}>
-            {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
+          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-gold ${compact ? '' : 'justify-center'}`}>
+            {compact ? null : <span className="block h-px w-8 bg-gold" />}
             This week
-            {compact ? null : <span className="block h-px w-8 bg-[#c9a84c]" />}
+            {compact ? null : <span className="block h-px w-8 bg-gold" />}
           </p>
-          <h2 id="schedule-heading" className={`font-display font-semibold text-[#1e2d4e] mt-1 ${compact ? 'text-[22px] sm:text-[26px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
+          <h2 id="schedule-heading" className={`font-display font-semibold text-navy mt-1 ${compact ? 'text-[22px] sm:text-[26px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
             Zmanim
           </h2>
         </div>
@@ -78,17 +78,17 @@ export default function ShabbosSchedule({ scheduleUrl, previewUrl, compact = fal
         </div>
       ) : scheduleUrl ? (
         <div className="flyer-frame">
-          <div className="text-[#7a7068] text-[14px] text-center px-5 py-12 leading-relaxed">
+          <div className="text-muted text-[14px] text-center px-5 py-12 leading-relaxed">
             The flyer preview did not load in your browser.
             <br />
-            <a href={scheduleUrl} target="_blank" rel="noreferrer" className="inline-block mt-4 text-[#1e2d4e] font-medium underline">
+            <a href={scheduleUrl} target="_blank" rel="noreferrer" className="inline-block mt-4 text-navy font-medium underline">
               Open PDF
             </a>
           </div>
         </div>
       ) : (
         <div className="flyer-frame">
-          <div className="text-[#7a7068] text-[14px] text-center px-5 py-12">
+          <div className="text-muted text-[14px] text-center px-5 py-12">
             This week&apos;s zmanim will be posted here.
           </div>
         </div>

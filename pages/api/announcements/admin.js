@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         tag: (item.tag || '').trim(),
         title: item.title.trim(),
         body: (item.body || '').trim(),
-        pin: item.pin || '#c9a84c',
+        pin: item.pin || '#b08d4b',
         sort_order: Number.isFinite(item.sort_order) ? item.sort_order : 0,
       })
       if (error) throw error
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
         tag: (item.tag || '').trim(),
         title: item.title.trim(),
         body: (item.body || '').trim(),
-        pin: item.pin || '#c9a84c',
+        pin: item.pin || '#b08d4b',
         sort_order: Number.isFinite(item.sort_order) ? item.sort_order : 0,
       }).eq('id', item.id)
       if (error) throw error

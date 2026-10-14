@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-const NAVY = '#1e2d4e'
-const GOLD = '#c9a84c'
-const INK = '#2a2a2a'
-const MUTED = '#7a7068'
+const NAVY = '#161d25'
+const GOLD = '#b08d4b'
+const INK = '#14181d'
+const MUTED = '#6e7a85'
 const CREAM = '#f0ebe0'
-const BORDER = '#ddd5c4'
+const BORDER = '#cdd0cb'
 const FONT_SERIF = "'Cormorant Garamond', Georgia, serif"
 const FONT_SANS = "'Jost', -apple-system, system-ui, sans-serif"
 

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { AdminBackLink } from '../../components/AdminChrome'
 import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
-const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4'
+const NAVY = '#161d25', GOLD = '#b08d4b', CREAM = '#f6f6f2', MUTED = '#6e7a85', BORDER = '#cdd0cb'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
 const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 const money = (n) => '$' + Number(n || 0).toLocaleString('en-US')
@@ -43,7 +43,7 @@ export default function AuctionAdmin() {
   return (
     <>
       <Head><title>Auction · Admin</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@0,500;0,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" /></Head>
-      <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#2a2a2a', padding: '28px 18px 60px' }}>
+      <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#14181d', padding: '28px 18px 60px' }}>
         <div style={{ maxWidth: 620, margin: '0 auto' }}>
           <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY }}>{data.title}</div>
           <div style={{ fontSize: 13, color: data.isOpen ? '#2e7d32' : MUTED, marginBottom: 16 }}>{data.isOpen ? '● Bidding is open' : '■ Bidding is closed'}</div>

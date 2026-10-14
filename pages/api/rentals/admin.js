@@ -1,16 +1,16 @@
 import { supabaseAdmin } from '../../../lib/supabaseAdmin'
+import { inquiriesToCsv } from '../../../lib/rentals/csv'
+import { rowToAdminInquiry } from '../../../lib/rentals/inquiryValidate'
+import { fetchAllListingsAdmin, ADMIN_SELECT } from '../../../lib/rentals/queries'
+import { isRentalsEmailConfigured, sendRentalInquiryEmail } from '../../../lib/rentals/sendInquiryEmail'
 import { expiryFromNow, validateListingInput, rowToAdmin } from '../../../lib/rentals/validate'
-import { fetchAllListingsAdmin } from '../../../lib/rentals/queries'
 
 const ADMIN_CODE = process.env.SHUL_ADMIN_CODE
-
-const SELECT =
-  'id,title,neighborhood,monthly_rent,bedrooms,bathrooms,available_date,description,distance_to_shul,contact_name,contact_phone,contact_email,status,created_at,expires_at'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
-  const { passcode, action, listing, id } = req.body || {}
+  const { passcode, action, listing, id, listingId, inquiryId } = req.body || {}
   if (!ADMIN_CODE) {
     return res.status(503).json({ error: 'Admin is not configured on the server (SHUL_ADMIN_CODE).' })
   }
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
           ...data,
           expires_at: expiryFromNow(60),
         })
-        .select(SELECT)
+        .select(ADMIN_SELECT)
         .single()
       if (error) throw error
       return res.status(200).json({ listing: rowToAdmin(row) })
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
         .from('rental_listings')
         .update(data)
         .eq('id', id)
-        .select(SELECT)
+        .select(ADMIN_SELECT)
         .single()
       if (error) throw error
       return res.status(200).json({ listing: rowToAdmin(row) })
@@ -58,14 +58,33 @@ export default async function handler(req, res) {
     if (action === 'set_status') {
       if (!id) return res.status(400).json({ error: 'Missing listing id.' })
       const st = listing?.status
-      if (st !== 'active' && st !== 'hidden') {
-        return res.status(400).json({ error: 'Status must be active or hidden.' })
+      if (st !== 'active' && st !== 'hidden' && st !== 'leased') {
+        return res.status(400).json({ error: 'Status must be active, hidden, or leased.' })
       }
+      const patch = { status: st }
+      if (st === 'leased' && !listing?.clearLeased) {
+        patch.leased_at = listing?.leased_at || new Date().toISOString().slice(0, 10)
+      }
+      if (st !== 'leased') patch.leased_at = null
+
       const { data: row, error } = await supabaseAdmin
         .from('rental_listings')
-        .update({ status: st })
+        .update(patch)
         .eq('id', id)
-        .select(SELECT)
+        .select(ADMIN_SELECT)
+        .single()
+      if (error) throw error
+      return res.status(200).json({ listing: rowToAdmin(row) })
+    }
+
+    if (action === 'mark_leased') {
+      if (!id) return res.status(400).json({ error: 'Missing listing id.' })
+      const leasedAt = listing?.leasedAt || listing?.leased_at || new Date().toISOString().slice(0, 10)
+      const { data: row, error } = await supabaseAdmin
+        .from('rental_listings')
+        .update({ status: 'leased', leased_at: leasedAt })
+        .eq('id', id)
+        .select(ADMIN_SELECT)
         .single()
       if (error) throw error
       return res.status(200).json({ listing: rowToAdmin(row) })
@@ -75,9 +94,9 @@ export default async function handler(req, res) {
       if (!id) return res.status(400).json({ error: 'Missing listing id.' })
       const { data: row, error } = await supabaseAdmin
         .from('rental_listings')
-        .update({ expires_at: expiryFromNow(60) })
+        .update({ expires_at: expiryFromNow(60), status: 'active', leased_at: null })
         .eq('id', id)
-        .select(SELECT)
+        .select(ADMIN_SELECT)
         .single()
       if (error) throw error
       return res.status(200).json({ listing: rowToAdmin(row) })
@@ -90,13 +109,71 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true })
     }
 
+    if (action === 'list_inquiries') {
+      const lid = listingId || id
+      if (!lid) return res.status(400).json({ error: 'Missing listing id.' })
+      const { data, error } = await supabaseAdmin
+        .from('rental_inquiries')
+        .select('*')
+        .eq('listing_id', lid)
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      return res.status(200).json({ inquiries: (data || []).map(rowToAdminInquiry) })
+    }
+
+    if (action === 'resend_inquiry') {
+      if (!isRentalsEmailConfigured()) {
+        return res.status(400).json({ error: 'Inquiry email is not enabled yet.' })
+      }
+      if (!inquiryId) return res.status(400).json({ error: 'Missing inquiry id.' })
+      const { data: inquiry, error: iErr } = await supabaseAdmin
+        .from('rental_inquiries')
+        .select('*')
+        .eq('id', inquiryId)
+        .single()
+      if (iErr) throw iErr
+      if (!inquiry) return res.status(404).json({ error: 'Inquiry not found.' })
+
+      const { data: listing, error: lErr } = await supabaseAdmin
+        .from('rental_listings')
+        .select('id,title,neighborhood,monthly_rent,owner_email')
+        .eq('id', inquiry.listing_id)
+        .single()
+      if (lErr) throw lErr
+
+      const sendResult = await sendRentalInquiryEmail({ listing, inquiry })
+      const emailStatus = sendResult.ok ? 'sent' : 'failed'
+      await supabaseAdmin.from('rental_inquiries').update({ email_status: emailStatus }).eq('id', inquiryId)
+
+      if (!sendResult.ok) {
+        return res.status(502).json({ error: sendResult.error || 'Email could not be sent.' })
+      }
+      return res.status(200).json({ ok: true, emailStatus })
+    }
+
+    if (action === 'export_inquiries_csv') {
+      const lid = listingId || null
+      let q = supabaseAdmin
+        .from('rental_inquiries')
+        .select('*, rental_listings(title)')
+        .order('created_at', { ascending: false })
+      if (lid) q = q.eq('listing_id', lid)
+      const { data, error } = await q
+      if (error) throw error
+      const rows = (data || []).map((row) => ({
+        ...rowToAdminInquiry(row),
+        listingTitle: row.rental_listings?.title || '',
+      }))
+      return res.status(200).json({ csv: inquiriesToCsv(rows) })
+    }
+
     return res.status(400).json({ error: 'Unknown action.' })
   } catch (e) {
     console.error('rentals/admin', action, e)
     const msg = String(e?.message || e || '')
-    if (msg.includes('rental_listings') || msg.includes('schema cache')) {
+    if (msg.includes('rental_listings') || msg.includes('rental_inquiries') || msg.includes('schema cache')) {
       return res.status(503).json({
-        error: 'Rentals database table is missing. Run supabase/migrations/20261014_rental_listings.sql in Supabase.',
+        error: 'Rentals database tables are missing. Run supabase/migrations for rental_listings and rental_inquiries.',
       })
     }
     return res.status(500).json({ error: 'Request failed. Try again or check server logs.' })

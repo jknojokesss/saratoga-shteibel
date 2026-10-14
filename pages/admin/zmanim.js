@@ -5,11 +5,11 @@ import { AdminPageShell, adminCardStyle } from '../../components/AdminChrome'
 import { useAdminPasscode } from '../../lib/useAdminPasscode'
 import { adminFontsLink } from '../../lib/adminTheme'
 
-const NAVY = '#1e2d4e'
-const GOLD = '#c9a84c'
-const CREAM = '#faf7f2'
-const MUTED = '#7a7068'
-const BORDER = '#ddd5c4'
+const NAVY = '#161d25'
+const GOLD = '#b08d4b'
+const CREAM = '#f6f6f2'
+const MUTED = '#6e7a85'
+const BORDER = '#cdd0cb'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
 const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
