@@ -1,9 +1,9 @@
 import Head from 'next/head'
-import Link from 'next/link'
 import MarketListingsSection from '../components/MarketListingsSection'
 import RentalsListingCards from '../components/RentalsListingCards'
 import PageHero from '../components/PageHero'
 import SiteLayout from '../components/SiteLayout'
+import ListRentalPromo from '../components/ListRentalPromo'
 import InquireEmailLink, { InquireEmailHint } from '../components/InquireEmailLink'
 import { generalInquiryDraft } from '../lib/rentals/inquiryMailto'
 import { MARKET_LISTINGS } from '../lib/rentals/marketListings'
@@ -51,10 +51,11 @@ export default function HomesPage({ listings, marketListings }) {
           />
 
           <div className={styles.body}>
+            <ListRentalPromo />
+
             {!hasShul && !hasMarket ? (
               <p className={styles.empty} role="status">
-                No listings right now.{' '}
-                <Link href="/homes/post-rental" className={styles.inlineAction}>Submit a rental</Link> for review, or ask in shul.
+                No other listings right now. Check back for buying options, or ask in shul.
               </p>
             ) : (
               <section
@@ -64,15 +65,14 @@ export default function HomesPage({ listings, marketListings }) {
                 <div
                   className={`${styles.homesHeaderRow} ${!hasShul && hasMarket ? styles.homesHeaderRowBuyFocus : ''}`}
                 >
-                  {hasShul ? (
-                    <div className={styles.homesHeaderCell}>
-                      <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
-                      <p className={styles.sectionIntro}>
-                        Community postings — Inquire opens email and copies a draft to paste.{' '}
-                        <Link href="/homes/post-rental" className={styles.inlineAction}>List your rental</Link>
-                      </p>
-                    </div>
-                  ) : null}
+                  <div className={styles.homesHeaderCell}>
+                    <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
+                    <p className={styles.sectionIntro}>
+                      {hasShul
+                        ? 'Community postings — tap Inquire on a listing to email the shul.'
+                        : 'No community rentals posted yet — use List your rental above to submit one.'}
+                    </p>
+                  </div>
                   {hasMarket ? (
                     <div
                       className={
@@ -90,7 +90,7 @@ export default function HomesPage({ listings, marketListings }) {
                 <div
                   className={`${styles.homesListingsRow} ${!hasShul && hasMarket ? styles.homesListingsRowBuyFocus : ''}`}
                 >
-                  {hasShul ? <RentalsListingCards listings={listings} contentOnly /> : null}
+                  <RentalsListingCards listings={listings} contentOnly />
                   {hasMarket ? (
                     <MarketListingsSection listings={marketListings} contentOnly wideGrid={!hasShul} />
                   ) : null}
