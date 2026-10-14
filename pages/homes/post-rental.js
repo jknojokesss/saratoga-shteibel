@@ -11,7 +11,6 @@ import styles from '../../styles/rentalSubmit.module.css'
 
 const EMPTY = {
   address: '',
-  neighborhood: '',
   monthly_rent: '',
   bedrooms: '',
   bathrooms: '',
@@ -127,16 +126,6 @@ export default function PostRentalPage() {
                     value={form.address}
                     onChange={(address) => setForm({ ...form, address })}
                   />
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="neighborhood">Area / phase</label>
-                    <input
-                      id="neighborhood"
-                      className={styles.input}
-                      value={form.neighborhood}
-                      onChange={(e) => setForm({ ...form, neighborhood: e.target.value })}
-                      placeholder="e.g. Woodleigh, Phase 1"
-                    />
-                  </div>
                   <div className={styles.field}>
                     <label className={styles.label} htmlFor="monthly_rent">Monthly rent (USD) *</label>
                     <input
