@@ -431,8 +431,6 @@
   }
   var selectedOption = null;
 
-  setAccount(IFIELDS_KEY, "SaratogaShteibel", "1.0");
-
   function readInputValue(el) {
     if (!el) return '';
     try {
@@ -970,6 +968,15 @@
       processCardPayment();
     }
 
+    if (typeof getTokens !== 'function') {
+      showError(
+        'Card payment could not load — often caused by an ad blocker or privacy extension. Try Donors Fund below, disable the blocker for this site, or use another browser.'
+      );
+      btn.disabled = false;
+      btn.textContent = 'Complete Payment';
+      return;
+    }
+
     getTokens(
       function() { startPaymentOnce(); },
       function() {
@@ -983,6 +990,15 @@
       30000
     );
   }
+
+  // After all UI handlers exist — Cardknox is often blocked by ad blockers; must not break Kiddush/Shaleshudis toggles.
+  (function initCardknox() {
+    try {
+      if (typeof setAccount === 'function') setAccount(IFIELDS_KEY, 'SaratogaShteibel', '1.0');
+    } catch (e) {
+      console.warn('Cardknox iFields unavailable', e);
+    }
+  })();
 </script>
 </body>
 </html>
