@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export default function ShabbosSchedule({ scheduleUrl, previewUrl, compact = false }) {
+export default function ShabbosSchedule({ scheduleUrl, previewUrl, compact = false, hideTitle = false }) {
   const pdfCanvas = useRef(null)
   const [pdfFailed, setPdfFailed] = useState(false)
 
@@ -42,40 +42,50 @@ export default function ShabbosSchedule({ scheduleUrl, previewUrl, compact = fal
     return () => { cancelled = true }
   }, [scheduleUrl, previewUrl])
 
+  const headingId = hideTitle ? undefined : 'schedule-heading'
+
   return (
-    <section aria-labelledby="schedule-heading">
-      <div className={`mb-4 ${compact
-        ? 'flex flex-wrap items-end justify-between gap-3'
-        : 'flex flex-col items-center text-center mb-6'}`}>
-        <div className={compact ? 'min-w-0 text-left' : ''}>
-          <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-gold ${compact ? '' : 'justify-center'}`}>
-            {compact ? null : <span className="block h-px w-8 bg-gold" />}
-            This week
-            {compact ? null : <span className="block h-px w-8 bg-gold" />}
-          </p>
-          <h2 id="schedule-heading" className={`font-display font-semibold text-navy mt-1 ${compact ? 'text-[22px] sm:text-[26px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
-            Zmanim
-          </h2>
+    <section aria-labelledby={headingId}>
+      {hideTitle ? null : (
+        <div className={`mb-4 ${compact
+          ? 'flex flex-wrap items-end justify-between gap-3'
+          : 'flex flex-col items-center text-center mb-6'}`}>
+          <div className={compact ? 'min-w-0 text-left' : ''}>
+            <p className={`flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase text-gold ${compact ? '' : 'justify-center'}`}>
+              {compact ? null : <span className="block h-px w-8 bg-gold" />}
+              This week
+              {compact ? null : <span className="block h-px w-8 bg-gold" />}
+            </p>
+            <h2 id="schedule-heading" className={`font-display font-semibold text-navy mt-1 ${compact ? 'text-[22px] sm:text-[26px] leading-tight' : 'text-[30px] sm:text-[36px] mt-2'}`}>
+              Zmanim
+            </h2>
+          </div>
         </div>
-        {scheduleUrl ? (
-          <a href={scheduleUrl} target="_blank" rel="noreferrer" className={`btn-outline shrink-0 text-[12px] font-medium tracking-[0.12em] uppercase px-4 py-2 rounded-sm ${compact ? '' : 'mt-4'}`}>
-            Open PDF
-          </a>
-        ) : null}
-      </div>
+      )}
       {previewUrl ? (
-        <a href={scheduleUrl || previewUrl} target="_blank" rel="noreferrer" className="flyer-frame block overflow-hidden">
-          <img src={previewUrl} alt="This week's zmanim" className="block w-full" />
+        <a
+          href={scheduleUrl || previewUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="flyer-frame block overflow-hidden"
+          title="Open PDF"
+        >
+          <img src={previewUrl} alt="This week's zmanim — tap to open PDF" className="block w-full" />
         </a>
       ) : scheduleUrl && !pdfFailed ? (
-        <div className="flyer-frame overflow-hidden">
+        <a
+          href={scheduleUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="flyer-frame block overflow-hidden"
+          title="Open PDF"
+        >
           <canvas
             ref={pdfCanvas}
-            onClick={() => window.open(scheduleUrl, '_blank')}
-            title="Open this week's zmanim"
-            className="block w-full cursor-pointer"
+            title="This week's zmanim — tap to open PDF"
+            className="block w-full cursor-pointer pointer-events-none"
           />
-        </div>
+        </a>
       ) : scheduleUrl ? (
         <div className="flyer-frame">
           <div className="text-muted text-[14px] text-center px-5 py-12 leading-relaxed">
