@@ -30,10 +30,6 @@ export default async function handler(req, res) {
     if (!listing) {
       return res.status(404).json({ error: 'This listing is no longer available.' })
     }
-    if (!listing.owner_email) {
-      return res.status(503).json({ error: 'This listing cannot accept inquiries right now. Please try again later.' })
-    }
-
     const sendResult = await sendRentalInquiryEmail({ listing, inquiry: data })
     const emailStatus = sendResult.ok ? 'sent' : 'failed'
 
@@ -54,14 +50,14 @@ export default async function handler(req, res) {
       return res.status(200).json({
         ok: true,
         message:
-          'Your request was saved. We could not email the owner automatically; the shul will follow up.',
+          'Your request was saved. We could not send email automatically; the shul will follow up.',
         emailDelivered: false,
       })
     }
 
     return res.status(200).json({
       ok: true,
-      message: 'Thank you. Your details were sent to the listing owner.',
+      message: 'Thank you. Your request was sent to the shul office.',
       emailDelivered: true,
     })
   } catch (e) {
