@@ -94,6 +94,11 @@
   padding-right: 2rem;
 }
 
+.inputWithSuggestions {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .addressSpinner {
   position: absolute;
   right: 0.65rem;
@@ -145,6 +150,13 @@
 
 .addressSuggestions li:last-child .addressSuggestionBtn {
   border-bottom: none;
+}
+
+.addressWalkHint {
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  color: var(--navy);
+  font-weight: 500;
 }
 
 .addressMapsLink {

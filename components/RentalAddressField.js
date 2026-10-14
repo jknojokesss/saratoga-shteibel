@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
+import { formatWalkToShul } from '../lib/rentals/walkToShul'
 import styles from '../styles/rentalSubmit.module.css'
 
 function mapsUrlForAddress(address) {
   return `https://maps.google.com/?q=${encodeURIComponent(address)}`
 }
 
-export default function RentalAddressField({ value, onChange, required = true }) {
+export default function RentalAddressField({ value, onChange, onWalkToShulChange, required = true }) {
   const [query, setQuery] = useState(value || '')
   const [suggestions, setSuggestions] = useState([])
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [verified, setVerified] = useState(false)
+  const [walkHint, setWalkHint] = useState('')
   const debounceRef = useRef(null)
   const wrapRef = useRef(null)
 
@@ -32,6 +34,8 @@ export default function RentalAddressField({ value, onChange, required = true })
     if (debounceRef.current) clearTimeout(debounceRef.current)
     const trimmed = text.trim()
     setVerified(false)
+    setWalkHint('')
+    onWalkToShulChange?.('')
     if (trimmed.length < 3) {
       setSuggestions([])
       setOpen(false)
@@ -55,10 +59,18 @@ export default function RentalAddressField({ value, onChange, required = true })
     }, 320)
   }
 
-  function pick(label) {
-    setQuery(label)
-    onChange(label)
+  function pick(suggestion) {
+    setQuery(suggestion.label)
+    onChange(suggestion.label)
     setVerified(true)
+    if (suggestion.lat != null && suggestion.lon != null) {
+      const hint = formatWalkToShul(suggestion.lat, suggestion.lon)
+      setWalkHint(hint)
+      onWalkToShulChange?.(hint)
+    } else {
+      setWalkHint('')
+      onWalkToShulChange?.('')
+    }
     setOpen(false)
     setSuggestions([])
   }
@@ -74,7 +86,7 @@ export default function RentalAddressField({ value, onChange, required = true })
         <input
           id="address"
           required={required}
-          className={styles.input}
+          className={`${styles.input}${open && suggestions.length ? ` ${styles.inputWithSuggestions}` : ''}`}
           value={query}
           autoComplete="street-address"
           placeholder="e.g. 12 Saratoga Pl"
@@ -97,13 +109,14 @@ export default function RentalAddressField({ value, onChange, required = true })
         <ul id="address-suggestions" className={styles.addressSuggestions} role="listbox">
           {suggestions.map((s) => (
             <li key={`${s.lat}-${s.lon}-${s.label}`}>
-              <button type="button" className={styles.addressSuggestionBtn} onClick={() => pick(s.label)}>
+              <button type="button" className={styles.addressSuggestionBtn} onClick={() => pick(s)}>
                 {s.label}
               </button>
             </li>
           ))}
         </ul>
       ) : null}
+      {walkHint ? <p className={styles.addressWalkHint}>{walkHint}</p> : null}
       {showMaps ? (
         <p className={styles.addressMapsLink}>
           <a href={mapsUrlForAddress(value)} target="_blank" rel="noreferrer">

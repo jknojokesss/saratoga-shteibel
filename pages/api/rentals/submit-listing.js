@@ -5,6 +5,7 @@ import { ADMIN_SELECT } from '../../../lib/rentals/queries'
 import { submissionApprovalDraft } from '../../../lib/rentals/submissionMailto'
 import { isSubmissionRateLimited } from '../../../lib/rentals/submissionRateLimit'
 import { validateSubmissionInput } from '../../../lib/rentals/submissionValidate'
+import { enrichListingWithWalkToShul } from '../../../lib/rentals/walkToShul'
 import { expiryFromNow, rowToAdmin } from '../../../lib/rentals/validate'
 
 const SUCCESS_MESSAGE =
@@ -30,6 +31,8 @@ export default async function handler(req, res) {
         error: 'Too many submissions from your network. Please try again in about an hour.',
       })
     }
+
+    await enrichListingWithWalkToShul(data)
 
     const insertRow = {
       ...data,

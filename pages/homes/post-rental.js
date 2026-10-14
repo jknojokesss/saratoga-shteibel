@@ -16,7 +16,6 @@ const EMPTY = {
   bathrooms: '',
   available_date: '',
   description: '',
-  distance_to_shul: '',
   contact_name: '',
   contact_phone: '',
   contact_email: '',
@@ -24,6 +23,7 @@ const EMPTY = {
 
 export default function PostRentalPage() {
   const [form, setForm] = useState(EMPTY)
+  const [walkToShul, setWalkToShul] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [done, setDone] = useState(null)
@@ -32,12 +32,24 @@ export default function PostRentalPage() {
     e.preventDefault()
     setError('')
 
-    const payload = { ...form, title: listingTitleFromFields(form) }
-    const emailDraft = submissionApprovalDraftFromForm(payload)
-    const emailOpened = openMailtoDraft(emailDraft)
-
     setBusy(true)
     try {
+      let distance_to_shul = walkToShul
+      if (!distance_to_shul && form.address.trim()) {
+        try {
+          const wr = await fetch(
+            `/api/rentals/walk-to-shul?address=${encodeURIComponent(form.address.trim())}`
+          )
+          const wd = await wr.json()
+          distance_to_shul = wd.distance_to_shul || ''
+        } catch {
+          distance_to_shul = ''
+        }
+      }
+
+      const payload = { ...form, title: listingTitleFromFields(form), distance_to_shul }
+      const emailDraft = submissionApprovalDraftFromForm(payload)
+      const emailOpened = openMailtoDraft(emailDraft)
       const r = await fetch('/api/rentals/submit-listing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -51,6 +63,7 @@ export default function PostRentalPage() {
         emailDraft: d.emailDraft || emailDraft,
       })
       setForm(EMPTY)
+      setWalkToShul('')
     } catch (err) {
       setError(err.message || 'Something went wrong.')
     } finally {
@@ -124,6 +137,7 @@ export default function PostRentalPage() {
                   <RentalAddressField
                     value={form.address}
                     onChange={(address) => setForm({ ...form, address })}
+                    onWalkToShulChange={setWalkToShul}
                   />
                   <div className={styles.field}>
                     <label className={styles.label} htmlFor="monthly_rent">Monthly rent (USD) *</label>
@@ -171,16 +185,6 @@ export default function PostRentalPage() {
                       className={styles.input}
                       value={form.available_date}
                       onChange={(e) => setForm({ ...form, available_date: e.target.value })}
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="distance_to_shul">Walk to shul</label>
-                    <input
-                      id="distance_to_shul"
-                      className={styles.input}
-                      value={form.distance_to_shul}
-                      onChange={(e) => setForm({ ...form, distance_to_shul: e.target.value })}
-                      placeholder="e.g. 8 min walk"
                     />
                   </div>
                   <div className={styles.field}>
