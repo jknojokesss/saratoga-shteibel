@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import RentalInquiryModal from './RentalInquiryModal'
+import { inquiryEmailForListing } from '../lib/rentals/inquiryMailto'
 import styles from '../styles/rentals.module.css'
 
 function formatDate(iso) {
@@ -24,41 +23,34 @@ function bedBathLabel(bed, bath) {
 }
 
 export default function RentalsListingCards({ listings }) {
-  const [inquiryListing, setInquiryListing] = useState(null)
+  if (!listings.length) return null
 
   return (
-    <>
-      <section aria-label="Active rental listings">
-        {listings.map((item) => (
-          <article key={item.id} className={styles.card}>
-            <h2 className={styles.cardTitle}>{item.title}</h2>
-            <p className={styles.meta}>
-              {item.address}
-              {item.neighborhood ? ` · ${item.neighborhood}` : ''}
-              {item.availableDate ? ` · Available ${formatDate(item.availableDate)}` : ''}
-            </p>
-            <p className={styles.rent}>
-              {formatRent(item.monthlyRent)}
-              <span className={styles.rentSuffix}> / mo</span>
-            </p>
-            {bedBathLabel(item.bedrooms, item.bathrooms) ? (
-              <p className={styles.meta}>{bedBathLabel(item.bedrooms, item.bathrooms)}</p>
-            ) : null}
-            {item.distanceToShul ? <p className={styles.meta}>To shul: {item.distanceToShul}</p> : null}
-            {item.description ? <p className={styles.desc}>{item.description}</p> : null}
-            <button
-              type="button"
-              className={styles.requestBtn}
-              onClick={() => setInquiryListing(item)}
-            >
-              Request details
-            </button>
-          </article>
-        ))}
-      </section>
-      {inquiryListing ? (
-        <RentalInquiryModal listing={inquiryListing} onClose={() => setInquiryListing(null)} />
-      ) : null}
-    </>
+    <section aria-labelledby="shul-listings-heading">
+      <h2 id="shul-listings-heading" className={styles.sectionTitle}>Posted here</h2>
+      <p className={styles.sectionIntro}>From owners and agents in the community. Tap Inquire to email the shul office.</p>
+      {listings.map((item) => (
+        <article key={item.id} className={styles.card}>
+          <h3 className={styles.cardTitle}>{item.title}</h3>
+          <p className={styles.meta}>
+            {item.address}
+            {item.neighborhood ? ` · ${item.neighborhood}` : ''}
+            {item.availableDate ? ` · Available ${formatDate(item.availableDate)}` : ''}
+          </p>
+          <p className={styles.rent}>
+            {formatRent(item.monthlyRent)}
+            <span className={styles.rentSuffix}> / mo</span>
+          </p>
+          {bedBathLabel(item.bedrooms, item.bathrooms) ? (
+            <p className={styles.meta}>{bedBathLabel(item.bedrooms, item.bathrooms)}</p>
+          ) : null}
+          {item.distanceToShul ? <p className={styles.meta}>To shul: {item.distanceToShul}</p> : null}
+          {item.description ? <p className={styles.desc}>{item.description}</p> : null}
+          <a href={inquiryEmailForListing(item)} className={styles.inquireBox}>
+            Inquire
+          </a>
+        </article>
+      ))}
+    </section>
   )
 }

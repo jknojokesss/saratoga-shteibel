@@ -122,28 +122,140 @@
   line-height: 1.55;
 }
 
-.requestBtn {
-  margin-top: 0.35rem;
-  padding: 0.55rem 1rem;
-  font-size: 0.82rem;
+.sectionTitle {
+  font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-family: inherit;
-  color: var(--paper-hi);
+  color: var(--ink);
+  margin: 0 0 0.35rem;
+}
+
+.sectionIntro {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.marketSection {
+  margin-top: 2.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(20, 24, 29, 0.12);
+}
+
+.marketGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.marketCard {
+  display: block;
+  text-decoration: none;
+  color: inherit;
   background: var(--navy);
-  border: 1px solid var(--navy);
-  border-radius: 3px;
-  cursor: pointer;
+  color: var(--paper-hi);
+  padding: 1rem 1.1rem 1.05rem;
+  border-radius: 4px;
+  border: 1px solid #0f1419;
+  box-shadow: 0 8px 20px rgba(15, 20, 25, 0.12);
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.requestBtn:hover {
+.marketCard:hover {
   background: var(--navy-2);
+  transform: translateY(-1px);
 }
 
-.requestBtn:focus-visible {
+.marketCard:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
+}
+
+.marketType {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.35rem;
+}
+
+.marketTitle {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+}
+
+.marketPrice {
+  display: block;
+  font-family: 'Frank Ruhl Libre', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.marketBlurb {
+  display: block;
+  font-size: 0.82rem;
+  color: #c5cdd6;
+  line-height: 1.45;
+  margin-bottom: 0.5rem;
+}
+
+.marketSource {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+.inquireBox {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-family: inherit;
+  color: var(--paper-hi);
+  background: #0f1419;
+  border: 1px solid #0f1419;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.inquireBox:hover {
+  background: var(--navy);
+}
+
+.inquireBox:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.generalInquireWrap {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(20, 24, 29, 0.12);
+  text-align: center;
+}
+
+.generalInquireHint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 0.65rem 0 0;
+  line-height: 1.45;
 }
 
 .modalBackdrop {
