@@ -345,6 +345,46 @@
   z-index: 1;
 }
 
+.marketCommunityBadge {
+  position: absolute;
+  right: 0.55rem;
+  top: 0.55rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-hi);
+  background: rgba(32, 42, 52, 0.88);
+  border: 1px solid rgba(212, 188, 138, 0.45);
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.marketCommunityBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(20, 24, 29, 0.1);
+}
+
+.marketCommunityTitle {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--navy-2);
+}
+
+.marketCommunityIntro {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .marketPriceOnPhoto {
   position: absolute;
   left: 0.65rem;

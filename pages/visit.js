@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import PageHero from '../components/PageHero'
 import SiteLayout from '../components/SiteLayout'
 import { ADDRESS, CITY, MAPS_EMBED, MAPS_LINK } from '../components/brand'
 
@@ -12,28 +13,24 @@ export default function Visit() {
         <meta name="description" content="Visit Saratoga Shteibel at 166 Woodleigh Place, Toms River, NJ 08755." />
       </Head>
       <SiteLayout current="visit">
-        <div className="paper-bg">
-          <section className="mx-auto max-w-3xl px-5 sm:px-8 pt-10 sm:pt-14 pb-8 text-center">
-            <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-3">Visit</p>
-            <h1 className="font-display font-semibold text-navy leading-tight text-[36px] sm:text-[52px]">
-              {ADDRESS}
-            </h1>
-            <p className="mt-2 text-[16px] text-muted">{CITY}</p>
-            <p className="mt-3 text-[14px] text-muted">
-              Shabbos times are on this week’s flyer.
-            </p>
-            <div className="gold-rule mx-auto my-6" />
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <a href={MAPS_LINK} target="_blank" rel="noreferrer" className="btn-gold px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
-                Directions
-              </a>
-              <Link href="/this-week" className="btn-outline px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm">
-                Zmanim
-              </Link>
-            </div>
-          </section>
-        </div>
-        <div className="h-[52vh] min-h-[380px] border-t-[3px] border-gold bg-paper">
+        <PageHero kicker="Visit" title={ADDRESS} subtitle={CITY}>
+          <a
+            href={MAPS_LINK}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-gold px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm"
+          >
+            Directions
+          </a>
+          <Link
+            href="/this-week"
+            className="btn-outline px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm !text-paper-hi !border-paper-hi/40 hover:!bg-paper-hi/10"
+          >
+            Zmanim
+          </Link>
+        </PageHero>
+        <p className="text-center text-[14px] text-muted py-6 px-5 bg-paper">Shabbos times are on this week’s flyer.</p>
+        <div className="h-[52vh] min-h-[380px] border-t border-gold bg-paper">
           <iframe
             title="Map of Saratoga Shteibel"
             src={MAPS_EMBED}
