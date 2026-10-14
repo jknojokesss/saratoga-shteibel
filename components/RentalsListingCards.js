@@ -1,4 +1,5 @@
-import { inquiryEmailForListing } from '../lib/rentals/inquiryMailto'
+import InquireEmailLink from './InquireEmailLink'
+import { inquiryDraftForListing } from '../lib/rentals/inquiryMailto'
 import styles from '../styles/rentals.module.css'
 
 function formatDate(iso) {
@@ -45,9 +46,13 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
           ) : null}
           {item.distanceToShul ? <p className={styles.meta}>To shul: {item.distanceToShul}</p> : null}
           {item.description ? <p className={styles.desc}>{item.description}</p> : null}
-          <a href={inquiryEmailForListing(item)} className={styles.inquireBox}>
+          <InquireEmailLink
+            subject={inquiryDraftForListing(item).subject}
+            body={inquiryDraftForListing(item).body}
+            className={styles.inquireBox}
+          >
             Inquire
-          </a>
+          </InquireEmailLink>
         </article>
       ))}
     </>

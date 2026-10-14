@@ -408,6 +408,13 @@
   line-height: 1.45;
 }
 
+.inquireClipboardHint {
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin: 0.5rem 0 0;
+  line-height: 1.4;
+}
+
 .modalBackdrop {
   position: fixed;
   inset: 0;
