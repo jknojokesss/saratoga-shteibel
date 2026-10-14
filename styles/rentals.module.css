@@ -34,22 +34,42 @@
   padding: 1.75rem 1.25rem 3rem;
 }
 
-.splitLayout {
+.homesBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.homesHeaderRow,
+.homesListingsRow {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.25rem;
   align-items: start;
 }
 
 @media (min-width: 900px) {
-  .splitLayout {
+  .homesHeaderRow,
+  .homesListingsRow {
     grid-template-columns: 1fr 1fr;
-    gap: 1.25rem 2rem;
+    column-gap: 2rem;
+    row-gap: 0;
+  }
+
+  .homesListingsRow {
+    margin-top: 0.35rem;
   }
 }
 
-.splitCol {
+.homesHeaderCell {
   min-width: 0;
+}
+
+.listingsCol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .splitSection {
@@ -68,8 +88,9 @@
 }
 
 @media (max-width: 899px) {
-  .splitCol + .splitCol {
-    padding-top: 1.75rem;
+  .homesHeaderCell + .homesHeaderCell,
+  .listingsCol + .listingsCol {
+    padding-top: 1.25rem;
     border-top: 1px solid rgba(20, 24, 29, 0.12);
   }
 }
@@ -306,11 +327,11 @@
 }
 
 @media (min-width: 900px) {
-  .splitCol .marketCard {
+  .listingsCol .marketCard {
     flex-direction: column;
   }
 
-  .splitCol .marketCardMedia {
+  .listingsCol .marketCardMedia {
     flex: none;
     max-width: none;
     width: 100%;
@@ -318,15 +339,15 @@
     min-height: unset;
   }
 
-  .splitCol .marketCardBody {
+  .listingsCol .marketCardBody {
     padding: 0.65rem 0.75rem 0.8rem;
   }
 
-  .splitCol .marketTitle {
+  .listingsCol .marketTitle {
     font-size: 0.88rem;
   }
 
-  .splitCol .marketPrice {
+  .listingsCol .marketPrice {
     font-size: 1.05rem;
   }
 }
@@ -353,12 +374,15 @@
   text-transform: uppercase;
   text-decoration: none;
   font-family: inherit;
-  color: var(--paper-hi);
+  color: var(--paper-hi) !important;
   background: #0f1419;
   border: 1px solid #0f1419;
   border-radius: 4px;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
   transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .inquireBox:hover {

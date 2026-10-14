@@ -42,14 +42,28 @@ export default function RentalsPage({ listings, marketListings }) {
                 No listings right now. Check back soon, or ask in shul if you have a property to post.
               </p>
             ) : (
-              <div className={styles.splitLayout}>
-                <div className={styles.splitCol}>
-                  <RentalsListingCards listings={listings} />
+              <section className={styles.homesBoard} aria-label="Rentals and homes for sale">
+                <div className={styles.homesHeaderRow}>
+                  <div className={styles.homesHeaderCell}>
+                    <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
+                    <p className={styles.sectionIntro}>
+                      Community postings — tap Inquire to email the shul office.
+                    </p>
+                  </div>
+                  {hasMarket ? (
+                    <div className={styles.homesHeaderCell}>
+                      <h2 id="market-listings-heading" className={styles.sectionTitle}>Buying</h2>
+                      <p className={styles.sectionIntro}>
+                        Area homes for sale (MLS prices, Oct 2026). Confirm on Zillow — links open in a new tab.
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
-                <div className={styles.splitCol}>
-                  <MarketListingsSection listings={marketListings} />
+                <div className={styles.homesListingsRow}>
+                  <RentalsListingCards listings={listings} contentOnly />
+                  {hasMarket ? <MarketListingsSection listings={marketListings} contentOnly /> : null}
                 </div>
-              </div>
+              </section>
             )}
 
             <div className={styles.generalInquireWrap}>
