@@ -3,6 +3,7 @@ import Link from 'next/link'
 import PageHero from '../components/PageHero'
 import SiteLayout from '../components/SiteLayout'
 import { ADDRESS, CITY, MAPS_EMBED, MAPS_LINK } from '../components/brand'
+import heroStyles from '../styles/siteHero.module.css'
 
 export default function Visit() {
   return (
@@ -14,18 +15,10 @@ export default function Visit() {
       </Head>
       <SiteLayout current="visit">
         <PageHero kicker="Visit" title={ADDRESS} subtitle={CITY}>
-          <a
-            href={MAPS_LINK}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-gold px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm"
-          >
+          <a href={MAPS_LINK} target="_blank" rel="noreferrer" className={heroStyles.heroBtnGold}>
             Directions
           </a>
-          <Link
-            href="/this-week"
-            className="btn-outline px-8 py-3.5 text-[13px] tracking-[0.16em] uppercase rounded-sm !text-paper-hi !border-paper-hi/40 hover:!bg-paper-hi/10"
-          >
+          <Link href="/this-week" className={heroStyles.heroBtnOutline}>
             Zmanim
           </Link>
         </PageHero>
