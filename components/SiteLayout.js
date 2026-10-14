@@ -18,17 +18,17 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
   return (
     <div className={`${flush ? 'donate-lock h-[100svh] overflow-hidden' : 'min-h-screen'} flex flex-col bg-paper`}>
       <a href="#main" className="skip-link">Skip to content</a>
-      <header className="fixed top-0 inset-x-0 z-50 bg-[#faf7f2]/95 backdrop-blur-md border-b border-[#ddd5c4] shadow-[0_1px_0_rgba(201,168,76,0.55)]">
+      <header className="fixed top-0 inset-x-0 z-50 bg-paper-hi/95 backdrop-blur-md border-b border-border shadow-[0_1px_0_rgba(176,141,75,0.55)]">
         <div className="mx-auto max-w-6xl px-5 sm:px-8 h-[72px] flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-3 min-w-0" onClick={() => setOpen(false)}>
             <span className="logo-plate">
               <img src="/logo.png" alt="" width={48} height={36} />
             </span>
             <span className="min-w-0">
-              <span className="block font-display text-[21px] leading-none font-semibold tracking-wide text-[#1e2d4e]">
+              <span className="block font-display text-[21px] leading-none font-semibold tracking-wide text-navy">
                 Saratoga Shteibel
               </span>
-              <span className="block text-[10px] tracking-[0.18em] uppercase mt-1 text-[#7a7068]">
+              <span className="block text-[10px] tracking-[0.18em] uppercase mt-1 text-muted">
                 Toms River · Est. 2023
               </span>
             </span>
@@ -41,8 +41,8 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
                 href={l.href}
                 className={`text-[12px] tracking-[0.16em] uppercase font-medium transition-colors ${
                   current && l.href.includes(current)
-                    ? 'text-[#1e2d4e]'
-                    : 'text-[#7a7068] hover:text-[#1e2d4e]'
+                    ? 'text-navy'
+                    : 'text-muted hover:text-navy'
                 }`}
               >
                 {l.label}
@@ -51,7 +51,7 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
             <Link
               href="/donate"
               className={`btn-gold text-[12px] tracking-[0.14em] uppercase font-medium px-5 py-2.5 rounded-sm ${
-                current === 'donate' ? 'ring-1 ring-[#1e2d4e]/20' : ''
+                current === 'donate' ? 'ring-1 ring-navy/20' : ''
               }`}
             >
               Donate
@@ -60,7 +60,7 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
 
           <button
             type="button"
-            className="md:hidden w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-sm text-[#1e2d4e]"
+            className="md:hidden w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-sm text-navy"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -72,13 +72,13 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
         </div>
 
         {open && (
-          <div className="md:hidden bg-[#faf7f2] border-t border-[#ddd5c4] px-5 py-6 flex flex-col gap-1">
+          <div className="md:hidden bg-paper-hi border-t border-border px-5 py-6 flex flex-col gap-1">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="py-3 text-[13px] tracking-[0.16em] uppercase text-[#1e2d4e] border-b border-[#eee6d8]"
+                className="py-3 text-[13px] tracking-[0.16em] uppercase text-navy border-b border-border/60"
               >
                 {l.label}
               </Link>
@@ -98,17 +98,17 @@ export default function SiteLayout({ children, current = '', hideFooter = false,
       </div>
 
       {hideFooter ? null : (
-        <footer className="mt-auto bg-[#1e2d4e] text-[#9aa6bd]">
+        <footer className="mt-auto bg-navy text-[#9aa6bd]">
           <div className="mx-auto max-w-6xl px-5 sm:px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <div className="font-display text-[#e8d5a3] text-[18px] font-semibold">Saratoga Shteibel</div>
+              <div className="font-display text-gold-light text-[18px] font-semibold">Saratoga Shteibel</div>
               <div className="text-[13px] mt-1">166 Woodleigh Place · Toms River, NJ</div>
             </div>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              <Link href="/this-week" className="text-[11px] tracking-[0.14em] uppercase text-[#e8d5a3] hover:text-white">Zmanim</Link>
-              <Link href="/visit" className="text-[11px] tracking-[0.14em] uppercase text-[#e8d5a3] hover:text-white">Visit</Link>
-              <Link href="/rentals" className="text-[11px] tracking-[0.14em] uppercase text-[#e8d5a3] hover:text-white">Rentals</Link>
-              <Link href="/donate" className="border border-[#c9a84c] text-[#e8d5a3] text-[11px] tracking-[0.14em] uppercase px-3 py-2 hover:bg-[#c9a84c] hover:text-[#1e2d4e] transition-colors rounded-sm">
+              <Link href="/this-week" className="text-[11px] tracking-[0.14em] uppercase text-gold-light hover:text-white">Zmanim</Link>
+              <Link href="/visit" className="text-[11px] tracking-[0.14em] uppercase text-gold-light hover:text-white">Visit</Link>
+              <Link href="/rentals" className="text-[11px] tracking-[0.14em] uppercase text-gold-light hover:text-white">Rentals</Link>
+              <Link href="/donate" className="border border-gold text-gold-light text-[11px] tracking-[0.14em] uppercase px-3 py-2 hover:bg-gold hover:text-navy transition-colors rounded-sm">
                 Donate
               </Link>
             </div>

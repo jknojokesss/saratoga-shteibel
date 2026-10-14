@@ -3,19 +3,19 @@ import Head from 'next/head'
 import { AdminBackLink } from '../../components/AdminChrome'
 import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
-const NAVY = '#1e2d4e'
-const GOLD = '#c9a84c'
-const CREAM = '#faf7f2'
-const MUTED = '#7a7068'
-const BORDER = '#ddd5c4'
+const NAVY = '#161d25'
+const GOLD = '#b08d4b'
+const CREAM = '#f6f6f2'
+const MUTED = '#6e7a85'
+const BORDER = '#cdd0cb'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
 const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
 const PINS = [
-  { label: 'Gold', value: '#c9a84c' },
+  { label: 'Brass', value: '#b08d4b' },
   { label: 'Coral', value: '#d47c6a' },
   { label: 'Green', value: '#8bb87f' },
-  { label: 'Navy', value: '#1e2d4e' },
+  { label: 'Midnight', value: '#161d25' },
 ]
 
 const inputStyle = { width: '100%', boxSizing: 'border-box', fontSize: 14, padding: '10px 12px', border: `1px solid ${BORDER}`, borderRadius: 3, fontFamily: SANS, background: CREAM, outline: 'none', marginBottom: 10 }
@@ -24,7 +24,7 @@ const labelStyle = { fontSize: 11, letterSpacing: 0.6, textTransform: 'uppercase
 export default function AnnouncementsAdmin() {
   const [passcode, setPasscode] = useAdminPasscode()
   const [items, setItems] = useState(null)
-  const [draft, setDraft] = useState({ tag: '', title: '', body: '', pin: '#c9a84c', sort_order: 0 })
+  const [draft, setDraft] = useState({ tag: '', title: '', body: '', pin: '#b08d4b', sort_order: 0 })
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [schedUrl, setSchedUrl] = useState(null)
@@ -78,7 +78,7 @@ export default function AnnouncementsAdmin() {
   async function addNew() {
     if (!draft.title.trim()) { setError('Title is required.'); return }
     const ok = await call('create', { ...draft, sort_order: Number(draft.sort_order) || 0 })
-    if (ok) setDraft({ tag: '', title: '', body: '', pin: '#c9a84c', sort_order: 0 })
+    if (ok) setDraft({ tag: '', title: '', body: '', pin: '#b08d4b', sort_order: 0 })
   }
 
   const card = { background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 4, padding: '18px 20px', marginBottom: 16 }
@@ -102,7 +102,7 @@ export default function AnnouncementsAdmin() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
       </Head>
-      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: SANS, color: '#2a2a2a' }}>
+      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px', fontFamily: SANS, color: '#14181d' }}>
         <div style={{ maxWidth: 620, margin: '0 auto' }}>
           <AdminBackLink />
           <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY }}>Bulletin Board — Admin</div>

@@ -94,7 +94,7 @@ export default function AdminHub() {
         <meta name="robots" content="noindex" />
         <link href={adminFontsLink} rel="stylesheet" />
       </Head>
-      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px 48px', fontFamily: SANS, color: '#2a2a2a' }}>
+      <div style={{ minHeight: '100vh', background: CREAM, padding: '32px 16px 48px', fontFamily: SANS, color: '#14181d' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
           <div style={{ fontFamily: SERIF, fontSize: 30, fontWeight: 600, color: NAVY }}>Shul admin</div>
           <div style={{ width: 48, height: 2, background: GOLD, margin: '10px 0 8px' }} />

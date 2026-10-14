@@ -25,7 +25,7 @@ export function AdminBackLink({ title }) {
 
 export function AdminPageShell({ title, children, maxWidth = 720 }) {
   return (
-    <div style={{ minHeight: '100vh', background: CREAM, padding: '28px 16px 48px', fontFamily: SANS, color: '#2a2a2a' }}>
+    <div style={{ minHeight: '100vh', background: CREAM, padding: '28px 16px 48px', fontFamily: SANS, color: '#14181d' }}>
       <div style={{ maxWidth, margin: '0 auto' }}>
         <AdminBackLink title={title} />
         {children}

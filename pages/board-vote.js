@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-const NAVY = '#1e2d4e', GOLD = '#c9a84c', CREAM = '#faf7f2', MUTED = '#7a7068', BORDER = '#ddd5c4'
+const NAVY = '#161d25', GOLD = '#b08d4b', CREAM = '#f6f6f2', MUTED = '#6e7a85', BORDER = '#cdd0cb'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
 const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 const numWord = (n) => ({ 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven' }[n] || String(n))
@@ -58,7 +58,7 @@ export default function BoardVote() {
   const shell = (children) => (
     <>
       <Head><title>Board Election</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@0,500;0,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" /></Head>
-      <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#2a2a2a', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8vh 16px 40px' }}>
+      <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#14181d', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8vh 16px 40px' }}>
         <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY, textAlign: 'center' }}>Saratoga Shteibel</div>
         <div style={{ color: '#a99f8c', fontSize: 12, letterSpacing: 2, marginBottom: 22 }}>BOARD ELECTION</div>
         <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderTop: `4px solid ${GOLD}`, borderRadius: 12, padding: '26px 24px', width: '100%', maxWidth: 380, boxSizing: 'border-box' }}>

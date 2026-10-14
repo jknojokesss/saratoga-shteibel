@@ -3,13 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --ink: #2a2a2a;
-  --paper: #faf7f2;
-  --navy: #1e2d4e;
-  --gold: #c9a84c;
-  --gold-light: #e8d5a3;
-  --muted: #7a7068;
-  --border: #ddd5c4;
+  --ink: #14181d;
+  --paper: #ecede8;
+  --paper-hi: #f6f6f2;
+  --navy: #161d25;
+  --navy-2: #202a34;
+  --gold: #b08d4b;
+  --gold-light: #d4bc8a;
+  --muted: #6e7a85;
+  --border: #cdd0cb;
 }
 
 * {
@@ -42,7 +44,7 @@ body {
 .paper-bg {
   background-color: var(--paper);
   background-image:
-    radial-gradient(rgba(30, 45, 78, 0.035) 0.7px, transparent 0.7px);
+    radial-gradient(rgba(22, 29, 37, 0.035) 0.7px, transparent 0.7px);
   background-size: 18px 18px;
 }
 
@@ -59,7 +61,7 @@ body {
   font-weight: 500;
 }
 .btn-gold:hover {
-  background: #d8b95e;
+  background: #c4a060;
 }
 
 .btn-outline {
@@ -81,27 +83,27 @@ body {
   font-weight: 500;
 }
 .btn-navy:hover {
-  background: #2c3e6b;
+  background: var(--navy-2);
 }
 .dest-btn-gold {
   background: var(--gold);
   color: var(--navy);
 }
-.dest-btn-gold:hover { background: #d8b95e; }
+.dest-btn-gold:hover { background: #c4a060; }
 
 .dest-btn-navy {
   background: var(--navy);
   color: #fff;
 }
-.dest-btn-navy:hover { background: #2c3e6b; }
+.dest-btn-navy:hover { background: var(--navy-2); }
 
 .dest-btn-outline {
-  background: rgba(250, 247, 242, 0.12);
-  color: #faf7f2;
-  border: 1.5px solid #e8d5a3;
+  background: rgba(246, 246, 242, 0.12);
+  color: var(--paper-hi);
+  border: 1.5px solid var(--gold-light);
 }
 .dest-btn-outline:hover {
-  background: #e8d5a3;
+  background: var(--gold-light);
   color: var(--navy);
 }
 
@@ -125,7 +127,7 @@ body {
   width: 52px;
   height: 44px;
   background: #fff;
-  border: 1px solid rgba(201, 168, 76, 0.45);
+  border: 1px solid rgba(176, 141, 75, 0.45);
   border-radius: 2px;
   flex-shrink: 0;
   overflow: hidden;
@@ -173,12 +175,12 @@ body {
   text-transform: uppercase;
   font-weight: 600;
   border-radius: 6px;
-  box-shadow: 0 12px 28px rgba(30, 45, 78, 0.14);
+  box-shadow: 0 12px 28px rgba(22, 29, 37, 0.14);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .home-btn:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 36px rgba(30, 45, 78, 0.2);
+  box-shadow: 0 18px 36px rgba(22, 29, 37, 0.2);
 }
 .home-btn:active {
   transform: translateY(0);
@@ -210,7 +212,7 @@ body {
   }
 }
 .logo-plate-light {
-  background: rgba(250, 247, 242, 0.92);
+  background: rgba(246, 246, 242, 0.92);
 }
 
 .cork-board {
@@ -228,7 +230,7 @@ body {
   width: 100%;
   height: 100%;
   border: 0;
-  background: #faf7f2;
+  background: var(--paper-hi);
   flex: 1 1 auto;
   min-height: 0;
 }
@@ -252,7 +254,7 @@ body {
   box-shadow:
     0 0 0 4px #fff,
     0 0 0 5px var(--gold),
-    0 10px 24px rgba(30, 45, 78, 0.08);
+    0 10px 24px rgba(22, 29, 37, 0.08);
 }
 
 @media (min-width: 768px) {
