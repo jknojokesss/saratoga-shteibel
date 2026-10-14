@@ -60,19 +60,19 @@ export default function HomesPage({ listings, marketListings }) {
             ) : (
               <section
                 className={`${styles.homesBoard} ${!hasShul && hasMarket ? styles.homesBoardBuyFocus : ''}`}
-                aria-label="Rentals and homes for sale"
+                aria-label={hasShul && hasMarket ? 'Rentals and homes for sale' : hasMarket ? 'Homes for sale' : 'Community rentals'}
               >
                 <div
                   className={`${styles.homesHeaderRow} ${!hasShul && hasMarket ? styles.homesHeaderRowBuyFocus : ''}`}
                 >
-                  <div className={styles.homesHeaderCell}>
-                    <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
-                    {hasShul ? (
+                  {hasShul ? (
+                    <div className={styles.homesHeaderCell}>
+                      <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
                       <p className={styles.sectionIntro}>
                         Community postings — tap Inquire on a listing to email the shul.
                       </p>
-                    ) : null}
-                  </div>
+                    </div>
+                  ) : null}
                   {hasMarket ? (
                     <div
                       className={
@@ -90,7 +90,7 @@ export default function HomesPage({ listings, marketListings }) {
                 <div
                   className={`${styles.homesListingsRow} ${!hasShul && hasMarket ? styles.homesListingsRowBuyFocus : ''}`}
                 >
-                  <RentalsListingCards listings={listings} contentOnly />
+                  {hasShul ? <RentalsListingCards listings={listings} contentOnly /> : null}
                   {hasMarket ? (
                     <MarketListingsSection listings={marketListings} contentOnly wideGrid={!hasShul} />
                   ) : null}
