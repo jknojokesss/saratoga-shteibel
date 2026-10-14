@@ -15,7 +15,7 @@ export default function MarketListingsSection({ listings }) {
       <div className={styles.marketSectionHeader}>
         <h2 id="market-listings-heading" className={styles.sectionTitle}>On the market nearby</h2>
         <p className={styles.sectionIntro}>
-          Sale and rental listings on other sites — we do not verify these; links open in a new tab.
+          List prices from MLS syndication (Oct 2026) — confirm on Zillow before making decisions. Links open in a new tab.
         </p>
       </div>
       <div className={styles.marketScrollWrap}>
