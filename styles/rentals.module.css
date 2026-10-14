@@ -1,37 +1,30 @@
 .page {
-  --rent-paper: #ecede8;
-  --rent-paper-hi: #f6f6f2;
-  --rent-ink: #14181d;
-  --rent-midnight: #161d25;
-  --rent-midnight-2: #202a34;
-  --rent-brass: #b08d4b;
-  --rent-brass-lo: #8a6e39;
-  --rent-slate: #6e7a85;
-  font-family: 'Inter', 'Jost', -apple-system, system-ui, sans-serif;
-  color: var(--rent-ink);
-  background: var(--rent-paper);
+  font-family: 'Jost', -apple-system, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
 }
 
 .hero {
-  background: var(--rent-midnight);
-  color: var(--rent-paper-hi);
+  background: var(--navy);
+  color: var(--paper-hi);
   padding: 2.5rem 1.25rem 2.75rem;
-  border-bottom: 1px solid var(--rent-brass-lo);
+  border-bottom: 1px solid #8a6e39;
 }
 
 .kicker {
   font-size: 0.68rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--rent-brass);
+  color: var(--gold);
   margin: 0 0 0.65rem;
 }
 
 .title {
-  font-family: 'Bodoni Moda', 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2rem, 5vw, 2.75rem);
-  font-weight: 500;
-  line-height: 1.1;
+  font-family: 'Jost', -apple-system, system-ui, sans-serif;
+  font-size: clamp(1.65rem, 4.2vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
   margin: 0;
 }
 
@@ -42,9 +35,9 @@
 }
 
 .card {
-  background: var(--rent-paper-hi);
+  background: var(--paper-hi);
   border: 1px solid rgba(20, 24, 29, 0.08);
-  border-top: 1px solid var(--rent-brass);
+  border-top: 1px solid var(--gold);
   padding: 1.25rem 1.15rem 1.35rem;
 }
 
@@ -53,16 +46,16 @@
 }
 
 .cardTitle {
-  font-family: 'Inter', 'Jost', sans-serif;
+  font-family: 'Jost', -apple-system, system-ui, sans-serif;
   font-size: 1.15rem;
   font-weight: 600;
   margin: 0 0 0.35rem;
-  color: var(--rent-ink);
+  color: var(--ink);
 }
 
 .meta {
   font-size: 0.82rem;
-  color: var(--rent-slate);
+  color: var(--muted);
   margin: 0 0 0.75rem;
 }
 
@@ -70,21 +63,21 @@
   font-family: 'Frank Ruhl Libre', Georgia, serif;
   font-size: 1.35rem;
   font-weight: 700;
-  color: var(--rent-ink);
+  color: var(--ink);
   margin: 0 0 0.5rem;
 }
 
 .rentSuffix {
   font-size: 0.85rem;
   font-weight: 400;
-  color: var(--rent-slate);
+  color: var(--muted);
 }
 
 .desc {
   font-size: 0.95rem;
   line-height: 1.55;
   margin: 0 0 0.85rem;
-  color: var(--rent-ink);
+  color: var(--ink);
 }
 
 .contact {
@@ -93,19 +86,19 @@
 }
 
 .contact a {
-  color: var(--rent-midnight-2);
+  color: var(--navy-2);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .contact a:focus-visible {
-  outline: 2px solid var(--rent-brass);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 
 .empty {
   text-align: center;
-  color: var(--rent-slate);
+  color: var(--muted);
   padding: 2.5rem 1rem;
   font-size: 0.95rem;
 }
@@ -116,7 +109,7 @@
   border-top: 1px solid rgba(20, 24, 29, 0.12);
   font-size: 0.8rem;
   line-height: 1.5;
-  color: var(--rent-slate);
+  color: var(--muted);
 }
 
 .heroSub {
@@ -127,4 +120,159 @@
   margin-left: auto;
   margin-right: auto;
   line-height: 1.55;
+}
+
+.requestBtn {
+  margin-top: 0.35rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: inherit;
+  color: var(--paper-hi);
+  background: var(--navy);
+  border: 1px solid var(--navy);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.requestBtn:hover {
+  background: var(--navy-2);
+}
+
+.requestBtn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 24, 29, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  max-height: min(90vh, 640px);
+  overflow-y: auto;
+  background: var(--paper-hi);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gold);
+  padding: 1.35rem 1.25rem 1.5rem;
+  box-shadow: 0 18px 40px rgba(22, 29, 37, 0.2);
+}
+
+.modalClose {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.65rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: var(--ink);
+}
+
+.modalSub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.85rem;
+}
+
+.fieldInput,
+.fieldTextarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--paper-hi);
+  color: var(--ink);
+  box-sizing: border-box;
+}
+
+.fieldTextarea {
+  resize: vertical;
+}
+
+.fieldHint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: -0.35rem 0 0.85rem;
+}
+
+.privacyNote {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted);
+  margin: 0 0 0.85rem;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: inherit;
+  color: #fff;
+  background: var(--navy);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.submitBtn:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.errorMsg {
+  font-size: 0.85rem;
+  color: #b23a2e;
+  margin: 0 0 0.65rem;
+}
+
+.successMsg {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0.5rem 0 0;
 }

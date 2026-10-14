@@ -3,11 +3,11 @@ import Head from 'next/head'
 import { AdminBackLink } from '../../components/AdminChrome'
 import { useAdminPasscode } from '../../lib/useAdminPasscode'
 
-const NAVY = '#1e2d4e'
-const GOLD = '#c9a84c'
-const CREAM = '#faf7f2'
-const MUTED = '#7a7068'
-const BORDER = '#ddd5c4'
+const NAVY = '#161d25'
+const GOLD = '#b08d4b'
+const CREAM = '#f6f6f2'
+const MUTED = '#6e7a85'
+const BORDER = '#cdd0cb'
 const SERIF = "'Cormorant Garamond', Georgia, serif"
 const SANS = "'Jost', -apple-system, system-ui, sans-serif"
 
@@ -20,6 +20,7 @@ const EMPTY_FORM = {
   available_date: '',
   description: '',
   distance_to_shul: '',
+  owner_email: '',
   contact_name: '',
   contact_phone: '',
   contact_email: '',
@@ -35,6 +36,23 @@ function fmtDate(iso) {
   }
 }
 
+function statusLabel(row) {
+  if (row.status === 'leased') return 'Leased'
+  if (row.status === 'hidden') return 'Hidden'
+  if (row.active) return 'Active'
+  return 'Expired'
+}
+
+function downloadCsv(filename, csv) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 export default function AdminRentals() {
   const [passcode, setPasscode] = useAdminPasscode()
   const [listings, setListings] = useState(null)
@@ -42,6 +60,8 @@ export default function AdminRentals() {
   const [busy, setBusy] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const [editId, setEditId] = useState(null)
+  const [inquiryListing, setInquiryListing] = useState(null)
+  const [inquiries, setInquiries] = useState([])
   const autoTried = useRef(false)
 
   useEffect(() => {
@@ -84,6 +104,8 @@ export default function AdminRentals() {
     setEditId(null)
     setForm(EMPTY_FORM)
     setError('')
+    setInquiryListing(null)
+    setInquiries([])
   }
 
   function startEdit(row) {
@@ -97,12 +119,30 @@ export default function AdminRentals() {
       available_date: row.availableDate || '',
       description: row.description || '',
       distance_to_shul: row.distanceToShul || '',
+      owner_email: row.ownerEmail || '',
       contact_name: row.contactName || '',
       contact_phone: row.contactPhone || '',
       contact_email: row.contactEmail || '',
       status: row.status,
     })
     setError('')
+    setInquiryListing(null)
+    setInquiries([])
+  }
+
+  async function openInquiries(row) {
+    setInquiryListing(row)
+    setInquiries([])
+    setBusy(true)
+    setError('')
+    try {
+      const d = await api('list_inquiries', { listingId: row.id })
+      setInquiries(d.inquiries || [])
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setBusy(false)
+    }
   }
 
   async function save(e) {
@@ -142,6 +182,23 @@ export default function AdminRentals() {
     }
   }
 
+  async function markLeased(row) {
+    if (!confirm(`Mark “${row.title}” as leased? It will leave the public page.`)) return
+    setBusy(true)
+    try {
+      await api('mark_leased', { id: row.id })
+      if (inquiryListing?.id === row.id) {
+        setInquiryListing(null)
+        setInquiries([])
+      }
+      await load()
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
   async function renew(row) {
     if (!confirm(`Renew “${row.title}” for 60 more days?`)) return
     setBusy(true)
@@ -161,7 +218,38 @@ export default function AdminRentals() {
     try {
       await api('delete', { id: row.id })
       if (editId === row.id) startCreate()
+      if (inquiryListing?.id === row.id) {
+        setInquiryListing(null)
+        setInquiries([])
+      }
       await load()
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function resendInquiry(inq) {
+    setBusy(true)
+    setError('')
+    try {
+      await api('resend_inquiry', { inquiryId: inq.id })
+      if (inquiryListing) await openInquiries(inquiryListing)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function exportCsv(all) {
+    setBusy(true)
+    setError('')
+    try {
+      const d = await api('export_inquiries_csv', all ? {} : { listingId: inquiryListing?.id })
+      const name = all ? 'rental-inquiries-all.csv' : `rental-inquiries-${inquiryListing?.id || 'listing'}.csv`
+      downloadCsv(name, d.csv)
     } catch (e) {
       setError(e.message)
     } finally {
@@ -194,8 +282,7 @@ export default function AdminRentals() {
             <AdminBackLink />
             <div style={{ fontFamily: SERIF, fontSize: 24, fontWeight: 600, color: NAVY, marginBottom: 8 }}>Rentals</div>
             <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.5, marginBottom: 14 }}>
-              Same passcode as <strong>Membership</strong> and <strong>Financials</strong>. If you already signed in at{' '}
-              <a href="/admin" style={{ color: NAVY }}>/admin</a>, this page should open automatically.
+              Same passcode as <strong>Membership</strong> and <strong>Financials</strong>.
             </p>
             <input
               type="password"
@@ -219,13 +306,20 @@ export default function AdminRentals() {
   return (
     <>
       <Head><title>Rentals — Admin</title><meta name="robots" content="noindex" /></Head>
-      <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#2a2a2a', padding: '24px 16px 48px' }}>
-        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+      <div style={{ minHeight: '100vh', background: CREAM, fontFamily: SANS, color: '#14181d', padding: '24px 16px 48px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <AdminBackLink />
-          <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY, marginBottom: 4 }}>Rentals</div>
-          <p style={{ fontSize: 13, color: MUTED, marginBottom: 20 }}>
-            Listings expire 60 days after posting. Renew to keep them on the public page.
-          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 20 }}>
+            <div>
+              <div style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: NAVY, marginBottom: 4 }}>Rentals</div>
+              <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>
+                Owner email is private — inquiries go by email. Listings expire after 60 days unless renewed.
+              </p>
+            </div>
+            <button type="button" disabled={busy} onClick={() => exportCsv(true)} style={btnSmall}>
+              Export all inquiries (CSV)
+            </button>
+          </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 1fr) minmax(0, 1.4fr)', gap: 20, alignItems: 'start' }}>
             <form onSubmit={save} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderTop: `3px solid ${GOLD}`, borderRadius: 4, padding: '18px 16px' }}>
@@ -234,6 +328,8 @@ export default function AdminRentals() {
               <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Neighborhood *</label>
               <input required value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} style={inputStyle} placeholder="e.g. Woodleigh" />
+              <label style={labelStyle}>Owner email * (private)</label>
+              <input required type="email" value={form.owner_email} onChange={(e) => setForm({ ...form, owner_email: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Monthly rent *</label>
               <input required type="number" min="1" value={form.monthly_rent} onChange={(e) => setForm({ ...form, monthly_rent: e.target.value })} style={inputStyle} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -261,16 +357,17 @@ export default function AdminRentals() {
               </p>
               <label style={labelStyle}>Distance / walk to shul</label>
               <input value={form.distance_to_shul} onChange={(e) => setForm({ ...form, distance_to_shul: e.target.value })} style={inputStyle} placeholder="e.g. 8 min walk" />
-              <label style={labelStyle}>Contact name</label>
+              <label style={labelStyle}>Contact name (admin reference)</label>
               <input value={form.contact_name} onChange={(e) => setForm({ ...form, contact_name: e.target.value })} style={inputStyle} />
-              <label style={labelStyle}>Phone</label>
+              <label style={labelStyle}>Phone (admin reference)</label>
               <input type="tel" value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} style={inputStyle} />
-              <label style={labelStyle}>Email</label>
+              <label style={labelStyle}>Email (admin reference)</label>
               <input type="email" value={form.contact_email} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Status</label>
               <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} style={inputStyle}>
                 <option value="active">Active</option>
                 <option value="hidden">Hidden</option>
+                <option value="leased">Leased</option>
               </select>
               {error && <div style={{ color: '#B23A2E', fontSize: 13, marginBottom: 8 }}>{error}</div>}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -285,45 +382,101 @@ export default function AdminRentals() {
               </div>
             </form>
 
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, background: '#fff', border: `1px solid ${BORDER}` }}>
-                <thead>
-                  <tr style={{ background: CREAM, textAlign: 'left' }}>
-                    <th style={{ padding: '10px 8px' }}>Title</th>
-                    <th style={{ padding: '10px 8px' }}>Posted</th>
-                    <th style={{ padding: '10px 8px' }}>Expires</th>
-                    <th style={{ padding: '10px 8px' }}>Status</th>
-                    <th style={{ padding: '10px 8px' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {listings.length === 0 ? (
-                    <tr><td colSpan={5} style={{ padding: 16, color: MUTED }}>No listings yet.</td></tr>
-                  ) : listings.map((row) => (
-                    <tr key={row.id} style={{ borderTop: `1px solid ${BORDER}` }}>
-                      <td style={{ padding: '10px 8px', verticalAlign: 'top' }}>
-                        <div style={{ fontWeight: 600 }}>{row.title}</div>
-                        <div style={{ color: MUTED, fontSize: 12 }}>{row.neighborhood}</div>
-                      </td>
-                      <td style={{ padding: '10px 8px', whiteSpace: 'nowrap' }}>{fmtDate(row.createdAt)}</td>
-                      <td style={{ padding: '10px 8px', whiteSpace: 'nowrap' }}>{fmtDate(row.expiresAt)}</td>
-                      <td style={{ padding: '10px 8px' }}>
-                        {row.active ? 'Active' : row.status === 'hidden' ? 'Hidden' : 'Expired'}
-                      </td>
-                      <td style={{ padding: '10px 8px' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 120 }}>
-                          <button type="button" onClick={() => startEdit(row)} style={btnSmall}>Edit</button>
-                          <button type="button" onClick={() => toggleStatus(row)} style={btnSmall}>
-                            {row.status === 'active' ? 'Hide' : 'Show'}
-                          </button>
-                          <button type="button" onClick={() => renew(row)} style={btnSmall}>Renew 60d</button>
-                          <button type="button" onClick={() => remove(row)} style={{ ...btnSmall, color: '#B23A2E', borderColor: '#e8c4c4' }}>Delete</button>
-                        </div>
-                      </td>
+            <div>
+              <div style={{ overflowX: 'auto', marginBottom: inquiryListing ? 16 : 0 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, background: '#fff', border: `1px solid ${BORDER}` }}>
+                  <thead>
+                    <tr style={{ background: CREAM, textAlign: 'left' }}>
+                      <th style={{ padding: '10px 8px' }}>Title</th>
+                      <th style={{ padding: '10px 8px' }}>Owner email</th>
+                      <th style={{ padding: '10px 8px' }}>Posted</th>
+                      <th style={{ padding: '10px 8px' }}>Status</th>
+                      <th style={{ padding: '10px 8px' }}>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {listings.length === 0 ? (
+                      <tr><td colSpan={5} style={{ padding: 16, color: MUTED }}>No listings yet.</td></tr>
+                    ) : listings.map((row) => (
+                      <tr key={row.id} style={{ borderTop: `1px solid ${BORDER}`, background: inquiryListing?.id === row.id ? '#f0f2ef' : undefined }}>
+                        <td style={{ padding: '10px 8px', verticalAlign: 'top' }}>
+                          <div style={{ fontWeight: 600 }}>{row.title}</div>
+                          <div style={{ color: MUTED, fontSize: 12 }}>{row.neighborhood}</div>
+                          {row.leasedAt ? <div style={{ fontSize: 11, color: MUTED }}>Leased {fmtDate(row.leasedAt)}</div> : null}
+                        </td>
+                        <td style={{ padding: '10px 8px', fontSize: 12, wordBreak: 'break-all' }}>{row.ownerEmail || '—'}</td>
+                        <td style={{ padding: '10px 8px', whiteSpace: 'nowrap' }}>{fmtDate(row.createdAt)}</td>
+                        <td style={{ padding: '10px 8px' }}>{statusLabel(row)}</td>
+                        <td style={{ padding: '10px 8px' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 120 }}>
+                            <button type="button" onClick={() => startEdit(row)} style={btnSmall}>Edit</button>
+                            <button type="button" onClick={() => openInquiries(row)} style={btnSmall}>Inquiries</button>
+                            {row.status !== 'leased' ? (
+                              <button type="button" onClick={() => markLeased(row)} style={btnSmall}>Mark leased</button>
+                            ) : null}
+                            {row.status === 'active' || row.status === 'hidden' ? (
+                              <button type="button" onClick={() => toggleStatus(row)} style={btnSmall}>
+                                {row.status === 'active' ? 'Hide' : 'Show'}
+                              </button>
+                            ) : null}
+                            <button type="button" onClick={() => renew(row)} style={btnSmall}>Renew 60d</button>
+                            <button type="button" onClick={() => remove(row)} style={{ ...btnSmall, color: '#B23A2E', borderColor: '#e8c4c4' }}>Delete</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {inquiryListing ? (
+                <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderTop: `3px solid ${GOLD}`, padding: '14px 12px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <div style={{ fontWeight: 600, color: NAVY }}>Inquiries — {inquiryListing.title}</div>
+                    <button type="button" disabled={busy} onClick={() => exportCsv(false)} style={btnSmall}>Export CSV</button>
+                  </div>
+                  {inquiries.length === 0 ? (
+                    <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>No inquiries yet.</p>
+                  ) : (
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+                      <thead>
+                        <tr style={{ textAlign: 'left', color: MUTED }}>
+                          <th style={{ padding: '6px 4px' }}>Date</th>
+                          <th style={{ padding: '6px 4px' }}>Requester</th>
+                          <th style={{ padding: '6px 4px' }}>Contact</th>
+                          <th style={{ padding: '6px 4px' }}>Message</th>
+                          <th style={{ padding: '6px 4px' }}>Email</th>
+                          <th style={{ padding: '6px 4px' }} />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {inquiries.map((inq) => (
+                          <tr key={inq.id} style={{ borderTop: `1px solid ${BORDER}` }}>
+                            <td style={{ padding: '8px 4px', whiteSpace: 'nowrap' }}>{fmtDate(inq.createdAt)}</td>
+                            <td style={{ padding: '8px 4px' }}>{inq.requesterName}</td>
+                            <td style={{ padding: '8px 4px' }}>
+                              {inq.requesterPhone || '—'}
+                              {inq.requesterEmail ? <><br />{inq.requesterEmail}</> : null}
+                              {inq.moveInDate ? <><br /><span style={{ color: MUTED }}>Move-in: {inq.moveInDate}</span></> : null}
+                            </td>
+                            <td style={{ padding: '8px 4px', maxWidth: 160 }}>{inq.message || '—'}</td>
+                            <td style={{ padding: '8px 4px' }}>
+                              <span style={{ color: inq.emailStatus === 'failed' ? '#B23A2E' : '#2e7d32' }}>
+                                {inq.emailStatus}
+                              </span>
+                            </td>
+                            <td style={{ padding: '8px 4px' }}>
+                              {inq.emailStatus === 'failed' ? (
+                                <button type="button" disabled={busy} onClick={() => resendInquiry(inq)} style={btnSmall}>Resend</button>
+                              ) : null}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
