@@ -10,6 +10,7 @@ const SECTIONS = [
     items: [
       { href: '/admin/zmanim', label: 'Zmanim flyer', desc: 'Upload this week’s schedule PDF and preview image' },
       { href: '/admin/announcements', label: 'Bulletin board', desc: 'Post announcements (if enabled)' },
+      { href: '/admin/rentals', label: 'Rentals', desc: 'Homes and apartments near the shul' },
     ],
   },
   {

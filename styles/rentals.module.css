@@ -1,0 +1,130 @@
+.page {
+  --rent-paper: #ecede8;
+  --rent-paper-hi: #f6f6f2;
+  --rent-ink: #14181d;
+  --rent-midnight: #161d25;
+  --rent-midnight-2: #202a34;
+  --rent-brass: #b08d4b;
+  --rent-brass-lo: #8a6e39;
+  --rent-slate: #6e7a85;
+  font-family: 'Inter', 'Jost', -apple-system, system-ui, sans-serif;
+  color: var(--rent-ink);
+  background: var(--rent-paper);
+}
+
+.hero {
+  background: var(--rent-midnight);
+  color: var(--rent-paper-hi);
+  padding: 2.5rem 1.25rem 2.75rem;
+  border-bottom: 1px solid var(--rent-brass-lo);
+}
+
+.kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rent-brass);
+  margin: 0 0 0.65rem;
+}
+
+.title {
+  font-family: 'Bodoni Moda', 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.body {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem 3rem;
+}
+
+.card {
+  background: var(--rent-paper-hi);
+  border: 1px solid rgba(20, 24, 29, 0.08);
+  border-top: 1px solid var(--rent-brass);
+  padding: 1.25rem 1.15rem 1.35rem;
+}
+
+.card + .card {
+  border-top: none;
+}
+
+.cardTitle {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+  color: var(--rent-ink);
+}
+
+.meta {
+  font-size: 0.82rem;
+  color: var(--rent-slate);
+  margin: 0 0 0.75rem;
+}
+
+.rent {
+  font-family: 'Frank Ruhl Libre', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--rent-ink);
+  margin: 0 0 0.5rem;
+}
+
+.rentSuffix {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--rent-slate);
+}
+
+.desc {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 0 0 0.85rem;
+  color: var(--rent-ink);
+}
+
+.contact {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.contact a {
+  color: var(--rent-midnight-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.contact a:focus-visible {
+  outline: 2px solid var(--rent-brass);
+  outline-offset: 2px;
+}
+
+.empty {
+  text-align: center;
+  color: var(--rent-slate);
+  padding: 2.5rem 1rem;
+  font-size: 0.95rem;
+}
+
+.disclaimer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(20, 24, 29, 0.12);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--rent-slate);
+}
+
+.heroSub {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: #c5cdd6;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.55;
+}
