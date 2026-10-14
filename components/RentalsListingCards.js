@@ -1,4 +1,4 @@
-import InquireEmailLink from './InquireEmailLink'
+import RentalEmailInquire from './RentalEmailInquire'
 import { inquiryDraftForListing } from '../lib/rentals/inquiryMailto'
 import styles from '../styles/rentals.module.css'
 
@@ -44,10 +44,21 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
             <p className={styles.meta}>{bedBathLabel(item.bedrooms, item.bathrooms)}</p>
           ) : null}
           {item.distanceToShul ? <p className={styles.meta}>To shul: {item.distanceToShul}</p> : null}
+          {item.contactPhone ? (
+            <p className={styles.meta}>
+              Contact:{' '}
+              <a href={`tel:${item.contactPhone.replace(/\D/g, '')}`} className={styles.rentalPhone}>
+                {item.contactPhone}
+              </a>
+            </p>
+          ) : null}
           {item.description ? <p className={styles.desc}>{item.description}</p> : null}
-          <InquireEmailLink subject={draft.subject} body={draft.body} className={styles.inquireBox}>
-            Inquire
-          </InquireEmailLink>
+          <RentalEmailInquire
+            draftId={item.id}
+            subject={draft.subject}
+            body={draft.body}
+            buttonLabel="Email the shul about this rental"
+          />
         </article>
         )
       })}

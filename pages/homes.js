@@ -4,7 +4,7 @@ import RentalsListingCards from '../components/RentalsListingCards'
 import PageHero from '../components/PageHero'
 import SiteLayout from '../components/SiteLayout'
 import ListRentalPromo from '../components/ListRentalPromo'
-import InquireEmailLink, { InquireEmailHint } from '../components/InquireEmailLink'
+import RentalEmailInquire from '../components/RentalEmailInquire'
 import { generalInquiryDraft } from '../lib/rentals/inquiryMailto'
 import { MARKET_LISTINGS } from '../lib/rentals/marketListings'
 import { fetchActiveListings } from '../lib/rentals/queries'
@@ -99,17 +99,14 @@ export default function HomesPage({ listings, marketListings }) {
             )}
 
             <div className={styles.generalInquireWrap}>
-              <InquireEmailLink
+              <p className={styles.generalInquireHint}>
+                General housing questions — edit the draft and email saratogashteibel@gmail.com
+              </p>
+              <RentalEmailInquire
                 subject={generalInquiry.subject}
                 body={generalInquiry.body}
-                className={styles.inquireBox}
-              >
-                Inquire
-              </InquireEmailLink>
-              <InquireEmailHint />
-              <p className={styles.generalInquireHint}>
-                Questions about housing near the shul — email saratogashteibel@gmail.com
-              </p>
+                buttonLabel="Email the shul"
+              />
             </div>
 
             <p className={styles.disclaimer}>{DISCLAIMER}</p>
