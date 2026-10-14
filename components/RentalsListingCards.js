@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import InquireEmailLink from './InquireEmailLink'
 import { inquiryDraftForListing } from '../lib/rentals/inquiryMailto'
 import styles from '../styles/rentals.module.css'
@@ -27,12 +26,6 @@ function bedBathLabel(bed, bath) {
 export default function RentalsListingCards({ listings, contentOnly = false }) {
   const inner = (
     <>
-      {!listings.length ? (
-        <p className={styles.columnEmpty} role="status">
-          No rentals posted here right now.{' '}
-          <Link href="/homes/post-rental" className={styles.inlineAction}>List yours</Link>
-        </p>
-      ) : null}
       {listings.map((item) => {
         const draft = inquiryDraftForListing(item)
         return (

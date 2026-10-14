@@ -67,11 +67,11 @@ export default function HomesPage({ listings, marketListings }) {
                 >
                   <div className={styles.homesHeaderCell}>
                     <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
-                    <p className={styles.sectionIntro}>
-                      {hasShul
-                        ? 'Community postings — tap Inquire on a listing to email the shul.'
-                        : 'No community rentals posted yet — use List your rental above to submit one.'}
-                    </p>
+                    {hasShul ? (
+                      <p className={styles.sectionIntro}>
+                        Community postings — tap Inquire on a listing to email the shul.
+                      </p>
+                    ) : null}
                   </div>
                   {hasMarket ? (
                     <div
