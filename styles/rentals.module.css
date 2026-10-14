@@ -598,11 +598,59 @@
   line-height: 1.45;
 }
 
-.inquireClipboardHint {
-  font-size: 0.76rem;
+.inquireBlock {
+  margin-top: 0.85rem;
+}
+
+.inquireDraftLabel {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--muted);
-  margin: 0.5rem 0 0;
-  line-height: 1.4;
+  margin-bottom: 0.35rem;
+}
+
+.inquireDraft {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(20, 24, 29, 0.12);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  resize: vertical;
+  min-height: 8rem;
+  margin-bottom: 0.5rem;
+}
+
+.inquireDraftHelp {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.45;
+  margin: 0 0 0.65rem;
+}
+
+.rentalPhone {
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rentalPhone:hover {
+  text-decoration: underline;
+}
+
+.inquireBlock .inquireBox {
+  width: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .modalBackdrop {
