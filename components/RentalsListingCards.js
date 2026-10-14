@@ -22,11 +22,9 @@ function bedBathLabel(bed, bath) {
   return parts.join(' · ')
 }
 
-export default function RentalsListingCards({ listings }) {
-  return (
-    <section className={styles.splitSection} aria-labelledby="shul-listings-heading">
-      <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
-      <p className={styles.sectionIntro}>Community postings — tap Inquire to email the shul office.</p>
+export default function RentalsListingCards({ listings, contentOnly = false }) {
+  const inner = (
+    <>
       {!listings.length ? (
         <p className={styles.columnEmpty} role="status">No rentals posted here right now.</p>
       ) : null}
@@ -52,6 +50,18 @@ export default function RentalsListingCards({ listings }) {
           </a>
         </article>
       ))}
+    </>
+  )
+
+  if (contentOnly) {
+    return <div className={styles.listingsCol}>{inner}</div>
+  }
+
+  return (
+    <section className={styles.splitSection} aria-labelledby="shul-listings-heading">
+      <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
+      <p className={styles.sectionIntro}>Community postings — tap Inquire to email the shul office.</p>
+      {inner}
     </section>
   )
 }
