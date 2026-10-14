@@ -29,7 +29,9 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
       {!listings.length ? (
         <p className={styles.columnEmpty} role="status">No rentals posted here right now.</p>
       ) : null}
-      {listings.map((item) => (
+      {listings.map((item) => {
+        const draft = inquiryDraftForListing(item)
+        return (
         <article key={item.id} className={styles.card}>
           <h3 className={styles.cardTitle}>{item.title}</h3>
           <p className={styles.meta}>
@@ -46,15 +48,12 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
           ) : null}
           {item.distanceToShul ? <p className={styles.meta}>To shul: {item.distanceToShul}</p> : null}
           {item.description ? <p className={styles.desc}>{item.description}</p> : null}
-          <InquireEmailLink
-            subject={inquiryDraftForListing(item).subject}
-            body={inquiryDraftForListing(item).body}
-            className={styles.inquireBox}
-          >
+          <InquireEmailLink subject={draft.subject} body={draft.body} className={styles.inquireBox}>
             Inquire
           </InquireEmailLink>
         </article>
-      ))}
+        )
+      })}
     </>
   )
 

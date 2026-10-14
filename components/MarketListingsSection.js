@@ -7,47 +7,95 @@ function typeLabel(t) {
   return 'Listing'
 }
 
-export default function MarketListingsSection({ listings, contentOnly = false }) {
+function splitTitle(title) {
+  if (!title) return { headline: '', detail: '' }
+  const idx = title.indexOf(' — ')
+  if (idx === -1) return { headline: title, detail: '' }
+  return { headline: title.slice(0, idx), detail: title.slice(idx + 3) }
+}
+
+function MarketCard({ item, wideGrid }) {
+  const { headline, detail } = splitTitle(item.title)
+  return (
+    <a
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={styles.marketCard}
+      role="listitem"
+    >
+      <div className={styles.marketCardMedia}>
+        {item.imageUrl ? (
+          <Image
+            src={item.imageUrl}
+            alt={headline || item.title}
+            fill
+            sizes={wideGrid ? '(max-width: 900px) 100vw, 360px' : '(max-width: 900px) 100vw, 42vw'}
+            className={styles.marketCardImg}
+          />
+        ) : (
+          <div className={styles.marketCardImgFallback} aria-hidden />
+        )}
+        <div className={styles.marketCardShade} aria-hidden />
+        <span className={styles.marketType}>{typeLabel(item.listingType)}</span>
+        {item.phase ? <span className={styles.marketPhaseBadge}>Phase {item.phase}</span> : null}
+        {item.priceLabel ? <span className={styles.marketPriceOnPhoto}>{item.priceLabel}</span> : null}
+      </div>
+      <div className={styles.marketCardBody}>
+        <span className={styles.marketHeadline}>{headline}</span>
+        {detail ? <span className={styles.marketDetail}>{detail}</span> : null}
+        {item.walkToShul ? <span className={styles.marketWalk}>{item.walkToShul}</span> : null}
+        {item.blurb ? <span className={styles.marketBlurb}>{item.blurb}</span> : null}
+        <span className={styles.marketCta}>
+          View on {item.source || 'Zillow'}
+          <span className={styles.marketCtaArrow} aria-hidden>→</span>
+        </span>
+      </div>
+    </a>
+  )
+}
+
+function PhaseBlock({ phase, listings, wideGrid }) {
+  if (!listings.length) return null
+  return (
+    <div className={styles.marketPhaseBlock}>
+      <h3 className={styles.marketPhaseTitle}>Phase {phase}</h3>
+      <div className={wideGrid ? styles.marketGridWide : styles.marketGrid} role="list">
+        {listings.map((item) => (
+          <MarketCard key={item.id} item={item} wideGrid={wideGrid} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default function MarketListingsSection({ listings, contentOnly = false, wideGrid = false }) {
   if (!listings?.length) return contentOnly ? <div className={styles.listingsCol} /> : null
 
+  const colClass = wideGrid
+    ? `${styles.listingsCol} ${styles.buyingCol} ${styles.buyingColWide}`
+    : `${styles.listingsCol} ${styles.buyingCol}`
+
+  const phase1 = listings.filter((l) => l.phase === 1)
+  const phase2 = listings.filter((l) => l.phase === 2)
+  const unphased = listings.filter((l) => l.phase !== 1 && l.phase !== 2)
+
   const grid = (
-    <div className={styles.marketGrid} role="list">
-      {listings.map((item) => (
-        <a
-          key={item.id}
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.marketCard}
-          role="listitem"
-        >
-          <div className={styles.marketCardMedia}>
-            {item.imageUrl ? (
-              <Image
-                src={item.imageUrl}
-                alt=""
-                fill
-                sizes="(max-width: 900px) 100vw, 42vw"
-                className={styles.marketCardImg}
-              />
-            ) : (
-              <div className={styles.marketCardImgFallback} aria-hidden />
-            )}
-            <span className={styles.marketType}>{typeLabel(item.listingType)}</span>
-          </div>
-          <div className={styles.marketCardBody}>
-            {item.priceLabel ? <span className={styles.marketPrice}>{item.priceLabel}</span> : null}
-            <span className={styles.marketTitle}>{item.title}</span>
-            {item.blurb ? <span className={styles.marketBlurb}>{item.blurb}</span> : null}
-            <span className={styles.marketSource}>View on {item.source || 'site'} →</span>
-          </div>
-        </a>
-      ))}
+    <div className={styles.marketPhases}>
+      <PhaseBlock phase={1} listings={phase1} wideGrid={wideGrid} />
+      <PhaseBlock phase={2} listings={phase2} wideGrid={wideGrid} />
+      {unphased.length ? (
+        <div className={wideGrid ? styles.marketGridWide : styles.marketGrid} role="list">
+          {unphased.map((item) => (
+            <MarketCard key={item.id} item={item} wideGrid={wideGrid} />
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 
   if (contentOnly) {
-    return <div className={styles.listingsCol}>{grid}</div>
+    return <div className={colClass}>{grid}</div>
   }
 
   return (
@@ -58,7 +106,7 @@ export default function MarketListingsSection({ listings, contentOnly = false })
           Area homes for sale (MLS prices, Oct 2026). Confirm on Zillow — links open in a new tab.
         </p>
       </div>
-      {grid}
+      <div className={colClass}>{grid}</div>
     </section>
   )
 }
