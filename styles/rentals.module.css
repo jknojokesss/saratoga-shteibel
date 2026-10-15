@@ -110,7 +110,35 @@
   background: var(--paper-hi);
   border: 1px solid rgba(20, 24, 29, 0.08);
   border-top: 1px solid var(--gold);
-  padding: 1.25rem 1.15rem 1.35rem;
+  padding: 0 0 1.35rem;
+  overflow: hidden;
+}
+
+.cardMedia {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  margin: 0 0 1rem;
+  background: rgba(20, 24, 29, 0.06);
+}
+
+.cardImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card .cardTitle,
+.card .meta,
+.card .rent,
+.card .desc {
+  padding-left: 1.15rem;
+  padding-right: 1.15rem;
+}
+
+.card .cardTitle {
+  padding-top: 0.15rem;
 }
 
 .card + .card {
