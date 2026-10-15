@@ -63,6 +63,9 @@
 
 .homesHeaderCell {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .listingsCol {
@@ -246,7 +249,12 @@
 
 @media (min-width: 900px) {
   .homesHeaderRow {
-    align-items: end;
+    align-items: stretch;
+  }
+
+  /* Same block height so listings start on one line (Buying intro is two lines). */
+  .homesHeaderCell {
+    min-height: 4.85rem;
   }
 
   .homesListingsRow {
