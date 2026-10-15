@@ -22,47 +22,75 @@ function bedBathLabel(bed, bath) {
   return parts.join(' · ')
 }
 
-export default function RentalsListingCards({ listings, contentOnly = false }) {
-  const inner = (
-    <>
-      {listings.map((item) => (
-        <article key={item.id} className={styles.card}>
-          {item.imageUrl ? (
-            <div className={styles.cardMedia}>
-              <Image
-                src={item.imageUrl}
-                alt={item.title}
-                width={800}
-                height={500}
-                className={styles.cardImg}
-                sizes="(max-width: 899px) 100vw, 42vw"
-              />
-            </div>
-          ) : null}
-          <h3 className={styles.cardTitle}>{item.title}</h3>
-          <p className={styles.meta}>
-            {item.address}
-            {item.neighborhood ? ` · ${item.neighborhood}` : ''}
-            {item.availableDate ? ` · Available ${formatDate(item.availableDate)}` : ''}
-          </p>
+function splitTitle(title) {
+  if (!title) return { headline: '', detail: '' }
+  const idx = title.indexOf(' — ')
+  if (idx === -1) return { headline: title, detail: '' }
+  return { headline: title.slice(0, idx), detail: title.slice(idx + 3) }
+}
+
+function RentalCard({ item }) {
+  const { headline, detail } = splitTitle(item.title)
+  const bedsBaths = bedBathLabel(item.bedrooms, item.bathrooms)
+
+  return (
+    <article className={`${styles.marketCard} ${styles.rentalCard}`}>
+      {item.imageUrl ? (
+        <div className={styles.marketCardMedia}>
+          <Image
+            src={item.imageUrl}
+            alt={headline || item.title}
+            fill
+            sizes="(max-width: 899px) 100vw, 42vw"
+            className={styles.marketCardImg}
+          />
+          <div className={styles.marketCardShade} aria-hidden />
+          <span className={styles.marketType}>For rent</span>
+          {item.phase ? <span className={styles.marketPhaseBadge}>Phase {item.phase}</span> : null}
+          <span className={styles.marketPriceOnPhoto}>
+            {formatRent(item.monthlyRent)}
+            <span className={styles.rentSuffixOnPhoto}> / mo</span>
+          </span>
+        </div>
+      ) : (
+        <div className={styles.rentalCardNoPhoto}>
+          <span className={styles.marketType}>For rent</span>
+          {item.phase ? <span className={styles.marketPhaseBadge}>Phase {item.phase}</span> : null}
           <p className={styles.rent}>
             {formatRent(item.monthlyRent)}
             <span className={styles.rentSuffix}> / mo</span>
           </p>
-          {bedBathLabel(item.bedrooms, item.bathrooms) ? (
-            <p className={styles.meta}>{bedBathLabel(item.bedrooms, item.bathrooms)}</p>
-          ) : null}
-          {item.distanceToShul ? <p className={styles.meta}>To shul: {item.distanceToShul}</p> : null}
-          {item.contactPhone ? (
-            <p className={styles.meta}>
-              Contact:{' '}
-              <a href={`tel:${item.contactPhone.replace(/\D/g, '')}`} className={styles.rentalPhone}>
-                {item.contactPhone}
-              </a>
-            </p>
-          ) : null}
-          {item.description ? <p className={styles.desc}>{item.description}</p> : null}
-        </article>
+        </div>
+      )}
+      <div className={styles.marketCardBody}>
+        <span className={styles.marketHeadline}>{headline || item.title}</span>
+        {detail ? <span className={styles.marketDetail}>{detail}</span> : null}
+        <span className={styles.marketDetail}>
+          {item.address}
+          {item.neighborhood ? ` · ${item.neighborhood}` : ''}
+          {item.availableDate ? ` · Available ${formatDate(item.availableDate)}` : ''}
+        </span>
+        {bedsBaths ? <span className={styles.marketDetail}>{bedsBaths}</span> : null}
+        {item.distanceToShul ? <span className={styles.marketWalk}>{item.distanceToShul}</span> : null}
+        {item.contactPhone ? (
+          <span className={styles.marketDetail}>
+            Contact:{' '}
+            <a href={`tel:${item.contactPhone.replace(/\D/g, '')}`} className={styles.rentalPhone}>
+              {item.contactPhone}
+            </a>
+          </span>
+        ) : null}
+        {item.description ? <span className={styles.marketBlurb}>{item.description}</span> : null}
+      </div>
+    </article>
+  )
+}
+
+export default function RentalsListingCards({ listings, contentOnly = false }) {
+  const inner = (
+    <>
+      {listings.map((item) => (
+        <RentalCard key={item.id} item={item} />
       ))}
     </>
   )
