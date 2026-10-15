@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import styles from '../styles/rentals.module.css'
 
 function formatDate(iso) {
@@ -26,6 +27,18 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
     <>
       {listings.map((item) => (
         <article key={item.id} className={styles.card}>
+          {item.imageUrl ? (
+            <div className={styles.cardMedia}>
+              <Image
+                src={item.imageUrl}
+                alt={item.title}
+                width={800}
+                height={500}
+                className={styles.cardImg}
+                sizes="(max-width: 899px) 100vw, 42vw"
+              />
+            </div>
+          ) : null}
           <h3 className={styles.cardTitle}>{item.title}</h3>
           <p className={styles.meta}>
             {item.address}
