@@ -41,7 +41,7 @@ export function RentalListingCard({ item }) {
             src={item.imageUrl}
             alt={headline || item.title}
             fill
-            sizes="(max-width: 899px) 100vw, 42vw"
+            sizes="(max-width: 900px) 100vw, 42vw"
             className={styles.marketCardImg}
           />
           <div className={styles.marketCardShade} aria-hidden />
@@ -86,17 +86,69 @@ export function RentalListingCard({ item }) {
   )
 }
 
-export default function RentalsListingCards({ listings, contentOnly = false }) {
-  const inner = (
-    <>
-      {listings.map((item) => (
-        <RentalListingCard key={item.id} item={item} />
-      ))}
-    </>
+function RentalPhaseBlock({ phase, listings }) {
+  if (!listings.length) return null
+  return (
+    <div className={styles.marketPhaseBlock}>
+      <h3 className={styles.marketPhaseTitle}>Saratoga · Phase {phase}</h3>
+      <div className={styles.marketGrid} role="list">
+        {listings.map((item) => (
+          <RentalListingCard key={item.id} item={item} />
+        ))}
+      </div>
+    </div>
   )
+}
+
+function RentalCommunityBlock({ listings }) {
+  if (!listings.length) return null
+  return (
+    <div className={styles.marketCommunityBlock}>
+      <h3 className={styles.marketCommunityTitle}>Walden Woods</h3>
+      <div className={styles.marketGrid} role="list">
+        {listings.map((item) => (
+          <RentalListingCard key={item.id} item={item} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function RentalOtherBlock({ listings }) {
+  if (!listings.length) return null
+  return (
+    <div className={styles.marketPhaseBlock}>
+      <h3 className={styles.marketPhaseTitle}>Community rentals</h3>
+      <div className={styles.marketGrid} role="list">
+        {listings.map((item) => (
+          <RentalListingCard key={item.id} item={item} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function RentalsByPhase({ listings }) {
+  const phase1 = listings.filter((r) => r.phase === 1)
+  const phase2 = listings.filter((r) => r.phase === 2)
+  const walden = listings.filter((r) => r.community === 'walden-woods')
+  const other = listings.filter((r) => !r.phase && r.community !== 'walden-woods')
+
+  return (
+    <div className={styles.marketPhases}>
+      <RentalPhaseBlock phase={1} listings={phase1} />
+      <RentalPhaseBlock phase={2} listings={phase2} />
+      <RentalCommunityBlock listings={walden} />
+      <RentalOtherBlock listings={other} />
+    </div>
+  )
+}
+
+export default function RentalsListingCards({ listings, contentOnly = false }) {
+  const inner = <RentalsByPhase listings={listings} />
 
   if (contentOnly) {
-    return <div className={styles.listingsCol}>{inner}</div>
+    return <div className={`${styles.listingsCol} ${styles.buyingCol}`}>{inner}</div>
   }
 
   return (

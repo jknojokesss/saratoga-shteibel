@@ -104,6 +104,7 @@
     padding-top: 1.25rem;
     border-top: 1px solid rgba(20, 24, 29, 0.12);
   }
+
 }
 
 .card {
@@ -243,52 +244,18 @@
   margin-bottom: 0;
 }
 
-.homesPhasesStack {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 0.75rem;
-}
-
-.homesPhaseRow {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.65rem;
-  align-items: start;
-}
-
-.homesPhaseIntro {
-  margin: -0.15rem 0 0.35rem;
-  font-size: 0.8rem;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-.homesPhaseCol {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.homesPhaseCol .marketCard {
-  border-top: 3px solid var(--gold);
-}
-
 @media (min-width: 900px) {
-  .homesPhaseRow {
-    grid-template-columns: 1fr 1fr;
-    column-gap: 2rem;
-    row-gap: 0.65rem;
-  }
-
-  .homesPhaseRow > .marketPhaseTitle,
-  .homesPhaseRow > .homesPhaseIntro {
-    grid-column: 1 / -1;
-  }
-
   .homesHeaderRow {
     align-items: end;
+  }
+
+  .homesListingsRow {
+    align-items: start;
+  }
+
+  .homesListingsRow .listingsCol,
+  .homesListingsRow .buyingCol {
+    padding-top: 0;
   }
 }
 
@@ -310,7 +277,7 @@
 }
 
 .buyingCol {
-  padding: 0.15rem 0 0;
+  padding: 0;
 }
 
 .buyingColWide {

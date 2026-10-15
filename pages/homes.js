@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import HomesListingsGrid from '../components/HomesListingsGrid'
 import MarketListingsSection from '../components/MarketListingsSection'
 import RentalsListingCards from '../components/RentalsListingCards'
 import PageHero from '../components/PageHero'
@@ -76,7 +75,7 @@ export default function HomesPage({ listings, marketListings }) {
                         hasShul ? styles.homesHeaderCell : `${styles.homesHeaderCell} ${styles.homesHeaderCellFull}`
                       }
                     >
-                      <h2 id="market-listings-heading" className={styles.sectionTitleBuying}>Buying</h2>
+                      <h2 id="market-listings-heading" className={styles.sectionTitle}>Buying</h2>
                       <p className={styles.sectionIntro}>
                         Saratoga Phase 1 & 2 plus Walden Woods (separate community). Walk times are to 166 Woodleigh
                         Place.
@@ -84,18 +83,14 @@ export default function HomesPage({ listings, marketListings }) {
                     </div>
                   ) : null}
                 </div>
-                {hasShul && hasMarket ? (
-                  <HomesListingsGrid rentals={listings} marketListings={marketListings} />
-                ) : (
-                  <div
-                    className={`${styles.homesListingsRow} ${!hasShul && hasMarket ? styles.homesListingsRowBuyFocus : ''}`}
-                  >
-                    {hasShul ? <RentalsListingCards listings={listings} contentOnly /> : null}
-                    {hasMarket ? (
-                      <MarketListingsSection listings={marketListings} contentOnly wideGrid={!hasShul} />
-                    ) : null}
-                  </div>
-                )}
+                <div
+                  className={`${styles.homesListingsRow} ${!hasShul && hasMarket ? styles.homesListingsRowBuyFocus : ''}`}
+                >
+                  {hasShul ? <RentalsListingCards listings={listings} contentOnly /> : null}
+                  {hasMarket ? (
+                    <MarketListingsSection listings={marketListings} contentOnly wideGrid={!hasShul} />
+                  ) : null}
+                </div>
               </section>
             )}
 
