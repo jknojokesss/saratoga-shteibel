@@ -29,7 +29,7 @@ function splitTitle(title) {
   return { headline: title.slice(0, idx), detail: title.slice(idx + 3) }
 }
 
-function RentalCard({ item }) {
+export function RentalListingCard({ item }) {
   const { headline, detail } = splitTitle(item.title)
   const bedsBaths = bedBathLabel(item.bedrooms, item.bathrooms)
 
@@ -90,7 +90,7 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
   const inner = (
     <>
       {listings.map((item) => (
-        <RentalCard key={item.id} item={item} />
+        <RentalListingCard key={item.id} item={item} />
       ))}
     </>
   )

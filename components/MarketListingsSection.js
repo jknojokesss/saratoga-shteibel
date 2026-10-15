@@ -14,7 +14,7 @@ function splitTitle(title) {
   return { headline: title.slice(0, idx), detail: title.slice(idx + 3) }
 }
 
-function MarketCard({ item, wideGrid }) {
+export function MarketListingCard({ item, wideGrid }) {
   const { headline, detail } = splitTitle(item.title)
   return (
     <a
@@ -66,7 +66,7 @@ function PhaseBlock({ phase, listings, wideGrid }) {
       <h3 className={styles.marketPhaseTitle}>Saratoga · Phase {phase}</h3>
       <div className={wideGrid ? styles.marketGridWide : styles.marketGrid} role="list">
         {listings.map((item) => (
-          <MarketCard key={item.id} item={item} wideGrid={wideGrid} />
+          <MarketListingCard key={item.id} item={item} wideGrid={wideGrid} />
         ))}
       </div>
     </div>
@@ -81,7 +81,7 @@ function CommunityBlock({ listings, wideGrid }) {
       <p className={styles.marketCommunityIntro}>Separate community — not part of Saratoga Phase 1 or 2.</p>
       <div className={wideGrid ? styles.marketGridWide : styles.marketGrid} role="list">
         {listings.map((item) => (
-          <MarketCard key={item.id} item={item} wideGrid={wideGrid} />
+          <MarketListingCard key={item.id} item={item} wideGrid={wideGrid} />
         ))}
       </div>
     </div>
