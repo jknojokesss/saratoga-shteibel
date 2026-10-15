@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import HomesListingsGrid from '../components/HomesListingsGrid'
 import MarketListingsSection from '../components/MarketListingsSection'
 import RentalsListingCards from '../components/RentalsListingCards'
 import PageHero from '../components/PageHero'
@@ -83,14 +84,18 @@ export default function HomesPage({ listings, marketListings }) {
                     </div>
                   ) : null}
                 </div>
-                <div
-                  className={`${styles.homesListingsRow} ${!hasShul && hasMarket ? styles.homesListingsRowBuyFocus : ''}`}
-                >
-                  {hasShul ? <RentalsListingCards listings={listings} contentOnly /> : null}
-                  {hasMarket ? (
-                    <MarketListingsSection listings={marketListings} contentOnly wideGrid={!hasShul} />
-                  ) : null}
-                </div>
+                {hasShul && hasMarket ? (
+                  <HomesListingsGrid rentals={listings} marketListings={marketListings} />
+                ) : (
+                  <div
+                    className={`${styles.homesListingsRow} ${!hasShul && hasMarket ? styles.homesListingsRowBuyFocus : ''}`}
+                  >
+                    {hasShul ? <RentalsListingCards listings={listings} contentOnly /> : null}
+                    {hasMarket ? (
+                      <MarketListingsSection listings={marketListings} contentOnly wideGrid={!hasShul} />
+                    ) : null}
+                  </div>
+                )}
               </section>
             )}
 
