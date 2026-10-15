@@ -15,6 +15,7 @@ const EMPTY_FORM = {
   title: '',
   address: '',
   neighborhood: '',
+  phase: '',
   monthly_rent: '',
   bedrooms: '',
   bathrooms: '',
@@ -116,6 +117,7 @@ export default function AdminRentals() {
       title: row.title,
       address: row.address || '',
       neighborhood: row.neighborhood || '',
+      phase: row.phase != null ? String(row.phase) : '',
       monthly_rent: String(row.monthlyRent),
       bedrooms: row.bedrooms != null ? String(row.bedrooms) : '',
       bathrooms: row.bathrooms != null ? String(row.bathrooms) : '',
@@ -159,6 +161,7 @@ export default function AdminRentals() {
         monthly_rent: Number(form.monthly_rent),
         bedrooms: form.bedrooms === '' ? null : form.bedrooms,
         bathrooms: form.bathrooms === '' ? null : form.bathrooms,
+        phase: form.phase === '' ? null : form.phase,
       }
       if (editId) await api('update', { id: editId, listing })
       else await api('create', { listing })
@@ -327,7 +330,17 @@ export default function AdminRentals() {
                 placeholder="e.g. 12 Example Dr, Toms River"
               />
               <label style={labelStyle}>Neighborhood</label>
-              <input value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} style={inputStyle} placeholder="e.g. Woodleigh (optional)" />
+              <input value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} style={inputStyle} placeholder="e.g. Saratoga" />
+              <label style={labelStyle}>Saratoga phase (1 or 2)</label>
+              <input
+                type="number"
+                min="1"
+                max="2"
+                value={form.phase}
+                onChange={(e) => setForm({ ...form, phase: e.target.value })}
+                style={inputStyle}
+                placeholder="Optional"
+              />
               <label style={labelStyle}>Owner email (private, for your records)</label>
               <input type="email" value={form.owner_email} onChange={(e) => setForm({ ...form, owner_email: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Monthly rent *</label>
@@ -356,7 +369,14 @@ export default function AdminRentals() {
                 Describe the property only. Do not state preferences about who may rent it.
               </p>
               <label style={labelStyle}>Distance / walk to shul</label>
-              <input value={form.distance_to_shul} onChange={(e) => setForm({ ...form, distance_to_shul: e.target.value })} style={inputStyle} placeholder="e.g. 8 min walk" />
+              <input value={form.distance_to_shul} onChange={(e) => setForm({ ...form, distance_to_shul: e.target.value })} style={inputStyle} placeholder="e.g. ~6 min walk · ~0.3 mi to shul" />
+              <label style={labelStyle}>Photo URL</label>
+              <input
+                value={form.image_url}
+                onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                style={inputStyle}
+                placeholder="/rentals/photo.jpg"
+              />
               <label style={labelStyle}>Contact name (admin reference)</label>
               <input value={form.contact_name} onChange={(e) => setForm({ ...form, contact_name: e.target.value })} style={inputStyle} />
               <label style={labelStyle}>Phone (admin reference)</label>

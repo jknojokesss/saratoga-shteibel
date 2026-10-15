@@ -290,6 +290,35 @@
   gap: 1rem;
 }
 
+.rentalCard {
+  cursor: default;
+}
+
+.rentalCard:hover {
+  transform: none;
+  box-shadow: 0 12px 28px rgba(15, 20, 25, 0.1);
+}
+
+.rentalCardNoPhoto {
+  position: relative;
+  padding: 1rem 0.9rem 0.85rem;
+  border-bottom: 1px solid rgba(20, 24, 29, 0.08);
+}
+
+.rentSuffixOnPhoto {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.92;
+}
+
+.listingsCol .marketCard {
+  border-top: 3px solid var(--gold);
+}
+
+.listingsCol .marketCard + .marketCard {
+  margin-top: 1rem;
+}
+
 .marketCard {
   display: flex;
   flex-direction: column;
