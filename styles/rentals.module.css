@@ -37,27 +37,33 @@
 .homesBoard {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.75rem;
 }
 
-.homesHeaderRow,
-.homesListingsRow {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-  align-items: start;
+.homesColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
 @media (min-width: 900px) {
-  .homesHeaderRow,
-  .homesListingsRow {
+  .homesBoard {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 2rem;
     row-gap: 0;
+    align-items: start;
   }
 
-  .homesListingsRow {
-    margin-top: 0.35rem;
+  .homesBoardBuyFocus {
+    grid-template-columns: 1fr;
+  }
+
+  .homesColumnFull {
+    max-width: 52rem;
+    margin: 0 auto;
+    width: 100%;
   }
 }
 
@@ -102,12 +108,10 @@
 }
 
 @media (max-width: 899px) {
-  .homesHeaderCell + .homesHeaderCell,
-  .listingsCol + .listingsCol {
+  .homesColumn + .homesColumn {
     padding-top: 1.25rem;
     border-top: 1px solid rgba(20, 24, 29, 0.12);
   }
-
 }
 
 .card {
@@ -248,49 +252,20 @@
 }
 
 @media (min-width: 900px) {
-  .homesHeaderRow {
-    align-items: stretch;
-  }
-
   /* Same block height so listings start on one line (Buying intro is two lines). */
   .homesHeaderCell {
     min-height: 4.85rem;
   }
 
-  .homesListingsRow {
-    align-items: start;
-  }
-
-  .homesListingsRow .listingsCol,
-  .homesListingsRow .buyingCol {
-    padding-top: 0;
-  }
-
-  .homesListingsRow {
-    align-items: start;
-  }
-
-  .homesListingsRow .listingsCol,
-  .homesListingsRow .buyingCol {
-    padding-top: 0;
-  }
-}
-
-.homesHeaderCellFull {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 900px) {
-  .homesBoardBuyFocus .homesHeaderRowBuyFocus,
-  .homesBoardBuyFocus .homesListingsRowBuyFocus {
-    grid-template-columns: 1fr;
-  }
-
-  .homesListingsRowBuyFocus .buyingColWide .marketGridWide {
+  .homesBoardBuyFocus .buyingColWide .marketGridWide {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
+}
+
+.rentalsCol .marketCard {
+  border-top: 3px solid var(--gold);
 }
 
 .buyingCol {
