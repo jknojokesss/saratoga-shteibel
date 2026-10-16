@@ -148,7 +148,7 @@ export default function RentalsListingCards({ listings, contentOnly = false }) {
   const inner = <RentalsByPhase listings={listings} />
 
   if (contentOnly) {
-    return <div className={`${styles.listingsCol} ${styles.buyingCol}`}>{inner}</div>
+    return <div className={`${styles.listingsCol} ${styles.rentalsCol}`}>{inner}</div>
   }
 
   return (

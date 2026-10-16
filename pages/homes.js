@@ -58,39 +58,29 @@ export default function HomesPage({ listings, marketListings }) {
                 className={`${styles.homesBoard} ${!hasShul && hasMarket ? styles.homesBoardBuyFocus : ''}`}
                 aria-label={hasShul && hasMarket ? 'Rentals and homes for sale' : hasMarket ? 'Homes for sale' : 'Community rentals'}
               >
-                <div
-                  className={`${styles.homesHeaderRow} ${!hasShul && hasMarket ? styles.homesHeaderRowBuyFocus : ''}`}
-                >
-                  {hasShul ? (
+                {hasShul ? (
+                  <div className={styles.homesColumn}>
                     <div className={styles.homesHeaderCell}>
                       <h2 id="shul-listings-heading" className={styles.sectionTitle}>Rentals</h2>
                       <p className={styles.sectionIntro}>
                         Community postings — call the contact number on each listing.
                       </p>
                     </div>
-                  ) : null}
-                  {hasMarket ? (
-                    <div
-                      className={
-                        hasShul ? styles.homesHeaderCell : `${styles.homesHeaderCell} ${styles.homesHeaderCellFull}`
-                      }
-                    >
+                    <RentalsListingCards listings={listings} contentOnly />
+                  </div>
+                ) : null}
+                {hasMarket ? (
+                  <div className={hasShul ? styles.homesColumn : `${styles.homesColumn} ${styles.homesColumnFull}`}>
+                    <div className={styles.homesHeaderCell}>
                       <h2 id="market-listings-heading" className={styles.sectionTitle}>Buying</h2>
                       <p className={styles.sectionIntro}>
                         Saratoga Phase 1 & 2 plus Walden Woods (separate community). Walk times are to 166 Woodleigh
                         Place.
                       </p>
                     </div>
-                  ) : null}
-                </div>
-                <div
-                  className={`${styles.homesListingsRow} ${!hasShul && hasMarket ? styles.homesListingsRowBuyFocus : ''}`}
-                >
-                  {hasShul ? <RentalsListingCards listings={listings} contentOnly /> : null}
-                  {hasMarket ? (
                     <MarketListingsSection listings={marketListings} contentOnly wideGrid={!hasShul} />
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </section>
             )}
 
